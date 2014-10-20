@@ -11,6 +11,9 @@ request = require 'request'
 
 sdk_ua_string = require './sdk_ua_string'
 
+SDKError = require './SDKError'
+colors = SDKError.colors
+
 class Model
     constructor: (source_data) ->
         @_data = source_data
@@ -74,8 +77,6 @@ class Model
 
 
 
-
-
 if fs.existsSync('.cache.json')
     CACHE = JSON.parse(fs.readFileSync('.cache.json'))
     for k,v of CACHE
@@ -90,10 +91,14 @@ saveCache = ->
     fs.writeFileSync('.cache.json', JSON.stringify(CACHE))
 
 
+
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
     constructor: ({ token, root, cache, project }) ->
+        unless token.substring(0,2) is 'r0'
+            TOKEN_PERM_MAP = {'rw': 'read-write', '0w': 'write-only'}
+            throw new SDKError('tokens', "ContentAPI token MUST be read-only. Given token is #{ TOKEN_PERM_MAP[token.substring(0,2)] }.")
         @_token = token
         @_root = root
         if cache
@@ -106,7 +111,6 @@ class ContentAPI
             @_ua += " (+http://#{ project.marquee.HOST })"
         else
             @_ua = sdk_ua_string
-        console.log @_ua
 
     _sendRequest: (opts) ->
         if @_cache?[opts.url]
@@ -125,9 +129,13 @@ class ContentAPI
                 'Authorization' : "Token #{ @_token }"
             url: opts.url
             qs: opts.query
-        util.log("API: #{ opts.url }")
-        request.get opts, (err, msg, body) ->
-            throw err if err
+        util.log("Making request to Content API: #{ colors.info(opts.url) }")
+        request.get _options, (error, response, data) ->
+            throw error if error
+            # This API client is **read-only** and MUST only ever receive
+            # a 200 from the API (or an error status), NEVER 201 or 204.
+            unless response.statusCode is 200
+                throw new SDKError('api', "Content API error: #{ response.statusCode }\n\n#{ data }", response.statusCode)
             if data.map?
                 result = data.map (o) -> new Model(o.published_json)
             else
@@ -149,7 +157,9 @@ class ContentAPI
             role__ne: 'publication' # Because of legacy 'publication' objects
             is_released: true
             _sort: '-published_date'
-        , cb
+        , (result) ->
+            util.log("Got #{ result.length } entries from API.")
+            cb(result)
     packages: (cb) ->
         @filter
             type: PACKAGE

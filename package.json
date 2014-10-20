@@ -23,7 +23,8 @@
     "sqwish": "^0.2.2",
     "autoprefixer-core": "^3.1.2",
     "temp": "^0.8.1",
-    "request": "^2.45.0"
+    "request": "^2.45.0",
+    "colors": "^1.0.3"
   },
   "devDependencies": {}
 }
