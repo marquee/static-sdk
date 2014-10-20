@@ -4,3 +4,4 @@ module.exports =
     TextBlock           : require './TextBlock'
     ReadingProgress     : require './ReadingProgress'
     renderEntryContent  : require './renderEntryContent'
+    ShareEntry          : require './ShareEntry'
