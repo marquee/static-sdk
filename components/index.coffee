@@ -1,6 +1,11 @@
 module.exports =
     Byline      : require './Byline'
     Card        : require './Card'
+    Category    : require './Category'
     Cover       : require './Cover'
+    CoverCredit : require './CoverCredit'
     DateTime    : require './DateTime'
+    Info        : require './Info'
+    Summary     : require './Summary'
     Tags        : require './Tags'
+    Title       : require './Title'
