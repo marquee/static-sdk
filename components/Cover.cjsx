@@ -11,15 +11,18 @@ module.exports = React.createClass
     }
     render: ->
         variants = new Classes(@props.className)
-        if @props.link
-            tag = React.DOM.a
-            variants.set('link')
-        else
-            tag = React.DOM.div
         variants.set('align', @props.align)
-        <tag className="Cover #{ variants }"
-            style   = {backgroundImage: "url('#{ @props.image }')"}
-            href    = @props.link
-        >
-                {@props.children}
-        </tag>
+        if @props.link
+            variants.set('link')
+            <a className="Cover #{ variants }"
+                style   = {backgroundImage: "url('#{ @props.image }')"}
+                href    = @props.link
+            >
+                    {@props.children}
+            </a>
+        else
+            <div className="Cover #{ variants }"
+                style   = {backgroundImage: "url('#{ @props.image }')"}
+            >
+                    {@props.children}
+            </div>
