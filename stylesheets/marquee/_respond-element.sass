@@ -1,0 +1,110 @@
+$break-extra_small : 640px  !default
+$break-small       : 768px  !default
+$break-medium      : 1024px !default
+$break-large       : 1280px !default
+$break-extra_large : 1440px !default 
+
+@mixin eq-width($min, $max)
+    &[min-width~="#{ $min }"][max-width~="#{ $max }"]
+        @content
+
+@mixin eq-width-gt($size)
+    &[min-width~="#{ $size + 1 }"]
+        @content
+
+@mixin eq-width-lt($size)
+    &[max-width~="#{ $size - 1 }"]
+        @content
+
+@mixin eq-width-gte($size)
+    &[min-width~="#{ $min }"]
+        @content
+
+@mixin eq-width-lte($size)
+    &[max-width~="#{ $min }"]
+        @content
+
+
+@mixin eq-width-gt-extra_small()
+    +eq-width-gt($break-extra_small)
+        @content
+
+@mixin eq-width-lt-extra_small()
+    +eq-width-lt($break-extra_small)
+        @content
+
+@mixin eq-width-gte-extra_small()
+    +eq-width-gte($break-extra_small)
+        @content
+
+@mixin eq-width-lte-extra_small()
+    +eq-width-lte($break-extra_small)
+        @content
+
+
+@mixin eq-width-gt-small()
+    +eq-width-gt($break-small)
+        @content
+
+@mixin eq-width-lt-small()
+    +eq-width-lt($break-small)
+        @content
+
+@mixin eq-width-gte-small()
+    +eq-width-gte($break-small)
+        @content
+
+@mixin eq-width-lte-small()
+    +eq-width-lte($break-small)
+        @content
+
+
+@mixin eq-width-gt-medium()
+    +eq-width-gt($break-medium)
+        @content
+
+@mixin eq-width-lt-medium()
+    +eq-width-lt($break-medium)
+        @content
+
+@mixin eq-width-gte-medium()
+    +eq-width-gte($break-medium)
+        @content
+
+@mixin eq-width-lte-medium()
+    +eq-width-lte($break-medium)
+        @content
+
+
+@mixin eq-width-gt-large()
+    +eq-width-gt($break-large)
+        @content
+
+@mixin eq-width-lt-large()
+    +eq-width-lt($break-large)
+        @content
+
+@mixin eq-width-gte-large()
+    +eq-width-gte($break-large)
+        @content
+
+@mixin eq-width-lte-large()
+    +eq-width-lte($break-large)
+        @content
+
+
+@mixin eq-width-gt-extra_large()
+    +eq-width-gt($break-extra_large)
+        @content
+
+@mixin eq-width-lt-extra_large()
+    +eq-width-lt($break-extra_large)
+        @content
+
+@mixin eq-width-gte-extra_large()
+    +eq-width-gte($break-extra_large)
+        @content
+
+@mixin eq-width-lte-extra_large()
+    +eq-width-lte($break-extra_large)
+        @content

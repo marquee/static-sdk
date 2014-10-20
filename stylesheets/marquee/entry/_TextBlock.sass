@@ -1,0 +1,45 @@
+.TextBlock
+    +layer(text)
+    font-size       : $Block-base_font_size
+    line-height     : $Block-line_height
+    max-width       : $Block-column_width--text + 2 * $Block-body_padding
+    padding-left    : $Block-body_padding
+    padding-right   : $Block-body_padding
+    &.-align--left
+        text-align: left
+    &.-align--center
+        text-align: center
+    &.-align--right
+        text-align: right
+    &.-effect--dropcaps
+        &:first-letter
+            float       : left
+            font-size   : 350%
+            height      : 0.7em
+            line-height : 0.85em
+            margin      : 6px 0 0
+            padding     : 0 0.1em 0 0
+
+
+    // +respond-to-gte($Block-column_width--text)
+    //     $_offset_padding: $Block-column_width--text / 2
+    //     +state(column_offset, left)
+    //         max-width: $Block-column_width--text + $_offset_padding
+    //     +state(column_offset, right)
+    //         max-width: $Block-column_width--text + $_offset_padding
+    //     +state(column_offset, left)
+    //         padding-right: $_offset_padding
+    //     +state(column_offset, right)
+    //         padding-left: $_offset_padding
+
+    &.-role--quote
+        clear: both
+
+    &.-role--pre
+        clear: both
+
+    &.-heading--1
+        font-size: $Block-heading_size--1
+
+    &.-heading--2
+        font-size: $Block-heading_size--2

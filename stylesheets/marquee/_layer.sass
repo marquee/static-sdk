@@ -1,0 +1,10 @@
+$layers: false !default
+$layers-z_gap: 10 !default
+@mixin layer($layer_name, $offset: 0)
+    $z_index: false
+    $max_z: length($layers)
+    @for $i from 1 through $max_z
+        @if $layer_name == nth($layers, $i)
+            $z_index: ($max_z - $i + 1) * $layers-z_gap + $offset
+    @if $z_index
+        z-index: $z_index

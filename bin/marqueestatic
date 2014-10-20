@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+var path    = require('path');
+var fs      = require('fs');
+
+console.log('marquee static!');
+
+console.log(process.argv);
+
+
+require('../compiler')(process.cwd());
+

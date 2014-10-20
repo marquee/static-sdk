@@ -1,0 +1,3 @@
+*.cjsx
+*.coffee
+.DS_Store
