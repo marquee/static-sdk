@@ -9,6 +9,8 @@ util    = require 'util'
 fs      = require 'fs'
 request = require 'request'
 
+sdk_ua_string = require './sdk_ua_string'
+
 class Model
     constructor: (source_data) ->
         @_data = source_data
@@ -91,11 +93,20 @@ saveCache = ->
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
-    constructor: ({ token, root, cache }) ->
+    constructor: ({ token, root, cache, project }) ->
         @_token = token
         @_root = root
         if cache
             @_cache = CACHE
+        if project
+            @_ua = project.name
+            if project.version
+                @_ua += "/#{ project.version }"
+            @_ua += " #{ sdk_ua_string }"
+            @_ua += " (+http://#{ project.marquee.HOST })"
+        else
+            @_ua = sdk_ua_string
+        console.log @_ua
 
     _sendRequest: (opts) ->
         if @_cache?[opts.url]
@@ -103,17 +114,20 @@ class ContentAPI
             opts.callback(@_cache[opts.url])
             return
 
-        headers =
-            'Accept'        : 'application/json'
-            'User-Agent'    : 'Marquee Static Compiler'
-            'Authorization' : "Token #{ @_token }"
         opts.query ?= {}
         opts.query._include_published = true
+
+        _options =
+            json: true
+            headers:
+                'Accept'        : 'application/json'
+                'User-Agent'    : @_ua
+                'Authorization' : "Token #{ @_token }"
+            url: opts.url
+            qs: opts.query
         util.log("API: #{ opts.url }")
-        req = rest.get(opts.url, query: opts.query, headers: headers)
-        req.on 'error', (err) ->
-            console.log err
-        req.on 'success', (data) =>
+        request.get opts, (err, msg, body) ->
+            throw err if err
             if data.map?
                 result = data.map (o) -> new Model(o.published_json)
             else
@@ -132,7 +146,7 @@ class ContentAPI
     entries: (cb) ->
         @filter
             type: ENTRY
-            role__in: 'story,redirect,custom'
+            role__ne: 'publication' # Because of legacy 'publication' objects
             is_released: true
             _sort: '-published_date'
         , cb
