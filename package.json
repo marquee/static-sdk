@@ -1,6 +1,5 @@
 {
   "name": "marquee-static-sdk",
-  "private": true,
   "version": "0.1.0-alpha",
   "scripts": {
     "build": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./",
@@ -32,5 +31,19 @@
     "temp": "^0.8.1",
     "uglify-js": "^2.4.15"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "homepage": "http://marquee.by",
+  "bugs": "https://github.com/marquee/marquee-static-sdk",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/marquee/marquee-static-sdk.git"
+  },
+  "author": "Alec Perkins <alec@marquee.by>",
+  "license": "Unlicense",
+  "contributors": [
+    {
+      "name": "Alec Perkins",
+      "email": "alec@marquee.by"
+    }
+  ]
 }
