@@ -34,7 +34,7 @@ module.exports = (project_directory, onCompile=null) ->
 
     # Provide the commit sha to the build, if available.
     _getCurrentCommit project_directory, (commit_sha) ->
-        _sha = if commit_sha then SDKError.colors.grey(" (@ #{ commit_sha })") else ''
+        _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
         util.log("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
 
         # Load the project's package.json file, if present and valid.
