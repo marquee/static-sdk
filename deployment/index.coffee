@@ -2,6 +2,8 @@ SDKError            = require '../compiler/SDKError'
 runCompiler         = require '../compiler'
 walkSync            = require '../compiler/walkSync'
 getCurrentCommit    = require '../compiler/getCurrentCommit'
+putFilesToS3        = require './putFilesToS3'
+path                = require 'path'
 
 module.exports = (project_directory, force=false) ->
 
@@ -31,7 +33,11 @@ module.exports = (project_directory, force=false) ->
                 unless project_package.marquee[prop]
                     throw new SDKError('configuration.deploy', "Project missing `package.marquee.#{ prop }`.")
 
-            files_to_deploy = walkSync(build_directory)
+            files_to_deploy = walkSync(build_directory, ignore=['.'])
             file_count = SDKError.colors.grey("(#{ files_to_deploy.length } files)")
             _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
-            SDKError.log("Deploying #{ SDKError.formatProjectPath(project_directory) }#{ _sha } #{ file_count } to #{ SDKError.colors.cyan(project_package.marquee.HOST) }")
+            project_name_and_commit = "#{ SDKError.formatProjectPath(project_directory) }#{ _sha }"
+            SDKError.log("Deploying #{ project_name_and_commit } #{ file_count } to #{ SDKError.colors.cyan(project_package.marquee.HOST) }")
+
+            putFilesToS3 build_directory, files_to_deploy, project_package.marquee, ->
+                SDKError.log("\nDeployed #{ project_name_and_commit } to #{ SDKError.colors.cyan.underline('http://' + project_package.marquee.HOST) }")

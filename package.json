@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "autoprefixer-core": "^3.1.2",
+    "aws-sdk": "^2.0.21",
     "coffee-react": "^1.0.2",
     "coffee-react-transform": "^1.0.4",
     "coffee-reactify": "^1.0.3",
