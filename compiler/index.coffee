@@ -100,6 +100,7 @@ module.exports = (project_directory, onCompile=null) ->
                 # makes for a substantially simpler compiler.
                 global.config = project_config
                 global.build_info =
+                    root        : project_directory
                     commit      : commit_sha
                     date        : new Date()
                     asset_hash  : asset_hash

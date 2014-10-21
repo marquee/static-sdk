@@ -1,5 +1,9 @@
 React = require 'react'
 
+fs = require 'fs'
+path = require 'path'
+UglifyJS        = require 'uglify-js'
+
 module.exports = React.createClass
     displayName: 'JSONData'
     render: ->
@@ -29,6 +33,20 @@ module.exports = React.createClass
             })();
         """
 
+        if process.env.NODE_ENV is 'production'
+            unescape_script = UglifyJS.minify(unescape_script, fromString: true).code
+
+        if @props.file
+            # Parse it to ensure it is valid JSON data.
+            json_data = JSON.parse(fs.readFileSync(path.join(global.build_info.root, @props.file)).toString())
+        else
+            json_data = @props.children
+
+        if process.env.NODE_ENV is 'production'
+            json_data = JSON.stringify(json_data)
+        else
+            json_data = JSON.stringify(json_data, null, 4)
+
         # Wrapped in a div since React only allows returning a single node.
         <div
             id          = @props.id
@@ -37,7 +55,7 @@ module.exports = React.createClass
             aria-hidden = true
         >
             <script type='text/json' id="#{ @props.id }--DATA">
-                {JSON.stringify(@props.children)}
+                {json_data}
             </script>
             <script dangerouslySetInnerHTML={__html: unescape_script}></script>
         </div>

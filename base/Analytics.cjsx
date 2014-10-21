@@ -5,8 +5,10 @@ UglifyJS = require 'uglify-js'
 
 
 _rawScript = (script_str) ->
+    if process.env.NODE_ENV is 'production'
+        script_str = UglifyJS.minify(script_str, fromString: true).code
     <script dangerouslySetInnerHTML={
-        __html: UglifyJS.minify(script_str, fromString: true).code
+        __html: script_str
     } />
 
 
@@ -14,7 +16,7 @@ module.exports.GoogleAnalytics = React.createClass
     displayName: 'GoogleAnalytics'
     render: ->
         return null unless @props.id
-        _rawScript """     
+        _rawScript """
             (function() {
                 var _gaq = window._gaq || [];
                 _gaq.push(['_setAccount', '#{ @props.id }']);
