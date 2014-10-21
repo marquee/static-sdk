@@ -8,20 +8,8 @@ compileAssets           = require './compileAssets'
 ContentAPI              = require './ContentAPI'
 SDKError                = require './SDKError'
 { formatProjectPath }   = SDKError
-{ exec }                = require 'child_process'
 
-_getCurrentCommit = (directory, cb) ->
-    # If not a git repository, return null.
-    unless fs.existsSync(path.join(directory, '.git'))
-        cb(null)
-        return
-    # http://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
-    exec 'git diff-index HEAD && git ls-files --exclude-standard --others', cwd: directory, (err, stdout, stderr) ->
-        is_dirty = stdout.trim().length isnt 0
-        exec 'git rev-parse --short=N HEAD', cwd: directory, (err, stdout, stderr) ->
-            sha = stdout.split('\n').join('')
-            cb("#{ sha }#{ if is_dirty then '-dirty' else '' }")
-
+getCurrentCommit        = require './getCurrentCommit'
 
 module.exports = (project_directory, onCompile=null) ->
     # Ensure build directory exists and is empty.
@@ -31,7 +19,7 @@ module.exports = (project_directory, onCompile=null) ->
         fs.removeSync(build_directory)
 
     # Provide the commit sha to the build, if available.
-    _getCurrentCommit project_directory, (commit_sha) ->
+    getCurrentCommit project_directory, (commit_sha) ->
         _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
         SDKError.log("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
 
@@ -93,7 +81,7 @@ module.exports = (project_directory, onCompile=null) ->
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
             unless 'index.html' in _emitFile.files_emitted
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
-            onCompile?(_emitFile.files_emitted, compileAssets.files_emitted)
+            onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package)
 
         # _includeAssets = (asset_hash) ->
         #     return (args...) ->
@@ -107,7 +95,6 @@ module.exports = (project_directory, onCompile=null) ->
             project_directory   : project_directory
             build_directory     : build_directory
             hash_files          : process.env.NODE_ENV is 'production'
-            config              : project_config
             callback: (asset_hash) ->
                 # Make the config globally available. Yes, globals are Bad(tm), but this
                 # makes for a substantially simpler compiler.

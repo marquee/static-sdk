@@ -19,15 +19,17 @@ colors.setTheme
 MAIN = 'http://docs.marquee.by/marquee-static-sdk/'
 
 DOCS =
-    main            : MAIN
-    configuration   : "#{ MAIN }configuration/"
-    tokens          : "#{ MAIN }tokens/"
-    emitFile        : "#{ MAIN }emitFile/"
-    'emitFile.json' : ''
-    'project.react' : ''
-    files           : "#{ MAIN }files/"
-    assets          : "#{ MAIN }assets/"
-    compiler        : "#{ MAIN }compiler/"
+    main                    : MAIN
+    configuration           : "#{ MAIN }configuration/"
+    'configuration.deploy'  : "configuration.deploy"
+    tokens                  : "#{ MAIN }tokens/"
+    emitFile                : "#{ MAIN }emitFile/"
+    'emitFile.json'         : ''
+    'project.react'         : ''
+    files                   : "#{ MAIN }files/"
+    assets                  : "#{ MAIN }assets/"
+    compiler                : "#{ MAIN }compiler/"
+    'deploy.repo'           : "#{ MAIN }deploy/"
     api:
         404: "#{ MAIN }api/not-found/"
         401: "#{ MAIN }api/unauthorized/"
@@ -50,7 +52,7 @@ SDKError = (subject, message, code=null) ->
         post_message = "\nOriginal stack trace:\n#{ colors.yellow(message.stack) }\n"
     else
         post_message = ''
-    return new Error("#{ _prefix }#{ colors.error(message) } See: #{ colors.underline(colors.help(url)) }\n#{ post_message }")
+    return new Error("#{ _prefix }#{ colors.error(message) }\nDocs: #{ colors.underline(colors.help(url)) }\n#{ post_message }")
 
 
 
@@ -66,12 +68,12 @@ SDKError.warn = (subject, message, code=null) ->
         url = DOCS[subject][code]
     else
         url = DOCS[subject]
-    return util.log("#{ _prefix }#{ colors.warn(message) } See: #{ colors.underline(colors.help(url)) }")
+    return util.log("#{ _prefix }#{ colors.warn(message) } Docs: #{ colors.underline(colors.help(url)) }")
 
 SDKError.formatProjectPath = (p, f=null) ->
     p_parent = path.dirname(p) + '/'
     if f
-        return "#{ colors.grey(p_parent) }#{ colors.grey.underline(p.replace(p_parent,'')) }#{ colors.green(f.replace(p,'')) }"
+        return "#{ colors.grey.underline(p.replace(p_parent,'')) }#{ colors.green(f.replace(p,'')) }"
     return "#{ colors.grey(p_parent) }#{ colors.green(p.replace(p_parent,'')) }"
 
 _prefix = ''

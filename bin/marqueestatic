@@ -8,9 +8,12 @@ if('--production'===process.argv[3]) {
     process.env.NODE_ENV = 'development';
 }
 
+var is_forced = '--force'===process.argv[3];
+
 switch (command) {
     case 'deploy':
         process.env.NODE_ENV = 'production';
+        require('../deployment')(process.cwd(), is_forced);
         break;
     case 'build':
         require('../development/build')(process.cwd());
