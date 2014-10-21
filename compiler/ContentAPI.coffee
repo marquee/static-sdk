@@ -5,7 +5,6 @@ IMAGE   = 'image'
 TEXT    = 'text'
 EMBED   = 'embed'
 
-util    = require 'util'
 fs      = require 'fs'
 request = require 'request'
 
@@ -177,7 +176,7 @@ class ContentAPI
 
     _sendRequest: (opts) ->
         if @_cache?[opts.url]
-            util.log("Cached: #{ opts.url }")
+            SDKError.log("Cached: #{ opts.url }")
             opts.callback(@_cache[opts.url])
             return
 
@@ -192,7 +191,7 @@ class ContentAPI
                 'Authorization' : "Token #{ @_token }"
             url: opts.url
             qs: opts.query
-        util.log("Making request to Content API: #{ colors.info(opts.url) }")
+        SDKError.log("Making request to Content API: #{ colors.info(opts.url) }")
         request.get _options, (error, response, data) ->
             throw error if error
             # This API client is **read-only** and MUST only ever receive
@@ -221,7 +220,7 @@ class ContentAPI
             is_released: true
             _sort: '-published_date'
         , (result) ->
-            util.log("Got #{ result.length } entries from API.")
+            SDKError.log("Got #{ result.length } entries from API.")
             cb(result)
     packages: (cb) ->
         @filter

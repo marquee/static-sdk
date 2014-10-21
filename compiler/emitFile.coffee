@@ -5,7 +5,6 @@ colors      = SDKError.colors
 
 path        = require 'path'
 fs          = require 'fs'
-util        = require 'util'
 mime        = require 'mime'
 
 module.exports = ({ project_directory, project, config, writeFile }) ->
@@ -33,14 +32,13 @@ module.exports = ({ project_directory, project, config, writeFile }) ->
                 # It looks like a React component but somehow React wasn't
                 # installed locally for the project.
                 if file_content._store?.props?
-                    util.log('project-react', "Did you mean to render a React component? React MUST be installed locally for the project in order to pass `emitFile` a React component.")
+                    SDKError.log('project.react', "Did you mean to render a React component? React MUST be installed locally for the project in order to pass `emitFile` a React component.")
 
                 # Try turning the data into JSON
                 try
                     output_content = JSON.stringify(file_content)
                 catch e
-                    util.log(e)
-                    new SDKError('emitFile', "Failed to generate file content JSON.")
+                    throw new SDKError('emitFile.json', e)
                 return ['application/json', output_content]
             else
                 throw new SDKError('emitFile', "emitFile got unknown type of content: #{ typeof file_content }")
@@ -63,7 +61,7 @@ module.exports = ({ project_directory, project, config, writeFile }) ->
         unless output_type
             output_type = mime.lookup(output_path)
 
-        util.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
+        SDKError.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
 
         writeFile
             path        : output_path

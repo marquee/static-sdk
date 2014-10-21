@@ -3,7 +3,6 @@ sys             = require 'sys'
 path            = require 'path'
 crypto          = require 'crypto'
 
-util            = require 'util'
 SDKError        = require './SDKError'
 { formatProjectPath } = SDKError
 Sass            = require 'node-sass'
@@ -28,17 +27,16 @@ walkSync = (dir) ->
 
 
 compileCoffee = (source_path, dest_path, project_directory, cb) ->
-    util.log(SDKError.colors.grey("Compiling (coffee): #{ source_path.replace(project_directory, '') }"))
+    SDKError.log(SDKError.colors.grey("Compiling (coffee): #{ source_path.replace(project_directory, '') }"))
     b = browserify([source_path])
     compiled = b.transform(coffee_reactify).bundle (err, compiled) ->
         throw err if err
-        console.log 'compiled coffee'
         fs.writeFile dest_path, compiled, (err) ->
             throw err if err
             cb()
 
 compileSass = (source_path, dest_path, project_directory, cb) ->
-    util.log(SDKError.colors.grey("Compiling (sass): #{ source_path.replace(project_directory, '') }"))
+    SDKError.log(SDKError.colors.grey("Compiling (sass): #{ source_path.replace(project_directory, '') }"))
     Sass.render
         file: source_path
         includePaths: [
@@ -49,7 +47,6 @@ compileSass = (source_path, dest_path, project_directory, cb) ->
             throw err if err
         success: (compiled) ->
             compiled = autoprefixer.process(compiled).css
-            console.log 'compiled sass'
             fs.writeFile dest_path, compiled, (err) ->
                 throw err if err
                 cb()
@@ -57,7 +54,7 @@ compileSass = (source_path, dest_path, project_directory, cb) ->
 
 
 processAsset = (opts) ->
-    util.log("Processing asset: #{ formatProjectPath(opts.project_directory, opts.asset) }")
+    SDKError.log("Processing asset: #{ formatProjectPath(opts.project_directory, opts.asset) }")
     dest_path = opts.asset.replace(opts.asset_source_dir, opts.asset_cache_dir)
     path_parts = dest_path.split('.')
     switch path_parts.pop()
@@ -76,15 +73,18 @@ processAsset = (opts) ->
                 opts.callback()
 
 copyAssetsToBuild = (asset_cache_dir, asset_dest_dir, callback) ->
-    util.log("Copying assets to build: #{ formatProjectPath(asset_dest_dir) }")
-    # TODO: allow this to be modified by the project (includeAssets('base.coffee'))
+    _to_copy = []
     _names = ['script.js', 'style.css']
     walkSync(asset_cache_dir).forEach (f) ->
         # The file is script.js, style.css, or a non-script/-style asset.
         if not f.split('.').pop() in ['js', 'css'] or f.split('/').pop() in _names
             dest_path = f.replace(asset_cache_dir, asset_dest_dir)
-            fs.copySync(f, dest_path)
+            _to_copy.push(source: f, destination: dest_path)
+    
+    SDKError.log("Copying #{ SDKError.colors.green(_to_copy.length) } assets to build: #{ formatProjectPath(asset_dest_dir) }")
 
+    _to_copy.forEach (f) ->
+        fs.copySync(f.source, f.destination)
 
 
 compileAssets = (opts) ->

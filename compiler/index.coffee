@@ -3,7 +3,6 @@ require('coffee-react/register')
 
 fs                      = require 'fs-extra'
 path                    = require 'path'
-util                    = require 'util'
 
 compileAssets           = require './compileAssets'
 ContentAPI              = require './ContentAPI'
@@ -28,13 +27,13 @@ module.exports = (project_directory, onCompile=null) ->
     # Ensure build directory exists and is empty.
     build_directory = path.join(project_directory, '.build')
     if fs.existsSync(build_directory)
-        util.log(SDKError.colors.grey('Clearing previous build...'))
+        SDKError.log(SDKError.colors.grey('Clearing previous build...'))
         fs.removeSync(build_directory)
 
     # Provide the commit sha to the build, if available.
     _getCurrentCommit project_directory, (commit_sha) ->
         _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
-        util.log("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
+        SDKError.log("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
 
         # Load the project's package.json file, if present and valid.
         project_package_file = path.join(project_directory, 'package.json')
@@ -50,7 +49,7 @@ module.exports = (project_directory, onCompile=null) ->
         unless project_package.main
             throw new SDKError('configuration', "Project missing `package.main` (typically \"./main.coffee\")")
         project_main = path.join(project_directory, project_package.main)
-        util.log("Project entrypoint: #{ formatProjectPath(project_directory, project_main) }")
+        SDKError.log("Project entrypoint: #{ formatProjectPath(project_directory, project_main) }")
 
         # Load and validate the Marquee-specific compiler configuration.
         project_config = project_package.marquee
@@ -85,14 +84,16 @@ module.exports = (project_directory, onCompile=null) ->
         _done_timeout = setTimeout ->
             throw new SDKError('compiler', 'Compiler timeout. Compiler MUST call `done` within 60 seconds.')
         , 60 * 1000
+
         _done = ->
+            SDKError.clearPrefix()
             clearTimeout(_done_timeout)
             # Check that the project has necessary files.
             unless '404.html' in _emitFile.files_emitted
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
             unless 'index.html' in _emitFile.files_emitted
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
-            onCompile?(_emitFile.files_emitted)
+            onCompile?(_emitFile.files_emitted, compileAssets.assets_copied)
 
         # _includeAssets = (asset_hash) ->
         #     return (args...) ->
@@ -121,6 +122,8 @@ module.exports = (project_directory, onCompile=null) ->
                     global.ASSET_URL = '/assets/'
 
                 # Finally, invoke the compiler.
+                SDKError.log("Invoking compiler from #{ SDKError.colors.green(project_package.main) }")
+                SDKError.setPrefix(SDKError.colors.grey('* compiler: '))
                 try
                     buildFn
                         api             : api

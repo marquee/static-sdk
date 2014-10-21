@@ -23,6 +23,8 @@ DOCS =
     configuration   : "#{ MAIN }configuration/"
     tokens          : "#{ MAIN }tokens/"
     emitFile        : "#{ MAIN }emitFile/"
+    'emitFile.json' : ''
+    'project.react' : ''
     files           : "#{ MAIN }files/"
     assets          : "#{ MAIN }assets/"
     compiler        : "#{ MAIN }compiler/"
@@ -33,14 +35,12 @@ DOCS =
         toString: -> "#{ MAIN }api/"
 
 
-
-
 SDKError = (subject, message, code=null) ->
     if arguments.length is 1
-        return new Error(colors.error(subject))
+        return new Error(_prefix + colors.error(subject))
     unless DOCS[subject]
         console.warn(colors.warn("Unknown error subject specified: #{ subject }"))
-        return new Error(colors.error(message))
+        return new Error(_prefix + colors.error(message))
     if code and DOCS[subject][code]
         url = DOCS[subject][code]
     else
@@ -50,23 +50,23 @@ SDKError = (subject, message, code=null) ->
         post_message = "\nOriginal stack trace:\n#{ colors.yellow(message.stack) }\n"
     else
         post_message = ''
-    return new Error("#{ colors.error(message) } See: #{ colors.underline(colors.help(url)) }\n#{ post_message }")
+    return new Error("#{ _prefix }#{ colors.error(message) } See: #{ colors.underline(colors.help(url)) }\n#{ post_message }")
 
 
 
 SDKError.warn = (subject, message, code=null) ->
     if arguments.length is 1
-        util.log(colors.warn(subject))
+        util.log(_prefix + colors.warn(subject))
         return
     unless DOCS[subject]
         console.warn(colors.warn("Unknown error subject specified: #{ subject }"))
-        util.log(colors.warn(message))
+        util.log(_prefix + colors.warn(message))
         return
     if code and DOCS[subject][code]
         url = DOCS[subject][code]
     else
         url = DOCS[subject]
-    return util.log("#{ colors.warn(message) } See: #{ colors.underline(colors.help(url)) }")
+    return util.log("#{ _prefix }#{ colors.warn(message) } See: #{ colors.underline(colors.help(url)) }")
 
 SDKError.formatProjectPath = (p, f=null) ->
     p_parent = path.dirname(p) + '/'
@@ -74,7 +74,14 @@ SDKError.formatProjectPath = (p, f=null) ->
         return "#{ colors.grey(p_parent) }#{ colors.grey.underline(p.replace(p_parent,'')) }#{ colors.green(f.replace(p,'')) }"
     return "#{ colors.grey(p_parent) }#{ colors.green(p.replace(p_parent,'')) }"
 
+_prefix = ''
+SDKError.setPrefix = (prefix) -> _prefix = prefix
+SDKError.clearPrefix = -> _prefix = ''
+SDKError.indent = -> _prefix = '\t'
+SDKError.unindent = -> SDKError.clearPrefix()
 
+SDKError.log = (message) ->
+    util.log("#{ _prefix }#{ message }")
 
 SDKError.colors = colors
 
