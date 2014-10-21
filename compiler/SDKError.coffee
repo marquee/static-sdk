@@ -1,5 +1,5 @@
 
-
+path    = require 'path'
 colors  = require 'colors/safe'
 util    = require 'util'
 
@@ -24,6 +24,8 @@ DOCS =
     tokens          : "#{ MAIN }tokens/"
     emitFile        : "#{ MAIN }emitFile/"
     files           : "#{ MAIN }files/"
+    assets          : "#{ MAIN }assets/"
+    compiler        : "#{ MAIN }compiler/"
     api:
         404: "#{ MAIN }api/not-found/"
         401: "#{ MAIN }api/unauthorized/"
@@ -61,6 +63,11 @@ SDKError.warn = (subject, message, code=null) ->
         url = DOCS[subject]
     return util.log("#{ colors.warn(message) } See: #{ colors.underline(colors.help(url)) }")
 
+SDKError.formatProjectPath = (p, f=null) ->
+    p_parent = path.dirname(p) + '/'
+    if f
+        return "#{ colors.grey(p_parent) }#{ colors.grey.underline(p.replace(p_parent,'')) }#{ colors.green(f.replace(p,'')) }"
+    return "#{ colors.grey(p_parent) }#{ colors.green(p.replace(p_parent,'')) }"
 
 
 

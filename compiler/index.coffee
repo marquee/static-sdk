@@ -1,23 +1,22 @@
 # Enable support for requiring `.cjsx` files.
 require('coffee-react/register')
 
-fs                  = require 'fs-extra'
-path                = require 'path'
-util                = require 'util'
+fs                      = require 'fs-extra'
+path                    = require 'path'
+util                    = require 'util'
 
-ContentAPI          = require './ContentAPI'
-formatProjectPath   = require './formatProjectPath'
-SDKError            = require './SDKError'
-
-{ exec } = require 'child_process'
+compileAssets           = require './compileAssets'
+ContentAPI              = require './ContentAPI'
+SDKError                = require './SDKError'
+{ formatProjectPath }   = SDKError
+{ exec }                = require 'child_process'
 
 _getCurrentCommit = (directory, cb) ->
+    # If not a git repository, return null.
     unless fs.existsSync(path.join(directory, '.git'))
         cb(null)
         return
     # http://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
-    # git diff-index HEAD
-    # git ls-files --exclude-standard --others
     exec 'git diff-index HEAD && git ls-files --exclude-standard --others', cwd: directory, (err, stdout, stderr) ->
         is_dirty = stdout.trim().length isnt 0
         exec 'git rev-parse --short=N HEAD', cwd: directory, (err, stdout, stderr) ->
@@ -95,33 +94,37 @@ module.exports = (project_directory, onCompile=null) ->
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
             onCompile?(_emitFile.files_emitted)
 
-        # TODO: compile assets
-        asset_hash = null
+        compileAssets
+            project_directory   : project_directory
+            build_directory     : build_directory
+            hash_files          : process.env.NODE_ENV is 'production'
+            config              : project_config
+            writeFile           : _writeFile
+            callback: (asset_hash) ->
+                console.log asset_hash
 
-        # Make the config globally available. Yes, globals are Bad(tm), but this
-        # makes for a substantially simpler compiler.
-        global.config = project_config
-        global.build_info =
-            commit      : commit_sha
-            date        : new Date()
-            asset_hash  : asset_hash
+                # Make the config globally available. Yes, globals are Bad(tm), but this
+                # makes for a substantially simpler compiler.
+                global.config = project_config
+                global.build_info =
+                    commit      : commit_sha
+                    date        : new Date()
+                    asset_hash  : asset_hash
+                if asset_hash
+                    global.ASSET_URL = "/assets/#{ asset_hash }/"
+                else
+                    global.ASSET_URL = '/assets/'
 
-        # Finally, invoke the compiler.
-        try
-            buildFn
-                api         : api
-                emitFile    : _emitFile
-                config      : project_config
-                project     : project_package
-                done        : _done
-                info        : build_info
-                
-        catch e
-            throw new SDKError('compiler', e)
+                # Finally, invoke the compiler.
+                try
+                    buildFn
+                        api         : api
+                        emitFile    : _emitFile
+                        config      : project_config
+                        project     : project_package
+                        done        : _done
+                        info        : build_info
+                catch e
+                    throw new SDKError('compiler', e)
 
     return build_directory
-        # make temp directory for asset cache
-        # build all assets to asset cache
-        # make a temp directory for project
-        # copy auto assets
-        # build project into temp directory
