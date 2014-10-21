@@ -94,15 +94,20 @@ module.exports = (project_directory, onCompile=null) ->
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
             onCompile?(_emitFile.files_emitted)
 
+        # _includeAssets = (asset_hash) ->
+        #     return (args...) ->
+        #         compileAssets.includeAssets
+        #             project_directory   : project_directory
+        #             build_directory     : build_directory
+        #             asset_hash          : asset_hash
+        #             assets              : args
+
         compileAssets
             project_directory   : project_directory
             build_directory     : build_directory
             hash_files          : process.env.NODE_ENV is 'production'
             config              : project_config
-            writeFile           : _writeFile
             callback: (asset_hash) ->
-                console.log asset_hash
-
                 # Make the config globally available. Yes, globals are Bad(tm), but this
                 # makes for a substantially simpler compiler.
                 global.config = project_config
@@ -118,12 +123,13 @@ module.exports = (project_directory, onCompile=null) ->
                 # Finally, invoke the compiler.
                 try
                     buildFn
-                        api         : api
-                        emitFile    : _emitFile
-                        config      : project_config
-                        project     : project_package
-                        done        : _done
-                        info        : build_info
+                        api             : api
+                        emitFile        : _emitFile
+                        config          : project_config
+                        project         : project_package
+                        done            : _done
+                        info            : build_info
+                        # includeAssets   : _includeAssets(asset_hash)
                 catch e
                     throw new SDKError('compiler', e)
 

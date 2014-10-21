@@ -87,14 +87,13 @@ copyAssetsToBuild = (asset_cache_dir, asset_dest_dir, callback) ->
 
 
 
-module.exports = (opts) ->
+compileAssets = (opts) ->
 
     {
         project_directory
         build_directory
         callback
         hash_files
-        writeFile
     } = opts
 
     asset_source_dir    = path.join(project_directory, 'assets')
@@ -135,3 +134,15 @@ module.exports = (opts) ->
 
                     copyAssetsToBuild(asset_cache_dir, asset_dest_dir)
                     callback(asset_hash)
+
+# compileAssets.includeAssets = (opts) ->
+#     {
+#         project_directory
+#         build_directory
+#         assets
+#         asset_hash
+#     } = opts
+#     # if asset is directory, process contents
+#     # console.log asset_hash, assets
+
+module.exports = compileAssets
