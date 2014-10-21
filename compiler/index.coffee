@@ -14,8 +14,15 @@ SDKError            = require './SDKError'
 _getCurrentCommit = (directory, cb) ->
     unless fs.existsSync(path.join(directory, '.git'))
         cb(null)
-    exec 'git rev-parse --short=N HEAD', cwd: directory, (err, stdout, stderr) ->
-        cb(stdout.split('\n').join('')) 
+        return
+    # http://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
+    # git diff-index HEAD
+    # git ls-files --exclude-standard --others
+    exec 'git diff-index HEAD && git ls-files --exclude-standard --others', cwd: directory, (err, stdout, stderr) ->
+        is_dirty = stdout.trim().length isnt 0
+        exec 'git rev-parse --short=N HEAD', cwd: directory, (err, stdout, stderr) ->
+            sha = stdout.split('\n').join('')
+            cb("#{ sha }#{ if is_dirty then '-dirty' else '' }")
 
 
 module.exports = (project_directory, onCompile=null) ->
@@ -94,6 +101,10 @@ module.exports = (project_directory, onCompile=null) ->
         # Make the config globally available. Yes, globals are Bad(tm), but this
         # makes for a substantially simpler compiler.
         global.config = project_config
+        global.build_info =
+            commit      : commit_sha
+            date        : new Date()
+            asset_hash  : asset_hash
 
         # Finally, invoke the compiler.
         try
@@ -103,10 +114,7 @@ module.exports = (project_directory, onCompile=null) ->
                 config      : project_config
                 project     : project_package
                 done        : _done
-                info:
-                    commit      : commit_sha
-                    date        : new Date()
-                    asset_hash  : asset_hash
+                info        : build_info
                 
         catch e
             throw new SDKError('compiler', e)
