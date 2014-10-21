@@ -8,5 +8,5 @@ console.log('marquee static!');
 console.log(process.argv);
 
 
-require('../compiler')(process.cwd());
+require('../development')(process.cwd());
 
