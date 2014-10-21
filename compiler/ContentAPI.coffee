@@ -14,6 +14,66 @@ sdk_ua_string = require './sdk_ua_string'
 SDKError = require './SDKError'
 colors = SDKError.colors
 
+# Wraps the CDN image URLs for easier manipulation of CDN resizing parameters.
+# Also abstracts the legacy image format.
+# entry.cover_image.width(300).height(200).crop('fit')
+# entry.cover_image.w(300).x2()
+class CDNImage
+    constructor: (image, params={}) ->
+        @_original = image
+        if typeof image is 'object'
+            @_obj = image
+        else
+            @_url = image
+        @_params = params
+
+    width: (w) ->
+        return @copy(width: w)
+
+    height: (h) ->
+        return @copy(height: h)
+
+    w: -> @width(arguments...)
+    h: -> @height(arguments...)
+
+    x2: ->
+        @_params.multiplier = 2
+        return this
+
+    x3: ->
+        @_params.multiplier = 3
+        return this
+
+    copy: (new_params={}) ->
+        _params = {}
+        for k,v of @_params
+            _params[k] = v
+        for k,v of new_params
+            _params[k] = v
+        return new CDNImage(@_original, _params)
+
+    toString: ->
+
+        _params = JSON.parse(JSON.stringify(@_params))
+
+        # Apply the retina multiplier.
+        if _params.multiplier
+            _params.width = _params.width * _params.multiplier if _params.width
+            _params.height = _params.height * _params.multiplier if _params.height
+            delete _params.multiplier
+
+        # Handle legacy images, approximating the resize effect.
+        if @_obj
+            if _params.width? and _params.width > 640
+                return @_obj.content['1280']?.url
+            return @_obj.content['640']?.url
+
+        url = @_url
+        param_list = []
+        for k,v of _params
+            param_list.push("#{ k }=#{ v }") unless k is 'multiplier'
+        return "#{ url }?#{ param_list.join('&') }"
+
 class Model
     constructor: (source_data) ->
         @_data = source_data
@@ -39,8 +99,11 @@ class Model
         if name in ['content', 'cover_content'] and @_data.type in [ENTRY, IMAGE, TEXT,  EMBED]
             return @_data[name]
 
+        # Treat the old cover_content images as new ones.
         if name is 'cover_image'
-            return @_data.cover_content?.content?['640']?.url
+            unless @_data.cover_content
+                return null
+            return new CDNImage(@_data.cover_content)
 
         switch name.split('_').pop()
             when 'date'
