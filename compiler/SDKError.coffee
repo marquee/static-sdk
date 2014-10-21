@@ -4,16 +4,16 @@ colors  = require 'colors/safe'
 util    = require 'util'
 
 colors.setTheme
-  silly     : 'rainbow',
-  input     : 'grey',
-  verbose   : 'cyan',
-  prompt    : 'grey',
-  info      : 'green',
-  data      : 'grey',
-  help      : 'cyan',
-  warn      : 'yellow',
-  debug     : 'blue',
-  error     : 'red'
+    silly     : 'rainbow',
+    input     : 'grey',
+    verbose   : 'cyan',
+    prompt    : 'grey',
+    info      : 'green',
+    data      : 'grey',
+    help      : 'cyan',
+    warn      : 'yellow',
+    debug     : 'blue',
+    error     : 'red'
 
 
 MAIN = 'http://docs.marquee.by/marquee-static-sdk/'
