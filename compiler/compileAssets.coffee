@@ -11,7 +11,8 @@ browserify      = require 'browserify'
 coffee_reactify = require 'coffee-reactify'
 
 walkSync        = require './walkSync'
-
+sqwish          = require 'sqwish'
+UglifyJS        = require 'uglify-js'
 
 
 compileCoffee = (source_path, dest_path, project_directory, cb) ->
@@ -19,6 +20,9 @@ compileCoffee = (source_path, dest_path, project_directory, cb) ->
     b = browserify([source_path])
     compiled = b.transform(coffee_reactify).bundle (err, compiled) ->
         throw err if err
+        if process.env.NODE_ENV is 'production'
+            SDKError.log(SDKError.colors.grey("Minifying #{ source_path.replace(project_directory,'') }"))
+            compiled = UglifyJS.minify(compiled.toString(), fromString: true).code
         fs.writeFile dest_path, compiled, (err) ->
             throw err if err
             cb()
@@ -35,17 +39,43 @@ compileSass = (source_path, dest_path, project_directory, cb) ->
             throw err if err
         success: (compiled) ->
             compiled = autoprefixer.process(compiled).css
+            if process.env.NODE_ENV is 'production'
+                SDKError.log(SDKError.colors.grey("Minifying #{ source_path.replace(project_directory,'') }"))
+                compiled = sqwish.minify(compiled.toString())
             fs.writeFile dest_path, compiled, (err) ->
                 throw err if err
                 cb()
 
+copyAndMinifyJS = (source, destination, project_directory, callback) ->
+    fs.readFile source, (err, file_data) ->
+        throw err if err?
+        if process.env.NODE_ENV is 'production'
+            SDKError.log(SDKError.colors.grey("Minifying #{ source.replace(project_directory,'') }"))
+            file_data = UglifyJS.minify(file_data.toString(), fromString: true).code
+        fs.writeFile destination, file_data, (err) ->
+            throw err if err?
+            callback()
+
+copyAndMinifyCSS = (source, destination, project_directory, callback) ->
+    fs.readFile source, (err, file_data) ->
+        throw err if err?
+        if process.env.NODE_ENV is 'production'
+            SDKError.log(SDKError.colors.grey("Minifying #{ source.replace(project_directory,'') }"))
+            file_data = sqwish.minify(file_data.toString())
+        fs.writeFile destination, file_data, (err) ->
+            throw err if err?
+            callback()
+
+copyAsset = (source, destination, project_directory, callback) ->
+    SDKError.log(SDKError.colors.grey("Copying #{ source.replace(project_directory,'') }"))
+    fs.copy source, destination, ->
+        callback()
 
 
 processAsset = (opts) ->
     SDKError.log("Processing asset: #{ formatProjectPath(opts.project_directory, opts.asset) }")
     dest_path = opts.asset.replace(opts.asset_source_dir, opts.asset_cache_dir)
     path_parts = dest_path.split('.')
-    # TODO: if process.env.NODE_ENV is 'production', minify
     switch path_parts.pop()
         when 'coffee'
             path_parts.push('js')
@@ -57,8 +87,14 @@ processAsset = (opts) ->
             dest_path = path_parts.join('.')
             compileSass opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
+        when 'js'
+            copyAndMinifyJS opts.asset, dest_path, opts.project_directory, ->
+                opts.callback()
+        when 'css'
+            copyAndMinifyJS opts.asset, dest_path, opts.project_directory, ->
+                opts.callback()
         else
-            fs.copy opts.asset, dest_path, ->
+            copyAsset opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
 
 copyAssetsToBuild = (project_directory, asset_cache_dir, asset_dest_dir) ->
@@ -66,7 +102,7 @@ copyAssetsToBuild = (project_directory, asset_cache_dir, asset_dest_dir) ->
     _names = ['script.js', 'style.css']
     walkSync(asset_cache_dir).forEach (f) ->
         # The file is script.js, style.css, or a non-script/-style asset.
-        if not f.split('.').pop() in ['js', 'css'] or f.split('/').pop() in _names
+        if (f.split('.').pop() not in ['js', 'css']) or f.split('/').pop() in _names
             dest_path = f.replace(asset_cache_dir, asset_dest_dir)
             _to_copy.push(source: f, destination: dest_path)
     
@@ -102,12 +138,13 @@ compileAssets = (opts) ->
     fs.ensureDirSync(asset_cache_dir)
     fs.ensureDirSync(asset_dest_dir)
 
-    assets = walkSync(asset_source_dir)
+    assets = walkSync(asset_source_dir, ignore=['_','.'])
     to_process = assets.length
     assets.forEach (asset) ->
         processAsset
             asset_source_dir    : asset_source_dir
             asset_cache_dir     : asset_cache_dir
+            asset_dest_dir      : asset_dest_dir
             asset               : asset
             project_directory   : project_directory
             callback: ->
