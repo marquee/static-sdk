@@ -45,7 +45,12 @@ SDKError = (subject, message, code=null) ->
         url = DOCS[subject][code]
     else
         url = DOCS[subject]
-    return new Error("#{ colors.error(message) } See: #{ colors.underline(colors.help(url)) }\n")
+
+    if message.stack
+        post_message = "\nOriginal stack trace:\n#{ colors.yellow(message.stack) }\n"
+    else
+        post_message = ''
+    return new Error("#{ colors.error(message) } See: #{ colors.underline(colors.help(url)) }\n#{ post_message }")
 
 
 
