@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./",
-    "workon": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
+    "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
     "clearjs": "find . -path ./node_modules -prune -or -name '*.js' | grep -v 'node_modules' | xargs rm"
   },
   "main": "./index.js",
