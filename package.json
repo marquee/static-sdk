@@ -1,7 +1,7 @@
 {
   "name": "marquee-static-sdk",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.0-alpha",
   "scripts": {
     "build": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./",
     "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
