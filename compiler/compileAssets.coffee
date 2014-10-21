@@ -72,7 +72,7 @@ processAsset = (opts) ->
             fs.copy opts.asset, dest_path, ->
                 opts.callback()
 
-copyAssetsToBuild = (asset_cache_dir, asset_dest_dir, callback) ->
+copyAssetsToBuild = (project_directory, asset_cache_dir, asset_dest_dir) ->
     _to_copy = []
     _names = ['script.js', 'style.css']
     walkSync(asset_cache_dir).forEach (f) ->
@@ -81,10 +81,12 @@ copyAssetsToBuild = (asset_cache_dir, asset_dest_dir, callback) ->
             dest_path = f.replace(asset_cache_dir, asset_dest_dir)
             _to_copy.push(source: f, destination: dest_path)
     
-    SDKError.log("Copying #{ SDKError.colors.green(_to_copy.length) } assets to build: #{ formatProjectPath(asset_dest_dir) }")
+    SDKError.log("Copying #{ SDKError.colors.green(_to_copy.length) } assets to build: #{ formatProjectPath(project_directory, asset_dest_dir) }")
 
     _to_copy.forEach (f) ->
         fs.copySync(f.source, f.destination)
+        compileAssets.files_emitted.push(f.destination)
+
 
 
 compileAssets = (opts) ->
@@ -132,8 +134,10 @@ compileAssets = (opts) ->
                         asset_hash = hash.digest('hex')
                         asset_dest_dir = path.join(asset_dest_dir, asset_hash)
 
-                    copyAssetsToBuild(asset_cache_dir, asset_dest_dir)
+                    copyAssetsToBuild(project_directory, asset_cache_dir, asset_dest_dir)
                     callback(asset_hash)
+
+compileAssets.files_emitted = []
 
 # compileAssets.includeAssets = (opts) ->
 #     {
