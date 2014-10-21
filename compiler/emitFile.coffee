@@ -8,7 +8,7 @@ fs          = require 'fs'
 util        = require 'util'
 mime        = require 'mime'
 
-module.exports = (project_directory, project, config) ->
+module.exports = ({ project_directory, project, config, writeFile }) ->
 
 
     # Require the project's copy of React so that the below validation and
@@ -46,12 +46,17 @@ module.exports = (project_directory, project, config) ->
                 throw new SDKError('emitFile', "emitFile got unknown type of content: #{ typeof file_content }")
 
     _processPath = (file_path) ->
+        # Turn paths that end in a directory into `path/index.html` for clean URLs
+        if file_path.indexOf('.') is -1
+            return "#{ file_path }/index.html"
         return file_path
+
+    files_emitted = []
 
     # The actual function given to the compiler for generating files.
     emitFile = (file_path, file_content) ->
-        output_path     = _processPath(file_path)
-        [output_type, output_content]  = _processContent(file_content)
+        output_path                     = _processPath(file_path)
+        [output_type, output_content]   = _processContent(file_content)
 
         # If _processContent didn't specify a content type, guess based on
         # the output path.
@@ -60,6 +65,14 @@ module.exports = (project_directory, project, config) ->
 
         util.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
 
+        writeFile
+            path        : output_path
+            content     : output_content
+            type        : output_type
+
+        files_emitted.push(output_path)
+
+    emitFile.files_emitted = files_emitted
 
     return emitFile
 
