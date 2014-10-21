@@ -10,19 +10,7 @@ autoprefixer    = require 'autoprefixer-core'
 browserify      = require 'browserify'
 coffee_reactify = require 'coffee-reactify'
 
-# Using a synchronous version of walk for simplicity
-walkSync = (dir) ->
-    results = []
-    list = fs.readdirSync(dir)
-    for f in list
-        file = path.join(dir,f)
-        stat = fs.statSync(file)
-        if stat?.isDirectory()
-            results.push(walkSync(file)...)
-        else
-            unless f[0] is '.'
-                results.push(file)
-    return results
+walkSync        = require './walkSync'
 
 
 
@@ -57,6 +45,7 @@ processAsset = (opts) ->
     SDKError.log("Processing asset: #{ formatProjectPath(opts.project_directory, opts.asset) }")
     dest_path = opts.asset.replace(opts.asset_source_dir, opts.asset_cache_dir)
     path_parts = dest_path.split('.')
+    # TODO: if process.env.NODE_ENV is 'production', minify
     switch path_parts.pop()
         when 'coffee'
             path_parts.push('js')
@@ -90,6 +79,8 @@ copyAssetsToBuild = (project_directory, asset_cache_dir, asset_dest_dir) ->
 
 
 compileAssets = (opts) ->
+    # Reset the count each run.
+    compileAssets.files_emitted = []
 
     {
         project_directory
@@ -105,7 +96,7 @@ compileAssets = (opts) ->
     # Asset folder is not strictly required, so only warn if it doesn't exist.
     unless fs.existsSync(asset_source_dir)
         SDKError.warn('assets', 'No project ./assets/ folder found.')
-        callback(null)
+        callback?(null)
         return
 
     fs.ensureDirSync(asset_cache_dir)
@@ -135,7 +126,7 @@ compileAssets = (opts) ->
                         asset_dest_dir = path.join(asset_dest_dir, asset_hash)
 
                     copyAssetsToBuild(project_directory, asset_cache_dir, asset_dest_dir)
-                    callback(asset_hash)
+                    callback?(asset_hash)
 
 compileAssets.files_emitted = []
 
