@@ -113,7 +113,9 @@ copyAssetsToBuild = (project_directory, asset_cache_dir, asset_dest_dir) ->
         compileAssets.files_emitted.push(f.destination)
 
 
-
+# All assets get compiled and placed into .asset-cache. This allows <Asset>
+# tags in the compiler to inline certain files. However, only script.js and
+# style.css (and any non-js/-css) get copied into the build output folder.
 compileAssets = (opts) ->
     # Reset the count each run.
     compileAssets.files_emitted = []

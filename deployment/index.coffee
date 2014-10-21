@@ -23,6 +23,8 @@ module.exports = (project_directory, force=false) ->
                 throw new SDKError('deploy.repo', "#{ _repo_message }\nUse `#{ SDKError.colors.magenta('marqueestatic deploy --force') }` to override.")
             SDKError.warn('deploy.repo', _repo_message)
 
+        # TODO: warn if branch is not master or behind origin/master
+
 
         SDKError.log('Pre-deploy build...\n\n')
         build_directory = runCompiler project_directory, (files, assets, project_package) ->

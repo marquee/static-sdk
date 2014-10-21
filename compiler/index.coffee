@@ -100,10 +100,10 @@ module.exports = (project_directory, onCompile=null) ->
                 # makes for a substantially simpler compiler.
                 global.config = project_config
                 global.build_info =
-                    root        : project_directory
-                    commit      : commit_sha
-                    date        : new Date()
-                    asset_hash  : asset_hash
+                    project_directory   : project_directory
+                    commit              : commit_sha
+                    date                : new Date()
+                    asset_hash          : asset_hash
                 if asset_hash
                     global.ASSET_URL = "/assets/#{ asset_hash }/"
                 else
