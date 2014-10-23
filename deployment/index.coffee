@@ -7,6 +7,8 @@ path                = require 'path'
 
 module.exports = (project_directory, force=false) ->
 
+    SDKError.log(SDKError.colors.grey("Attempting to deploy: #{ project_directory }"))
+
     getCurrentCommit project_directory, (commit_sha) ->
 
         # Require deploying from a clean working directory of a version
