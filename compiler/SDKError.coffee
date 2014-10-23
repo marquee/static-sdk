@@ -18,30 +18,32 @@ colors.setTheme
 
 MAIN = 'http://docs.marquee.by/marquee-static-sdk/'
 
-DOCS =
-    main                    : MAIN
-    configuration           : "#{ MAIN }configuration/"
-    'configuration.deploy'  : "configuration.deploy"
-    tokens                  : "#{ MAIN }tokens/"
-    emitFile                : "#{ MAIN }emitFile/"
-    'emitFile.json'         : ''
-    'project.react'         : ''
-    files                   : "#{ MAIN }files/"
-    assets                  : "#{ MAIN }assets/"
-    compiler                : "#{ MAIN }compiler/"
-    'deploy.repo'           : "#{ MAIN }deploy/"
-    api:
-        404: "#{ MAIN }api/not-found/"
-        401: "#{ MAIN }api/unauthorized/"
-        403: "#{ MAIN }api/forbidden/"
-        toString: -> "#{ MAIN }api/"
+DOCS = {}
+# Disable until they're actually available
+# DOCSX =
+#     main                    : MAIN
+#     configuration           : "#{ MAIN }configuration/"
+#     'configuration.deploy'  : "configuration.deploy"
+#     tokens                  : "#{ MAIN }tokens/"
+#     emitFile                : "#{ MAIN }emitFile/"
+#     'emitFile.json'         : ''
+#     'project.react'         : ''
+#     files                   : "#{ MAIN }files/"
+#     assets                  : "#{ MAIN }assets/"
+#     compiler                : "#{ MAIN }compiler/"
+#     'deploy.repo'           : "#{ MAIN }deploy/"
+#     api:
+#         404: "#{ MAIN }api/not-found/"
+#         401: "#{ MAIN }api/unauthorized/"
+#         403: "#{ MAIN }api/forbidden/"
+#         toString: -> "#{ MAIN }api/"
 
 
 SDKError = (subject, message, code=null) ->
     if arguments.length is 1
         return new Error(_prefix + colors.error(subject))
     unless DOCS[subject]
-        console.warn(colors.warn("Unknown error subject specified: #{ subject }"))
+        console.warn(colors.grey("Unknown error subject specified: #{ subject }"))
         return new Error(_prefix + colors.error(message))
     if code and DOCS[subject][code]
         url = DOCS[subject][code]
