@@ -13,7 +13,7 @@ getCurrentCommit        = require './getCurrentCommit'
 
 module.exports = (project_directory, onCompile=null) ->
     # Ensure build directory exists and is empty.
-    build_directory = path.join(project_directory, '.build')
+    build_directory = path.join(project_directory, '.dist')
     if fs.existsSync(build_directory)
         SDKError.log(SDKError.colors.grey('Clearing previous build...'))
         fs.removeSync(build_directory)
@@ -100,10 +100,12 @@ module.exports = (project_directory, onCompile=null) ->
                 # makes for a substantially simpler compiler.
                 global.config = project_config
                 global.build_info =
-                    project_directory   : project_directory
-                    commit              : commit_sha
-                    date                : new Date()
-                    asset_hash          : asset_hash
+                    project_directory       : project_directory
+                    commit                  : commit_sha
+                    date                    : new Date()
+                    asset_hash              : asset_hash
+                    build_directory         : build_directory
+                    asset_cache_directory   : path.join(build_directory, '.asset-cache')
                 if asset_hash
                     global.ASSET_URL = "/assets/#{ asset_hash }/"
                 else

@@ -25,7 +25,7 @@ _render = (props) =>
 
 _renderInline = (props) ->
 
-    _path = path.join(global.build_info.project_directory, '.build', '.asset-cache', props.path)
+    _path = path.join(global.build_info.asset_cache_directory, props.path)
     _ext = _path.split('.').pop()
 
     switch _ext
