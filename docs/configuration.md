@@ -32,11 +32,11 @@ property. They also need an entrypoint specified, under `"main"`.
 * `SITE_TWITTER_SCREEN_NAME` - the Twitter `screen_name` for the publication, used for Twitter Cards
 * `auto_assets` - set to `false` to disable automatic asset compilation
 
-## `main`
+## Entrypoint
 
-The entrypoint is the module that is loaded by the SDK and starts the
-compiler. It MAY be a `coffee`, `jsx`, or `cjsx` file, in addition to regular
-JavaScript.
+The entrypoint specified by `"main"` is the module that is loaded by the SDK
+and starts the compiler. It MAY be a `js`, `coffee`, `jsx`, or `cjsx` file,
+MAY be named anything, and MAY be located anywhere in the project.
 
 ## Tokens
 
