@@ -30,9 +30,16 @@ module.exports = (project_directory, build_directory) ->
         else if ext in ['sass']
             _doAssets(file_name)
 
-    watch path.join(project_directory, 'assets'), (file_name) ->
+    _handleChange = (file_name) ->
         SDKError.log(SDKError.colors.grey("changed: #{ file_name }"))
+        # Clear cache of required project files to ensure changes are used.
+        Object.keys(require.cache).forEach (key) ->
+            if key.indexOf(project_directory) > -1 and key.indexOf(path.join(project_directory, 'node_modules')) is -1
+                delete require.cache[key]
+
+    watch path.join(project_directory, 'assets'), (file_name) ->
+        _handleChange(file_name)
         _doAssets(file_name)
     watch watch_targets, (file_name) ->
-        SDKError.log(SDKError.colors.grey("changed: #{ file_name }"))
+        _handleChange(file_name)
         _doFiles(file_name)

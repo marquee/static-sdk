@@ -47,12 +47,6 @@ module.exports = (project_directory, onCompile=null) ->
             unless project_config[prop]
                 throw new SDKError('configuration', "Project missing `package.marquee.#{ prop }`.")
 
-        # Clear the require cache first to ensure it loads the most recent
-        # version when watching.
-        Object.keys(require.cache).forEach (key) ->
-            if key.indexOf(project_directory) > -1
-                delete require.cache[key]
-
         # Load the project compiler entrypoint.
         buildFn = require(project_main)
         unless typeof buildFn is 'function'
