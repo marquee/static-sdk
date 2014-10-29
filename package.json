@@ -19,6 +19,7 @@
     "coffee-reactify": "^1.0.3",
     "coffee-script": "^1.8.0",
     "colors": "^1.0.3",
+    "css": "^2.1.0",
     "fs-extra": "^0.12.0",
     "html": "0.0.7",
     "mime": "^1.2.11",
