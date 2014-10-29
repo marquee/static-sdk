@@ -37,7 +37,7 @@ _renderInline = (props) ->
 
         when 'css', 'sass'
             if _ext is 'sass'
-                full_path = full_path.replace('.sass', '.css')
+                _path = _path.replace('.sass', '.css')
             file_content = fs.readFileSync(_path).toString()
             return <style dangerouslySetInnerHTML={__html: file_content} />
         else
