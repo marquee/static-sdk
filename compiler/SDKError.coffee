@@ -38,6 +38,14 @@ DOCS = {}
 #         403: "#{ MAIN }api/forbidden/"
 #         toString: -> "#{ MAIN }api/"
 
+for k,v of DOCS
+    if typeof v is 'object'
+        for _k, _v of v
+            unless _k is 'toString'
+                v[_k] = "#{ MAIN }#{ _v }"
+    else
+        unless _k is 'toString'
+            DOCS[k] = "#{ MAIN }#{ v }"
 
 SDKError = (subject, message, code=null) ->
     if arguments.length is 1
