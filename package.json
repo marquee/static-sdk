@@ -1,7 +1,8 @@
 {
   "name": "marquee-static-sdk",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "scripts": {
+    "prepublish": "npm run clearjs && npm run build",
     "build": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./",
     "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
     "clearjs": "find . -path ./node_modules -prune -or -name '*.js' | grep -v 'node_modules' | xargs rm"
@@ -19,6 +20,7 @@
     "coffee-reactify": "^1.0.3",
     "coffee-script": "^1.8.0",
     "colors": "^1.0.3",
+    "css": "^2.1.0",
     "fs-extra": "^0.12.0",
     "html": "0.0.7",
     "mime": "^1.2.11",

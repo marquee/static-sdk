@@ -57,21 +57,31 @@
                     width: 100%
                     max-width: $Block-column_width--main / 4 * 3
             &.-position--center
-                max-width: none
                 ._Content
-                    max-width: none
+                    width: 100%
+                    max-width: $Block-column_width--main
+
+        &.-size--full
+            max-width: none
+            ._Content
+                width: 100%
+                max-width: none
 
     &.-pinned
-        // Create the "curtains" effect when there is more than one pinned
+        // Create a "curtains" effect when there is more than one pinned
         // image in a row
         & + &.-pinned
             margin-top: -1 * $Block-margin
 
+        max-width: none
+        ._Content
+            max-width: none
+
         ._Image
-            background-position     : center center
-            background-repeat       : no-repeat
-            background-size         : cover   
-            height: 100vh
+            background-position : center center
+            background-repeat   : no-repeat
+            background-size     : cover   
+            height              : 100vh
             +respond-to-gt-medium
                 background-attachment: fixed
 

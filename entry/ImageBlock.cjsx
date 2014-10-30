@@ -20,13 +20,12 @@ module.exports = React.createClass
         variants = new Classes()
 
         is_pinned = false
-        size = @props.block.layout?.size or 'medium'
-        position = @props.block.layout?.position or 'center'
+        layout = @props.block.layout or {}
+        size = layout.size or 'medium'
+        position = layout.position or 'center'
+        effect = layout.effect or 'default'
 
         aspect_ratio = @props.block.original?.width / (@props.block.original?.height or 1)
-
-        variants.set('size', size)
-        variants.set('position', position)
 
         credit = @props.block.credit
         caption = @props.block.caption
@@ -37,11 +36,14 @@ module.exports = React.createClass
                         caption = anno.content
                         break
 
-        if size is 'large' and position is 'center'
+        if effect is 'pin'
             variants.set('pinned')
             is_pinned = true
             image = <div className = '_Image' />
         else
+            variants.set('size', size)
+            unless size is 'full'
+                variants.set('position', position)
             image = <img className='_Image' />
 
         <figure
