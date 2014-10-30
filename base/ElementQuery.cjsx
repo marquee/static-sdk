@@ -98,20 +98,25 @@ element_query_engine = fs.readFileSync(path.join(__dirname, '_element_query_engi
 module.exports = React.createClass
     displayName: 'ElementQuery'
     getDefaultProps: -> {
-        styles: 'style.sass'
+        styles: ['style.sass']
     }
     render: ->
-        file = path.join(global.build_info.asset_cache_directory, @props.styles)
-        if file.split('.').pop() is 'sass'
-            file = file.replace('.sass', '.css')
-        css_source = fs.readFileSync(file).toString()
+        unless @props.styles.map?
+            stylesheets = [@props.styles]
+        else
+            stylesheets = @props.styles
+        styles = stylesheets.map (stylesheet) ->
+            file = path.join(global.build_info.asset_cache_directory, stylesheet)
+            if file.split('.').pop() is 'sass'
+                file = file.replace('.sass', '.css')
+            return fs.readFileSync(file).toString()
+        css_source = styles.join('')
         eq_script = """
                 (function(){
                     var _query_data = #{ JSON.stringify(parseCSS(css_source), null, 4) };
                     #{ element_query_engine }
                 })();
             """
-        console.log eq_script.length
         if process.env.NODE_ENV is 'production'
             eq_script = UglifyJS.minify(eq_script, fromString: true).code
         console.log eq_script.length
