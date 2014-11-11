@@ -31,3 +31,16 @@ a JSON-formatted string.
 
     emitFile('data.json', { key: "value" }) - /data.json
 
+
+## Common errors
+
+* `ReferenceError: React is not defined`
+
+    Any file that contains JSX or CJSX MUST require React, even if the React
+    object is never used directly. The compiled JS that the two output uses
+    React.
+
+* `Compiler timeout. Compiler MUST call done within 60 seconds.`
+    
+    Either the compiler does not call `done()` somewhere in its execution, or
+    the compilation process takes too long.
