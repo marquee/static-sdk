@@ -169,6 +169,9 @@ compileAssets = (opts) ->
 
 compileAssets.files_emitted = []
 
+# Export processAsset so it can be used directly, bypassing path definitions.
+compileAssets.processAsset = processAsset
+
 # compileAssets.includeAssets = (opts) ->
 #     {
 #         project_directory
