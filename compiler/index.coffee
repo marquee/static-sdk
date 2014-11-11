@@ -11,7 +11,7 @@ SDKError                = require './SDKError'
 
 getCurrentCommit        = require './getCurrentCommit'
 
-module.exports = (project_directory, onCompile=null) ->
+module.exports = (project_directory, options, onCompile=null) ->
     # Ensure build directory exists and is empty.
     build_directory = path.join(project_directory, '.dist')
     if fs.existsSync(build_directory)
@@ -40,12 +40,30 @@ module.exports = (project_directory, onCompile=null) ->
         SDKError.log("Project entrypoint: #{ formatProjectPath(project_directory, project_main) }")
 
         # Load and validate the Marquee-specific compiler configuration.
-        project_config = project_package.marquee
-        unless project_config
+        project_config = {}
+
+        unless project_package.marquee
             throw new SDKError('configuration', "Project missing `package.marquee`.")
+
+        for k,v of project_package.marquee
+            unless k is 'configurations'
+                project_config[k] = v
+
+        # Override config with specified configuration values.
+        if options.configuration
+            unless project_package.marquee.configurations[options.configuration]
+                _available_configs = Object.keys(project_package.marquee.configurations).map (c) -> "`#{ c }`"
+                _available_configs = _available_configs.join(', ')
+                throw new SDKError('configuration', "Unknown configuration specified: `#{ options.configuration }`. Package has #{ _available_configs }.")
+            for k,v of project_package.marquee.configurations[options.configuration]
+                project_config[k] = v
+
         ['CONTENT_API_TOKEN', 'CONTENT_API_ROOT', 'HOST'].forEach (prop) ->
             unless project_config[prop]
-                throw new SDKError('configuration', "Project missing `package.marquee.#{ prop }`.")
+                _config_notice = ''
+                if project_package.marquee.configurations
+                    _config_notice = ' A `--configuration <name>` may be required.'
+                throw new SDKError('configuration', "Project missing `package.marquee.#{ prop }`.#{ _config_notice }")
 
         # Load the project compiler entrypoint.
         buildFn = require(project_main)

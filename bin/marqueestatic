@@ -1,27 +1,39 @@
 #!/usr/bin/env node
 
-var command = process.argv[2];
+var program = require('commander');
 
-if('--production'===process.argv[3]) {
+program
+    .version(require('../_package_data').version)
+    .option('-p, --production', 'Build for production (minify)')
+    .option('-f, --force', 'Force the action, overriding checks and guards')
+    .option('-c, --configuration <name>', 'A configuration to use')
+    .parse(process.argv);
+
+if (program.production) {
     process.env.NODE_ENV = 'production';
 } else {
     process.env.NODE_ENV = 'development';
 }
 
-var is_forced = '--force'===process.argv[3];
+var _command = program.args[0];
+var _options = {
+    force: program.force || false,
+    configuration: program.configuration || null,
+    production: program.production || false,
+}
 
-switch (command) {
+switch (_command) {
     case 'deploy':
         process.env.NODE_ENV = 'production';
-        require('../deployment')(process.cwd(), is_forced);
+        require('../deployment')(process.cwd(), _options);
         break;
     case 'build':
-        require('../development/build')(process.cwd());
+        require('../development/build')(process.cwd(), _options);
         break;
     case 'develop':
-        require('../development')(process.cwd());
+        require('../development')(process.cwd(), _options);
         break;
     default:
-        console.log('Unknown command: ' + command);
+        console.log('Unknown command: `' + _command + '`');
         process.exit(1);
 }
