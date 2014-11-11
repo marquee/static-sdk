@@ -16,7 +16,7 @@ colors.setTheme
     error     : 'red'
 
 
-MAIN = 'http://docs.marquee.by/marquee-static-sdk/'
+MAIN = 'http://developer.marquee.by/marquee-static-sdk/'
 
 DOCS = {}
 # Disable until they're actually available
