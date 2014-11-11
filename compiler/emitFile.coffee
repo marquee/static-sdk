@@ -27,9 +27,6 @@ module.exports = ({ project_directory, project, config, writeFile }) ->
                 if React?.isValidComponent(file_content)
                     output_content = React.renderComponentToStaticMarkup(file_content)
                     output_content = "<!doctype html>#{ output_content }"
-                    unless process.env.NODE_ENV is 'production'
-                        { prettyPrint } = require 'html'
-                        output_content = prettyPrint(output_content)
                     return ['text/html', output_content]
 
                 # It looks like a React component but somehow React wasn't
