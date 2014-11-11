@@ -21,7 +21,6 @@ module.exports = ({ project_directory, project, config, writeFile }) ->
     _processContent = (file_content) ->
         switch typeof file_content
             when 'string'
-                console.log "SAVING STRING CONTENT TO", file_path
                 return [null, file_content]
 
             when 'object'
