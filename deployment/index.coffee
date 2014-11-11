@@ -1,11 +1,11 @@
 SDKError            = require '../compiler/SDKError'
-runCompiler         = require '../compiler'
+runCompilation      = require '../compiler'
 walkSync            = require '../compiler/walkSync'
 getCurrentCommit    = require '../compiler/getCurrentCommit'
 putFilesToS3        = require './putFilesToS3'
 path                = require 'path'
 
-module.exports = (project_directory, force=false) ->
+module.exports = (project_directory, options={}) ->
 
     SDKError.log(SDKError.colors.grey("Attempting to deploy: #{ project_directory }"))
 
@@ -15,21 +15,20 @@ module.exports = (project_directory, force=false) ->
         # controlled project. Allow for override.
         if not commit_sha
             _repo_message = "No repo detected. It is #{ SDKError.colors.bold('strongly') } recommended to only deploy from a source-controlled project."
-            unless force
+            unless options.force
                 throw new SDKError('deploy.repo', "#{ _repo_message }\nUse `#{ SDKError.colors.magenta('marqueestatic deploy --force') }` to override.")
             SDKError.warn('deploy.repo', _repo_message)
 
         else if commit_sha.split('-').pop() is 'dirty'
             _repo_message = "Uncommitted changes detected. It is #{ SDKError.colors.bold('strongly') } recommended to only deploy from a clean working directory."
-            unless force
+            unless options.force
                 throw new SDKError('deploy.repo', "#{ _repo_message }\nUse `#{ SDKError.colors.magenta('marqueestatic deploy --force') }` to override.")
             SDKError.warn('deploy.repo', _repo_message)
 
         # TODO: warn if branch is not master or behind origin/master
 
-
         SDKError.log('Pre-deploy build...\n\n')
-        build_directory = runCompiler project_directory, (files, assets, project_package) ->
+        build_directory = runCompilation project_directory, options, (files, assets, project_package) ->
 
             console.log('\n')
 

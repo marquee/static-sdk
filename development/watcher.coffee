@@ -5,7 +5,7 @@ SDKError        = require '../compiler/SDKError'
 compileAssets   = require '../compiler/compileAssets'
 runCompilation  = require '../compiler'
 
-module.exports = (project_directory, build_directory) ->
+module.exports = (project_directory, build_directory, options) ->
     SDKError.log("Watching for changes: #{ SDKError.formatProjectPath(project_directory) }")
 
     # Selectively watch to avoid EMFILE errors.
@@ -17,6 +17,7 @@ module.exports = (project_directory, build_directory) ->
             project_directory   : project_directory
             build_directory     : build_directory
             hash_files          : false
+            command_options     : options
             callback: ->
                 file_counts = SDKError.colors.green("#{ compileAssets.files_emitted.length } assets")
                 SDKError.log("#{ file_counts } generated in #{ SDKError.formatProjectPath(project_directory, build_directory) }")
@@ -24,7 +25,7 @@ module.exports = (project_directory, build_directory) ->
     _doFiles = (file_name) ->
         ext = file_name.split('.').pop()
         if ext in ['cjsx', 'coffee', 'html']
-            runCompilation project_directory, (files, assets) ->
+            runCompilation project_directory, options, (files, assets) ->
                 file_counts = SDKError.colors.green("#{ files.length } files, #{ assets.length } assets")
                 SDKError.log("#{ file_counts } generated in #{ SDKError.formatProjectPath(project_directory, build_directory) }")
         else if ext in ['sass']

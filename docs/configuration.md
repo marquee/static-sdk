@@ -17,7 +17,8 @@ property. They also need an entrypoint specified, under `"main"`.
         "HOST"                      : "<example.com>",
         "SITE_TITLE"                : "<Site Title>",
         "SITE_TWITTER_SCREEN_NAME"  : "<@screen_name>",
-        "auto_assets"               : true
+        "auto_assets"               : true,
+        "manual_only"               : false
     }
 
 * `PUBLICATION_SHORT_NAME` - the `short_name` of the publication on Marquee
@@ -31,6 +32,30 @@ property. They also need an entrypoint specified, under `"main"`.
 * `SITE_TITLE` - the title of the publication, used in the `<title>` attribute
 * `SITE_TWITTER_SCREEN_NAME` - the Twitter `screen_name` for the publication, used for Twitter Cards
 * `auto_assets` - set to `false` to disable automatic asset compilation
+* `manual_only` - set to `true` to disable automatic deploy by the Marquee hosting service
+
+### Multiple Configurations
+
+A project configuration MAY have a `configurations` option which defines
+additional configuration to be enabled using the `--configuration` command
+option. This allows for staging deploy and multitenant projects.
+
+If a configuration is specified, it is merged with the general configuration,
+overriding any matching key names.
+
+    ...
+    "marquee": {
+        ...
+        "configurations": {
+            "<name>": {
+                "AWS_BUCKET": "<alternate-bucket.tld>",
+                "manual_only": true
+            }
+        }
+    }
+
+The `manual_only` option is useful in these configurations to avoid compiling
+to staging on every deploy or content change.
 
 ## Entrypoint
 
