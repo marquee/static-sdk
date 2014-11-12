@@ -16,28 +16,36 @@ colors.setTheme
     error     : 'red'
 
 
-MAIN = 'http://docs.marquee.by/marquee-static-sdk/'
+MAIN = 'http://developer.marquee.by/marquee-static-sdk/'
 
-DOCS = {}
-# Disable until they're actually available
-# DOCSX =
-#     main                    : MAIN
-#     configuration           : "#{ MAIN }configuration/"
-#     'configuration.deploy'  : "configuration.deploy"
-#     tokens                  : "#{ MAIN }tokens/"
-#     emitFile                : "#{ MAIN }emitFile/"
-#     'emitFile.json'         : ''
-#     'project.react'         : ''
-#     files                   : "#{ MAIN }files/"
-#     assets                  : "#{ MAIN }assets/"
-#     compiler                : "#{ MAIN }compiler/"
-#     'deploy.repo'           : "#{ MAIN }deploy/"
-#     api:
-#         404: "#{ MAIN }api/not-found/"
-#         401: "#{ MAIN }api/unauthorized/"
-#         403: "#{ MAIN }api/forbidden/"
-#         toString: -> "#{ MAIN }api/"
 
+
+DOCS =
+    main                    : ''
+    configuration           : 'configuration/'
+    'configuration.deploy'  : 'configuration/#deployment'
+    tokens                  : 'configuration/#tokens'
+    emitFile                : 'compiler/#-emitfile-'
+    'emitFile.json'         : 'compiler/#-emitfile-'
+    'project.react'         : 'compiler/#-referenceerror-react-is-not-defined-'
+    files                   : ''
+    assets                  : 'assets/'
+    compiler                : 'compiler/'
+    'deploy.repo'           : ''
+    # api:
+    #     404: "#{ MAIN }api/not-found/"
+    #     401: "#{ MAIN }api/unauthorized/"
+    #     403: "#{ MAIN }api/forbidden/"
+    #     toString: -> "#{ MAIN }api/"
+
+for k,v of DOCS
+    if typeof v is 'object'
+        for _k, _v of v
+            unless _k is 'toString'
+                v[_k] = "#{ MAIN }#{ _v }"
+    else
+        unless _k is 'toString'
+            DOCS[k] = "#{ MAIN }#{ v }"
 
 SDKError = (subject, message, code=null) ->
     if arguments.length is 1

@@ -1,3 +1,6 @@
 *.cjsx
 *.coffee
 .DS_Store
+docs/_assets
+docs/*.html
+.env.json

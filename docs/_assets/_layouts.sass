@@ -1,0 +1,35 @@
+$nav_width: 180px
+$text_column: 600px
+$main_padding--extra_small: 16px
+$main_padding--small: 16px
+
+html,
+body
+    margin: 0
+    padding: 0
+
+.Site__
+    ._Nav__
+        +respond-to-gt-extra_small
+            bottom      : 0
+            left        : 0
+            position    : fixed
+            top         : 0
+            width       : $nav_width
+
+    ._Content__
+        padding: $main_padding--extra_small
+        +respond-to-gt-extra_small
+            margin-left : $nav_width
+            padding     : $main_padding--small
+
+.Page__
+    p
+        max-width   : $text_column
+    pre
+        margin      : 0 -1 * $main_padding--extra_small
+        overflow-x  : scroll
+        padding     : $main_padding--extra_small
+        +respond-to-gt-extra_small
+            margin      : 0 -1 * $main_padding--small
+            padding     : $main_padding--small
