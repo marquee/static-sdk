@@ -53,13 +53,13 @@ Base = React.createClass
 
                 <Asset path='style.sass' inline=true />
                 <GoogleFonts fonts={
-                    'Open+Sans': ['300italic', '300', '600italic', '600']
+                    'Open+Sans': ['400italic', '400', '600italic', '600']
                 }/>
                 <Favicon />
                 {@props.extra_head}
 
             </head>
-            <body className="Site__ #{ @props.page }__">
+            <body className='Site__'>
 
                 {@props.children}
 
@@ -73,16 +73,24 @@ Base = React.createClass
 MarkdownPage = React.createClass
     render: ->
         output_content = fs.readFileSync(@props.file).toString()
+
+        # http://tools.ietf.org/html/rfc2119
+        KEYWORDS = ['MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', 'OPTIONAL']
+        KEYWORDS.forEach (word) ->
+            exp = new RegExp(word,'g')
+            output_content = output_content.replace(exp, """
+                <em class="SpecKeyword" data-word="#{ word }">#{ word }</em>
+            """.trim())
         output_content = marked(output_content)
         <div className='Page__' dangerouslySetInnerHTML={ __html: output_content } />
 
-_capitalize = (text) ->
+_dashesToTitle = (text) ->
     text = text.split('-').map (seg) -> seg.substring(0,1).toUpperCase() + seg.substring(1)
-    return text.join('-')
+    return text.join(' ')
 
 Nav = React.createClass
     render: ->
-        nav_links = @props.files.map (f) ->
+        nav_links = @props.files.map (f) =>
             _f = f.replace(/\.md$/,'')
             if for_deploy
                 link = "/#{ deploy_config.PREFIX }/"
@@ -90,9 +98,13 @@ Nav = React.createClass
                     link += "#{ _f }/"
             else
                 link = "./#{ _f }.html"
-            text = _capitalize(_f)
-            return <a href=link>{text}</a>
-        <nav>
+            if _f is 'index'
+                text = 'Marquee Static SDK'
+            else
+                text = _dashesToTitle(_f)
+            current = if f is @props.current then '-current' else ''
+            return <a className="_Link #{ current }" href=link>{text}</a>
+        <nav className='Nav'>
             {nav_links}
         </nav>
 
@@ -120,15 +132,19 @@ getCurrentCommit project_directory, (commit_sha) ->
                     output_name = title
                 else
                     output_name = "#{ title }.html"
-                title = _capitalize(title)
+                title = _dashesToTitle(title)
 
                 if for_deploy and deploy_config.PREFIX
                     output_name = path.join(deploy_config.PREFIX, output_name)
                 _emitFile(
                     output_name,
                     <Base title=title>
-                        <Nav files=doc_files />
-                        <MarkdownPage file={path.join(source_directory, f)} />
+                        <div className='_Nav__'>
+                            <Nav files=doc_files current=f />
+                        </div>
+                        <div className='_Content__'>
+                            <MarkdownPage file={path.join(source_directory, f)} />
+                        </div>
                     </Base>
                 )
 
