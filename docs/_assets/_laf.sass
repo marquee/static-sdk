@@ -1,0 +1,53 @@
+$palette-light_grey: #f6f6f6
+
+.Site__
+    font-family: Open Sans
+    font-weight: 400
+    -webkit-font-smoothing: antialiased
+
+    strong
+        font-weight: 600
+
+    p
+        line-height: 1.6
+
+.Nav
+    background: #83b4db
+
+    ._Link
+        font-size: 13px
+        font-weight: 600
+        color: rgba(white,0.6)
+        letter-spacing: 1px
+        padding: 0.5em 1em
+        text-decoration: none
+        &:hover,
+        &:focus
+            background-color: rgba(white,0.1)
+            color: rgba(white,1)
+        &.-current,
+        &:active
+            background-color: #75a0c4
+            color: rgba(white,1)
+
+    ._Version
+        font-size: 0.8em
+        opacity: 0.7
+        &::before
+            content: "v"
+
+.SpecKeyword
+    font-size: 0.85em
+    font-style: normal
+    font-weight: 600
+
+.Page__
+    p code
+        background      : #fffbf5
+        border          : 1px solid #e3dfd8
+        padding         : 0 0.1em
+    pre
+        background      : #fffbf5
+        border          : 1px solid #e3dfd8
+        border-left     : 0
+        border-right    : 0

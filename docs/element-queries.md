@@ -47,11 +47,15 @@ The resulting CSS:
 }
 ```
 
-There are height equivalents, and `gte`, `lt`, `lte` mixins as well,
-though the recommended usage is to start with the smallest size and work up.
+Whenever the width of an element matching the `.SomeComponent` class is
+`641px` or greater, it will have a `font-size` of `16px`.
+
+There mixins have height equivalents, which work the same but query the
+element’s height. There are `gte`, `lt`, `lte` versions as well, though the
+recommended usage is to start with the smallest size and work up.
 
 The sizes default to these values, and can be adjusted by overriding the
-variables in `_config.sass`.
+variables in `_config.sass`:
 
 ```sass
 $break-extra_small : 640px
@@ -79,6 +83,7 @@ the included engine script in the page.
 
 Instead of being a requirable module, this is provided as a component for
 a couple reasons. The component parses the stylesheets for the element query
-selectors and includes the parsed form with the engine, so it may take effect
-immediately. Also, since it is potentially essential to the layout, it works
-best when inlined into the rendered page.
+selectors and includes the parsed form with the engine at render time. The
+generated output is ready to take effect immediately. Also, since it is
+potentially essential to the layout, it works best when inlined into the
+rendered page.
