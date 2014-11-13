@@ -3,6 +3,7 @@
   "version": "0.1.0-alpha.8",
   "scripts": {
     "prepublish": "npm run clearbuild && npm run build",
+    "postpublish": "npm run clearbuild && npm run deploy:docs",
     "build": "npm run build:source && npm run build:docs",
     "build:docs": "./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx",
     "build:source": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./ && rm ./docs/_compile_docs.js",
