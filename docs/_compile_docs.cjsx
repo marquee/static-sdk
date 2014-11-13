@@ -4,6 +4,8 @@ path = require 'path'
 fs = require 'fs-extra'
 marked = require 'marked'
 
+pkg = require '../_package_data.coffee'
+
 for_deploy = '--production' in process.argv
 
 source_directory = __dirname
@@ -103,7 +105,10 @@ Nav = React.createClass
             else
                 link = "./#{ _f }.html"
             if _f is 'index'
-                text = 'Marquee Static SDK'
+                text = <span>
+                        <span>Marquee Static SDK</span>
+                        <span className='_Version'>{pkg.version}</span>
+                    </span>
             else
                 text = _dashesToTitle(_f)
             current = if f is @props.current then '-current' else ''
@@ -137,7 +142,11 @@ getCurrentCommit project_directory, (commit_sha) ->
                     output_name = title
                 else
                     output_name = "#{ title }.html"
-                title = _dashesToTitle(title)
+
+                if f is 'index.md'
+                    title = null
+                else
+                    title = _dashesToTitle(title)
 
                 if for_deploy and deploy_config.PREFIX
                     output_name = path.join(deploy_config.PREFIX, output_name)
