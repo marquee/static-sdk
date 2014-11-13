@@ -39,6 +39,10 @@ walkSync = require '../compiler/walkSync'
 
 console.log 'Compiling docs in', build_directory, for_deploy
 
+global.config =
+    PUBLICATION_SHORT_NAME: 'marquee-static-sdk'
+
+MarqueeBranding = require '../components/MarqueeBranding'
 
 Base = React.createClass
     render: ->
@@ -103,9 +107,10 @@ Nav = React.createClass
             else
                 text = _dashesToTitle(_f)
             current = if f is @props.current then '-current' else ''
-            return <a className="_Link #{ current }" href=link>{text}</a>
+            return <a className="_Link #{ current }" href=link key=_f>{text}</a>
         <nav className='Nav'>
             {nav_links}
+            <MarqueeBranding campaign='docs' logo_only=true />
         </nav>
 
 getCurrentCommit project_directory, (commit_sha) ->
