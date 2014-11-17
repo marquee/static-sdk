@@ -125,9 +125,13 @@ compileAssets = (opts) ->
         build_directory
         callback
         hash_files
+        project_config
     } = opts
 
-    asset_source_dir    = path.join(project_directory, 'assets')
+    if project_config.asset_directory
+        asset_source_dir    = path.join(project_directory, project_config.asset_directory)
+    else
+        asset_source_dir    = path.join(project_directory, 'assets')
     asset_cache_dir     = path.join(build_directory, '.asset-cache')
     asset_dest_dir      = path.join(build_directory, 'assets')
 
@@ -172,14 +176,34 @@ compileAssets.files_emitted = []
 # Export processAsset so it can be used directly, bypassing path definitions.
 compileAssets.processAsset = processAsset
 
-# compileAssets.includeAssets = (opts) ->
-#     {
-#         project_directory
-#         build_directory
-#         assets
-#         asset_hash
-#     } = opts
-#     # if asset is directory, process contents
-#     # console.log asset_hash, assets
+compileAssets.includeAssets = (opts) ->
+    {
+        project_directory
+        build_directory
+        assets
+        asset_hash
+    } = opts
+
+    assets.forEach (f) ->
+        _f = f.split('.')
+        _ext = _f.pop()
+        switch _ext
+            when 'coffee', 'cjsx'
+                _f.push('js')
+            when 'sass'
+                _f.push('css')
+            else
+                _f.push(_ext)
+        _f = _f.join('.')
+        _source = path.join(build_directory, '.asset-cache', _f)
+        if asset_hash
+            _dest = path.join(build_directory, 'assets', asset_hash, _f)
+        else
+            _dest = path.join(build_directory, 'assets', _f)
+        unless fs.existsSync(_source)
+            throw new SDKError('assets.includeAssets', "Asset specified by includeAssets not found: #{ f }")
+        SDKError.log(SDKError.colors.grey("Including asset: #{ f }"))
+        fs.copySync(_source, _dest)
+        compileAssets.files_emitted.push(_dest)
 
 module.exports = compileAssets

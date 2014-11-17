@@ -1,20 +1,24 @@
 React = require 'react'
-fs = require 'fs'
+fs = require 'fs-extra'
 path = require 'path'
 
 _render = (props) =>
     full_path = "#{ global.ASSET_URL }#{ props.path }"
+    _source_path = path.join(global.build_info.asset_cache_directory, props.path)
     _ext = props.path.split('.').pop()
+
     switch _ext
-        when 'js', 'coffee'
-            if _ext is 'coffee'
-                full_path = full_path.replace('.coffee', '.js')
-            return <script src=full_path async=props.async></script>
+        when 'js', 'coffee', 'cjsx'
+            if _ext in ['coffee', 'cjsx']
+                full_path = full_path.replace(".#{ _ext }", '.js')
+                _source_path = _source_path.replace(".#{ _ext }", '.js')
+            output = <script src=full_path async=props.async></script>
 
         when 'css', 'sass'
             if _ext is 'sass'
                 full_path = full_path.replace('.sass', '.css')
-            return <link
+                _source_path = _source_path.replace('.sass', '.css')
+            output = <link
                 rel     = 'stylesheet'
                 type    = 'text/css'
                 href    = full_path
@@ -22,6 +26,16 @@ _render = (props) =>
         else
             console.warn("Asset got unknown asset type (#{ _ext })")
             return null
+
+    _dest_path = _source_path.replace(
+            global.build_info.asset_cache_directory
+            global.build_info.asset_dest_directory
+        )
+    fs.exists _dest_path, (_exists) ->
+        unless _exists
+            fs.copySync(_source_path, _dest_path)
+
+    return output
 
 _renderInline = (props) ->
 

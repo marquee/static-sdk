@@ -30,6 +30,7 @@ DOCS =
     'project.react'         : 'compiler/#-referenceerror-react-is-not-defined-'
     files                   : ''
     assets                  : 'assets/'
+    'assets.includeAssets'  : 'assets/#-includeAssets-'
     compiler                : 'compiler/'
     'deploy.repo'           : ''
     # api:

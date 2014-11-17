@@ -1,6 +1,6 @@
 {
   "name": "marquee-static-sdk",
-  "version": "0.1.0-alpha.9",
+  "version": "0.1.0-alpha.10",
   "scripts": {
     "prepublish": "npm run clearbuild && npm run build",
     "postpublish": "npm run clearbuild && npm run deploy:docs",

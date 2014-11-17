@@ -101,33 +101,38 @@ module.exports = (project_directory, options, onCompile=null) ->
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
             onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package)
 
-        # _includeAssets = (asset_hash) ->
-        #     return (args...) ->
-        #         compileAssets.includeAssets
-        #             project_directory   : project_directory
-        #             build_directory     : build_directory
-        #             asset_hash          : asset_hash
-        #             assets              : args
-
         compileAssets
             project_directory   : project_directory
             build_directory     : build_directory
             hash_files          : process.env.NODE_ENV is 'production'
+            project_config      : project_config
             callback: (asset_hash) ->
                 # Make the config globally available. Yes, globals are Bad(tm), but this
                 # makes for a substantially simpler compiler.
                 global.config = project_config
+                asset_dest_directory = path.join(build_directory, 'assets')
+                if asset_hash
+                    asset_dest_directory = path.join(asset_dest_directory, asset_hash)
                 global.build_info =
                     project_directory       : project_directory
                     commit                  : commit_sha
                     date                    : new Date()
                     asset_hash              : asset_hash
                     build_directory         : build_directory
+                    asset_dest_directory    : asset_dest_directory
                     asset_cache_directory   : path.join(build_directory, '.asset-cache')
                 if asset_hash
                     global.ASSET_URL = "/assets/#{ asset_hash }/"
                 else
                     global.ASSET_URL = '/assets/'
+
+                _makeIncludeAssets = (asset_hash) ->
+                    return (args...) ->
+                        compileAssets.includeAssets
+                            project_directory   : project_directory
+                            build_directory     : build_directory
+                            asset_hash          : asset_hash
+                            assets              : args
 
                 # Finally, invoke the compiler.
                 SDKError.log("Invoking compiler from #{ SDKError.colors.green(project_package.main) }")
@@ -140,7 +145,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         project         : project_package
                         done            : _done
                         info            : build_info
-                        # includeAssets   : _includeAssets(asset_hash)
+                        includeAssets   : _makeIncludeAssets(asset_hash)
                 catch e
                     throw new SDKError('compiler', e)
 
