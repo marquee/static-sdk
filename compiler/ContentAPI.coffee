@@ -165,6 +165,14 @@ class ContentAPI
         @_root = root
         if cache
             @_cache = CACHE
+
+        # If being used within the context of a publication, assemble a User
+        # Agent string that includes the publication information. Otherwise,
+        # use the default SDK User Agent string. An assembled string looks
+        # something like:
+        #
+        #    shortname/1.0.0 marquee-static-sdk/0.10.0 (+http://shortname.marquee.pub)
+        #
         if project
             @_ua = project.name
             if project.version

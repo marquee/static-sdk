@@ -30,14 +30,18 @@ DOCS =
     'project.react'         : 'compiler/#-referenceerror-react-is-not-defined-'
     files                   : ''
     assets                  : 'assets/'
-    'assets.includeAssets'  : 'assets/#-includeAssets-'
+    'assets.emitAssets'     : 'assets/#-emitassets-'
     compiler                : 'compiler/'
     'deploy.repo'           : ''
-    # api:
-    #     404: "#{ MAIN }api/not-found/"
-    #     401: "#{ MAIN }api/unauthorized/"
-    #     403: "#{ MAIN }api/forbidden/"
-    #     toString: -> "#{ MAIN }api/"
+    api:
+        201: 'api/#201-created'
+        204: 'api/#204-no-content'
+        404: 'api/#404-not-found'
+        401: 'api/#401-unauthorized'
+        403: 'api/#403-forbidden'
+        410: 'api/#410-gone'
+        500: 'api/#500-internal-server-error'
+        toString: -> 'api/'
 
 for k,v of DOCS
     if typeof v is 'object'
