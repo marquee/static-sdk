@@ -32,6 +32,10 @@ module.exports = ->
 
                     unless is_pinned
                         content_el.style.height = "#{ height }px"
+                    else if window.innerWidth < 1024
+                        image_el.style.height = "#{ height }px"
+                    else
+                        image_el.style.height = "100vh"
 
                     if not image_block.dataset.loaded and visibilityCheck(image_block)
                         if content_el.offsetWidth / px_ratio > 640
