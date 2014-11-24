@@ -1,5 +1,5 @@
 module.exports =
-    Analytics       : require './Analytics'
+    analytics       : require './analytics'
     Asset           : require './Asset'
     BuildInfo       : require './BuildInfo'
     ElementQuery    : require './ElementQuery'

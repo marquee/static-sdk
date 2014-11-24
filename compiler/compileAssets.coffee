@@ -176,7 +176,7 @@ compileAssets.files_emitted = []
 # Export processAsset so it can be used directly, bypassing path definitions.
 compileAssets.processAsset = processAsset
 
-compileAssets.includeAssets = (opts) ->
+compileAssets.emitAssets = (opts) ->
     {
         project_directory
         build_directory
@@ -201,7 +201,7 @@ compileAssets.includeAssets = (opts) ->
         else
             _dest = path.join(build_directory, 'assets', _f)
         unless fs.existsSync(_source)
-            throw new SDKError('assets.includeAssets', "Asset specified by includeAssets not found: #{ f }")
+            throw new SDKError('assets.emitAssets', "Asset specified by emitAssets not found: #{ f }")
         SDKError.log(SDKError.colors.grey("Including asset: #{ f }"))
         fs.copySync(_source, _dest)
         compileAssets.files_emitted.push(_dest)

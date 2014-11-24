@@ -51,11 +51,12 @@ into the page (minified with `--production` or a deploy). Inlining is useful
 for critical styles, or a script like `elementQuery` used to adjust the
 layout, which should be included with the first request for the page.
 
-## `includeAssets`
 
+## `emitAssets`
 
 Assets that are not automatically processed and not handled by an `<Asset>`
-can be included directly.
+can be included in the compiler output.
 
-    includeAssets('tenant_theme.sass', 'page_specific_script.coffee')
+    emitAssets('tenant_theme.sass', 'page_specific_script.coffee')
+
 

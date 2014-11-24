@@ -99,7 +99,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
             unless 'index.html' in _emitFile.files_emitted
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
-            onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package)
+            onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package, project_config)
 
         compileAssets
             project_directory   : project_directory
