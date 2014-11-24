@@ -5,7 +5,7 @@ SDKError        = require '../compiler/SDKError'
 compileAssets   = require '../compiler/compileAssets'
 runCompilation  = require '../compiler'
 
-module.exports = (project_directory, build_directory, options) ->
+module.exports = (project_directory, build_directory, options, project_config) ->
     SDKError.log("Watching for changes: #{ SDKError.formatProjectPath(project_directory) }")
 
     # Selectively watch to avoid EMFILE errors.
@@ -18,6 +18,7 @@ module.exports = (project_directory, build_directory, options) ->
             build_directory     : build_directory
             hash_files          : false
             command_options     : options
+            project_config      : project_config
             callback: ->
                 file_counts = SDKError.colors.green("#{ compileAssets.files_emitted.length } assets")
                 SDKError.log("#{ file_counts } generated in #{ SDKError.formatProjectPath(project_directory, build_directory) }")

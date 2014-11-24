@@ -2,6 +2,7 @@ module.exports =
     Byline      : require './Byline'
     Card        : require './Card'
     Category    : require './Category'
+    ContactForm : require './ContactForm'
     Cover       : require './Cover'
     CoverCredit : require './CoverCredit'
     DateTime    : require './DateTime'

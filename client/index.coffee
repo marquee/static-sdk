@@ -1,5 +1,6 @@
 module.exports =
     Block           : require './Block'
+    ContactForm     : require './ContactForm'
     ImageBlock      : require './ImageBlock'
     InterStoryLink  : require './InterStoryLink'
     Metric          : require './Metric'
