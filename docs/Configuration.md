@@ -105,4 +105,4 @@ The bucket MUST be configured as a [static site host](https://docs.aws.amazon.co
 to `index.html`, and the Error Document SHOULD be `404.html`. (The Error
 Document MAY be named differently, provided the compiler emits the correct
 file name.) Note: S3 requires that the bucket name and the site host name
-match.
+ddmatch. A compiler MAY target multiple buckets, using [Multiple Configurations](./#multiple-configurations).
