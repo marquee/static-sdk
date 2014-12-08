@@ -19,7 +19,9 @@ if for_deploy
     unless fs.existsSync(deploy_config_path)
         throw new Error('You need a .env.json with the necessary config.')
     deploy_config = JSON.parse(fs.readFileSync(deploy_config_path).toString())
-
+    global.ASSET_URL = '/assets/'
+else
+    global.ASSET_URL = './_assets/'
 project_directory = path.join(__dirname, '..')
 asset_source_dir = asset_cache_dir = asset_dest_dir = path.join(__dirname, '_assets')
 
@@ -73,6 +75,7 @@ Base = React.createClass
 
                 <GoogleAnalytics id=google_analytics_id />
                 <BuildInfo />
+                <Asset path='script.coffee' />
             </body>
         </html>
 
@@ -90,29 +93,27 @@ MarkdownPage = React.createClass
         output_content = marked(output_content)
         <div className='Page__' dangerouslySetInnerHTML={ __html: output_content } />
 
-_dashesToTitle = (text) ->
-    text = text.split('-').map (seg) -> seg.substring(0,1).toUpperCase() + seg.substring(1)
-    return text.join(' ')
+slugify = (text) ->
+    return text.toLowerCase().replace(/\s/g, '-')
 
 Nav = React.createClass
     render: ->
         nav_links = @props.files.map (f) =>
-            _f = f.replace(/\.md$/,'')
+            _title = f.replace(/\.md$/,'')
+            _slug = slugify(_title)
             if for_deploy
                 link = "/#{ deploy_config.PREFIX }/"
-                unless _f is 'index'
-                    link += "#{ _f }/"
+                unless _slug is 'index'
+                    link += "#{ _slug }/"
             else
-                link = "./#{ _f }.html"
-            if _f is 'index'
-                text = <span>
+                link = "./#{ _slug }.html"
+            if _slug is 'index'
+                _title = <span>
                         <span>Marquee Static SDK</span>
                         <span className='_Version'>{pkg.version}</span>
                     </span>
-            else
-                text = _dashesToTitle(_f)
-            current = if f is @props.current then '-current' else ''
-            return <a className="_Link #{ current }" href=link key=_f>{text}</a>
+            _current = if f is @props.current then '-current' else ''
+            return <a className="_Link #{ _current }" href=link key=_slug>{_title}</a>
         <nav className='Nav'>
             {nav_links}
             <MarqueeBranding campaign='docs' logo_only=true />
@@ -126,44 +127,50 @@ getCurrentCommit project_directory, (commit_sha) ->
         asset               : path.join(asset_source_dir, 'style.sass')
         project_directory   : project_directory
         callback: ->
-            global.build_info =
-                project_directory       : project_directory
-                commit                  : commit_sha
-                date                    : new Date()
-                build_directory         : build_directory
-                asset_cache_directory   : asset_cache_dir
+            processAsset
+                asset_source_dir    : asset_source_dir
+                asset_cache_dir     : asset_cache_dir
+                asset_dest_dir      : asset_dest_dir
+                asset               : path.join(asset_source_dir, 'script.coffee')
+                project_directory   : project_directory
+                callback: ->
+                    global.build_info =
+                        project_directory       : project_directory
+                        commit                  : commit_sha
+                        date                    : new Date()
+                        build_directory         : build_directory
+                        asset_cache_directory   : asset_cache_dir
 
-            doc_files = fs.readdirSync(source_directory).filter (f) ->
-                f.split('.').pop() is 'md' and f isnt 'index.md'
-            doc_files.unshift('index.md')
-            doc_files.forEach (f) ->
-                title = f.replace(/\.md$/, '')
-                if for_deploy and f isnt 'index.md'
-                    output_name = title
-                else
-                    output_name = "#{ title }.html"
+                    doc_files = fs.readdirSync(source_directory).filter (f) ->
+                        f.split('.').pop() is 'md' and f isnt 'index.md'
+                    doc_files.unshift('index.md')
+                    doc_files.forEach (f) ->
+                        title = f.replace(/\.md$/, '')
+                        slug = slugify(title)
+                        if for_deploy and f isnt 'index.md'
+                            output_name = slug
+                        else
+                            output_name = "#{ slug }.html"
 
-                if f is 'index.md'
-                    title = null
-                else
-                    title = _dashesToTitle(title)
+                        if f is 'index.md'
+                            title = "Marquee Static SDK, v#{ pkg.version }"
 
-                if for_deploy and deploy_config.PREFIX
-                    output_name = path.join(deploy_config.PREFIX, output_name)
-                _emitFile(
-                    output_name,
-                    <Base title=title>
-                        <div className='_Nav__'>
-                            <Nav files=doc_files current=f />
-                        </div>
-                        <div className='_Content__'>
-                            <MarkdownPage file={path.join(source_directory, f)} />
-                        </div>
-                    </Base>
-                )
+                        if for_deploy and deploy_config.PREFIX
+                            output_name = path.join(deploy_config.PREFIX, output_name)
+                        _emitFile(
+                            output_name,
+                            <Base title=title>
+                                <div className='_Nav__'>
+                                    <Nav files=doc_files current=f />
+                                </div>
+                                <div className='_Content__'>
+                                    <MarkdownPage file={path.join(source_directory, f)} />
+                                </div>
+                            </Base>
+                        )
 
-            if for_deploy
-                files_to_deploy = walkSync(build_directory)
-                putFilesToS3 build_directory, files_to_deploy, deploy_config, ->
-                    console.log arguments
-                    console.log 'DEPLOYED!'
+                    if for_deploy
+                        files_to_deploy = walkSync(build_directory)
+                        putFilesToS3 build_directory, files_to_deploy, deploy_config, ->
+                            console.log arguments
+                            console.log 'DEPLOYED!'
