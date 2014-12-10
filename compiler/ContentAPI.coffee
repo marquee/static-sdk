@@ -158,9 +158,11 @@ saveCache = ->
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
     constructor: ({ token, root, cache, project }) ->
+        # The actual token permissions are not determined by the prefix, but
+        # we can assume it reflects the permissions defined in the database.
         unless token.substring(0,2) is 'r0'
             TOKEN_PERM_MAP = {'rw': 'read-write', '0w': 'write-only'}
-            throw new SDKError('tokens', "ContentAPI token MUST be read-only. Given token is #{ TOKEN_PERM_MAP[token.substring(0,2)] }.")
+            throw new SDKError('tokens', "ContentAPI token MUST be read-only. Given token is labled #{ TOKEN_PERM_MAP[token.substring(0,2)] }.")
         @_token = token
         @_root = root
         if cache
