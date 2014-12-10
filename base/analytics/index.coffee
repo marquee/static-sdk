@@ -1,5 +1,6 @@
 module.exports =
-    Chartbeat       : require './Chartbeat'
-    ChartbeatStart  : require './ChartbeatStart'
-    Gauges          : require './Gauges'
-    GoogleAnalytics : require './GoogleAnalytics'
+    Chartbeat               : require './Chartbeat'
+    ChartbeatStart          : require './ChartbeatStart'
+    Gauges                  : require './Gauges'
+    GenericAnalyticsScript  : require './GenericAnalyticsScript'
+    GoogleAnalytics         : require './GoogleAnalytics'
