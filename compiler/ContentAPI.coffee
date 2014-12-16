@@ -147,20 +147,6 @@ class Model
 
 
 
-if fs.existsSync('.cache.json')
-    CACHE = JSON.parse(fs.readFileSync('.cache.json'))
-    for k,v of CACHE
-        if v.map?
-            CACHE[k] = v.map (o) -> new Model(o)
-        else
-            CACHE[k] = new Model(v)
-else
-    CACHE = {}
-
-saveCache = ->
-    fs.writeFileSync('.cache.json', JSON.stringify(CACHE))
-
-
 
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
