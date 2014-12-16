@@ -31,7 +31,7 @@ switch (_command) {
         require('../development/build')(process.cwd(), _options);
         break;
     case 'develop':
-        require('../development')(process.cwd(), _options);
+        require('../development/develop')(process.cwd(), _options);
         break;
     default:
         console.log('Unknown command: `' + _command + '`');

@@ -58,7 +58,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             for k,v of project_package.marquee.configurations[options.configuration]
                 project_config[k] = v
 
-        ['CONTENT_API_TOKEN', 'CONTENT_API_ROOT', 'HOST'].forEach (prop) ->
+        ['CONTENT_API_TOKEN', 'CONTENT_API_HOST', 'HOST'].forEach (prop) ->
             unless project_config[prop]
                 _config_notice = ''
                 if project_package.marquee.configurations
@@ -73,8 +73,7 @@ module.exports = (project_directory, options, onCompile=null) ->
         # Set up the Content API wrapper for the project.
         api = new ContentAPI
             token   : project_config.CONTENT_API_TOKEN
-            root    : project_config.CONTENT_API_ROOT
-            cache   : false
+            host    : project_config.CONTENT_API_HOST
             project : project_package
 
         # Create the file handling functions for the project.
