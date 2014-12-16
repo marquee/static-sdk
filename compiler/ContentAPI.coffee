@@ -1,14 +1,16 @@
 ENTRY   = 'container'
 PACKAGE = 'package'
 POST    = 'post'
+CHANNEL = 'channel'
 IMAGE   = 'image'
 TEXT    = 'text'
 EMBED   = 'embed'
 
 ENDPOINTS =
-    container: 'content/'
-    package: 'content/'
-    # post: 'api/posts/'
+    container   : 'content/'
+    package     : 'content/'
+    post        : 'posts/'
+    channel     : 'channels/'
 
 
 fs      = require 'fs'
@@ -247,6 +249,7 @@ class ContentAPI
         , (result) ->
             SDKError.log("Got #{ result.length } entries from API.")
             cb(result)
+
     packages: (cb) ->
         @filter
             type: PACKAGE
@@ -255,13 +258,23 @@ class ContentAPI
         , (result) ->
             SDKError.log("Got #{ result.length } packages from API.")
             cb(result)
-    # posts: (cb) ->
-    #     @filter
-    #         type: POST
-    #         _sort: '-start_date'
-    #         is_public: true
-    #     , (result) ->
-    #         SDKError.log("Got #{ result.length } posts from API.")
-    #         cb(result)
+
+    posts: (cb) ->
+        @filter
+            type: POST
+            _sort: '-start_date'
+            is_public: true
+        , (result) ->
+            SDKError.log("Got #{ result.length } posts from API.")
+            cb(result)
+
+    channels: (cb) ->
+        @filter
+            type: CHANNEL
+            _sort: 'created_date'
+        , (result) ->
+            SDKError.log("Got #{ result.length } channels from API.")
+            cb(result)
+
 
 module.exports = ContentAPI
