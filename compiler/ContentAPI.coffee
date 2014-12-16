@@ -229,13 +229,13 @@ class ContentAPI
             if num_last_batch is 0
                 cb(results)
             else
-                query._offset += LIMIT
                 @_sendRequest
                     url         : ENDPOINTS[query.type]
                     query       : query
                     callback    : (_results) ->
                         results.push(_results...)
                         num_last_batch = _results.length
+                        query._offset += LIMIT
                         _makeRequest()
         _makeRequest()
 
