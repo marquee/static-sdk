@@ -237,6 +237,7 @@ class ContentAPI
                         results.push(_results...)
                         num_last_batch = _results.length
                         _makeRequest()
+        _makeRequest()
 
     entries: (cb) ->
         @filter
