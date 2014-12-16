@@ -242,7 +242,6 @@ class ContentAPI
     entries: (cb) ->
         @filter
             type: ENTRY
-            role__ne: 'publication' # Because of legacy 'publication' objects
             is_released: true
             _sort: '-published_date'
         , (result) ->
