@@ -106,11 +106,10 @@ class Model
         if name in ['content', 'cover_content'] and @_data.type in [ENTRY, IMAGE, TEXT,  EMBED]
             return @_data[name]
 
-        # Treat the old cover_content images as new ones.
         if name is 'cover_image'
-            unless @_data.cover_content
+            unless @_data.cover_image
                 return null
-            return new CDNImage(@_data.cover_content)
+            return new CDNImage(@_data.cover_image)
 
         switch name.split('_').pop()
             when 'date'
