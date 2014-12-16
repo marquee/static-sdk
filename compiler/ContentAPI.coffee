@@ -5,6 +5,12 @@ IMAGE   = 'image'
 TEXT    = 'text'
 EMBED   = 'embed'
 
+ENDPOINTS =
+    container: 'content/'
+    package: 'content/'
+    # post: 'api/posts/'
+
+
 fs      = require 'fs'
 request = require 'request'
 
@@ -157,16 +163,14 @@ saveCache = ->
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
-    constructor: ({ token, root, cache, project }) ->
+    constructor: ({ token, host, project }) ->
         # The actual token permissions are not determined by the prefix, but
         # we can assume it reflects the permissions defined in the database.
         unless token.substring(0,2) is 'r0'
             TOKEN_PERM_MAP = {'rw': 'read-write', '0w': 'write-only'}
             throw new SDKError('tokens', "ContentAPI token MUST be read-only. Given token is labled #{ TOKEN_PERM_MAP[token.substring(0,2)] }.")
         @_token = token
-        @_root = root
-        if cache
-            @_cache = CACHE
+        @_host = host
 
         # If being used within the context of a publication, assemble a User
         # Agent string that includes the publication information. Otherwise,
@@ -185,13 +189,11 @@ class ContentAPI
             @_ua = sdk_ua_string
 
     _sendRequest: (opts) ->
-        if @_cache?[opts.url]
-            SDKError.log("Cached: #{ opts.url }")
-            opts.callback(@_cache[opts.url])
-            return
 
         opts.query ?= {}
         opts.query._include_published = true
+
+        url = "http://#{ @_host }/#{ opts.url }"
 
         _options =
             json: true
@@ -199,9 +201,9 @@ class ContentAPI
                 'Accept'        : 'application/json'
                 'User-Agent'    : @_ua
                 'Authorization' : "Token #{ @_token }"
-            url: opts.url
+            url: url
             qs: opts.query
-        SDKError.log("Making request to Content API: #{ colors.info(opts.url) }")
+        SDKError.log("Making request to Content API: #{ colors.info(url) }, #{ opts.query }")
         request.get _options, (error, response, data) ->
             throw error if error
             # This API client is **read-only** and MUST only ever receive
@@ -212,16 +214,29 @@ class ContentAPI
                 result = data.map (o) -> new Model(o.published_json)
             else
                 result = new Model(data.published_json)
-            if @_cache?
-                @_cache[opts.url] = result
-                saveCache()
             opts.callback(result)
 
+    # This is a good spot to make a generator or some sort of iterator instead,
+    # since this holds all the objects in memory.
     filter: (query, cb) ->
-        @_sendRequest
-            url         : @_root
-            query       : query
-            callback    : cb
+        # if no callback, return queryset?
+        LIMIT = 10
+        query._limit ?= LIMIT
+        query._offset ?= 0
+        results = []
+        num_last_batch = -1
+        _makeRequest = =>
+            if num_last_batch is 0
+                cb(results)
+            else
+                query._offset += LIMIT
+                @_sendRequest
+                    url         : ENDPOINTS[query.type]
+                    query       : query
+                    callback    : (_results) ->
+                        results.push(_results...)
+                        num_last_batch = _results.length
+                        _makeRequest()
 
     entries: (cb) ->
         @filter
@@ -237,12 +252,16 @@ class ContentAPI
             type: PACKAGE
             is_released: true
             _sort: '-published_date'
-        , cb
-    posts: (cb) ->
-        @filter
-            type: POST
-            _sort: '-start_date'
-            is_public: true
-        , cb
+        , (result) ->
+            SDKError.log("Got #{ result.length } packages from API.")
+            cb(result)
+    # posts: (cb) ->
+    #     @filter
+    #         type: POST
+    #         _sort: '-start_date'
+    #         is_public: true
+    #     , (result) ->
+    #         SDKError.log("Got #{ result.length } posts from API.")
+    #         cb(result)
 
 module.exports = ContentAPI

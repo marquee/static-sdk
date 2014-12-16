@@ -9,7 +9,7 @@ property. They also need an entrypoint specified, under `"main"`.
     "marquee": {
         "PUBLICATION_SHORT_NAME"    : "<short_name>",
         "CONTENT_API_TOKEN"         : "<read-only Content API token>",
-        "CONTENT_API_ROOT"          : "http://marquee.by/content/",
+        "CONTENT_API_HOST"          : "marquee.by",
         "AWS_BUCKET"                : "<example.com>",
         "AWS_ACCESS_KEY_ID"         : "<AWS Access Key ID>",
         "AWS_SECRET_ACCESS_KEY"     : "<AWS Secret Access Key>",
@@ -23,7 +23,7 @@ property. They also need an entrypoint specified, under `"main"`.
 
 * `PUBLICATION_SHORT_NAME` - the `short_name` of the publication on Marquee
 * `CONTENT_API_TOKEN` - a _read-only_ Content API token for the publication
-* `CONTENT_API_ROOT` - the endpoint of the Content API to use
+* `CONTENT_API_HOST` - the host of the Content API to use
 * `AWS_BUCKET` - the S3 bucket to deploy the compiled publication to
 * `AWS_ACCESS_KEY_ID` - an AWS Access Key ID with put object permission in the above bucket
 * `AWS_SECRET_ACCESS_KEY` - the corresponding Secret Access Key
