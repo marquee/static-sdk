@@ -1,14 +1,16 @@
 ENTRY   = 'container'
 PACKAGE = 'package'
 POST    = 'post'
+CHANNEL = 'channel'
 IMAGE   = 'image'
 TEXT    = 'text'
 EMBED   = 'embed'
 
 ENDPOINTS =
-    container: 'content/'
-    package: 'content/'
-    # post: 'api/posts/'
+    container   : 'content/'
+    package     : 'content/'
+    post        : 'posts/'
+    channel     : 'channels/'
 
 
 fs      = require 'fs'
@@ -104,11 +106,10 @@ class Model
         if name in ['content', 'cover_content'] and @_data.type in [ENTRY, IMAGE, TEXT,  EMBED]
             return @_data[name]
 
-        # Treat the old cover_content images as new ones.
         if name is 'cover_image'
-            unless @_data.cover_content
+            unless @_data.cover_image
                 return null
-            return new CDNImage(@_data.cover_content)
+            return new CDNImage(@_data.cover_image)
 
         switch name.split('_').pop()
             when 'date'
@@ -143,20 +144,6 @@ class Model
         data_copy = JSON.parse(JSON.stringify(@_data))
         return new Model(data_copy)
 
-
-
-if fs.existsSync('.cache.json')
-    CACHE = JSON.parse(fs.readFileSync('.cache.json'))
-    for k,v of CACHE
-        if v.map?
-            CACHE[k] = v.map (o) -> new Model(o)
-        else
-            CACHE[k] = new Model(v)
-else
-    CACHE = {}
-
-saveCache = ->
-    fs.writeFileSync('.cache.json', JSON.stringify(CACHE))
 
 
 
@@ -247,6 +234,7 @@ class ContentAPI
         , (result) ->
             SDKError.log("Got #{ result.length } entries from API.")
             cb(result)
+
     packages: (cb) ->
         @filter
             type: PACKAGE
@@ -255,13 +243,23 @@ class ContentAPI
         , (result) ->
             SDKError.log("Got #{ result.length } packages from API.")
             cb(result)
-    # posts: (cb) ->
-    #     @filter
-    #         type: POST
-    #         _sort: '-start_date'
-    #         is_public: true
-    #     , (result) ->
-    #         SDKError.log("Got #{ result.length } posts from API.")
-    #         cb(result)
+
+    posts: (cb) ->
+        @filter
+            type: POST
+            _sort: '-start_date'
+            is_public: true
+        , (result) ->
+            SDKError.log("Got #{ result.length } posts from API.")
+            cb(result)
+
+    channels: (cb) ->
+        @filter
+            type: CHANNEL
+            _sort: 'created_date'
+        , (result) ->
+            SDKError.log("Got #{ result.length } channels from API.")
+            cb(result)
+
 
 module.exports = ContentAPI
