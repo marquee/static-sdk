@@ -12,11 +12,18 @@ TAG_MAP =
 module.exports = React.createClass
     displayName: 'TextBlock'
     render: ->
+        # Only render if `content` is not null.
+        return null unless @props.block.content?
+
+        # Render the text content to HTML, applying annotations if any.
         text = new NOAT(@props.block.content)
-        @props.block.annotations.forEach (anno) ->
+        @props.block.annotations?.forEach (anno) ->
             attrs = {}
             attrs.href = anno.url if anno.type is 'link'
             text.add(TAG_MAP[anno.type], anno.start, anno.end, attrs)
+
+        # Choose the appropriate tag for the given block's role.
+        # Unknown roles are ignored and not rendered.
         switch @props.block.role
             when 'paragraph'
                 blocktag = React.DOM.p
