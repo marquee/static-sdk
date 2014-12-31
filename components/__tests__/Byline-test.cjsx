@@ -1,9 +1,9 @@
-jest.dontMock('../Byline.cjsx')
+jest.dontMock('../Byline.js')
 
 describe 'Byline', ->
     it 'renders byline text with single string name', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(
@@ -21,7 +21,7 @@ describe 'Byline', ->
 
     it 'renders byline text with single string name and different label', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(
@@ -39,7 +39,7 @@ describe 'Byline', ->
 
     it 'renders byline text with two names', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(
@@ -53,7 +53,7 @@ describe 'Byline', ->
     
     it 'renders byline text with three names', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(
@@ -67,7 +67,7 @@ describe 'Byline', ->
         
     it 'renders byline text with three names and different join/and', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(
@@ -81,7 +81,7 @@ describe 'Byline', ->
 
     it 'renders empty with no names in list', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(
@@ -99,7 +99,7 @@ describe 'Byline', ->
 
     it 'renders empty with no names in string', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(
@@ -117,7 +117,7 @@ describe 'Byline', ->
 
     it 'renders empty with no names as null', ->
         React = require 'react/addons'
-        Byline = require '../Byline.cjsx'
+        Byline = require '../Byline.js'
         { TestUtils } = React.addons
 
         byline = TestUtils.renderIntoDocument(

@@ -1,4 +1,4 @@
-// preprocessor.js
+// _preprocessor.js
 var coffee = require('coffee-script');
 var coffeereact = require('coffee-react');
 
