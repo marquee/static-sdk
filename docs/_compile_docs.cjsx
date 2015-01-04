@@ -38,7 +38,7 @@ getCurrentCommit = require '../compiler/getCurrentCommit'
 putFilesToS3 = require '../deployment/putFilesToS3'
 walkSync = require '../compiler/walkSync'
 
-{ GoogleAnalytics, ChartbeatStart } = require '../base/Analytics'
+{ GoogleAnalytics, ChartbeatStart } = require '../base/analytics'
 { BuildInfo, makeMetaTags, Asset, Favicon, GoogleFonts } = require '../base'
 
 console.log 'Compiling docs in', build_directory, for_deploy

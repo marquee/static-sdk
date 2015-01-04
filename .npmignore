@@ -4,3 +4,4 @@
 docs/_assets
 docs/*.html
 .env.json
+__tests__

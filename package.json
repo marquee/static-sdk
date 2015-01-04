@@ -2,14 +2,15 @@
   "name": "marquee-static-sdk",
   "version": "0.1.0-alpha.15",
   "scripts": {
-    "prepublish": "npm run clearbuild && npm run build",
+    "test": "npm run clearbuild && npm run build:source && jest",
+    "prepublish": "npm test && npm run clearbuild && npm run build",
     "postpublish": "npm run clearbuild && npm run deploy:docs",
     "build": "npm run build:source && npm run build:docs",
     "build:docs": "./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx",
     "build:source": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./ && rm ./docs/_compile_docs.js",
     "deploy:docs": "npm run build:source && ./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx --production",
     "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
-    "clearbuild": "find . -path ./node_modules -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | xargs rm"
+    "clearbuild": "find . -path ./node_modules -prune -or -path __tests__ -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | grep -v '__tests__' | xargs rm"
   },
   "main": "./index.js",
   "bin": {
@@ -40,7 +41,13 @@
     "uglify-js": "^2.4.15"
   },
   "devDependencies": {
-    "marked": "^0.3.2"
+    "marked": "^0.3.2",
+    "jest-cli": "~0.2.1"
+  },
+  "jest": {
+    "testFileExtensions": ["coffee", "cjsx"],
+    "scriptPreprocessor": "<rootDir>/__tests__/_preprocessor.js",
+    "unmockedModulePathPatterns": ["<rootDir>/node_modules/react"]
   },
   "homepage": "http://marquee.by",
   "bugs": "https://github.com/marquee/marquee-static-sdk",
