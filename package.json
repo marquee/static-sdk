@@ -10,7 +10,7 @@
     "build:source": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./ && rm ./docs/_compile_docs.js",
     "deploy:docs": "npm run build:source && ./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx --production",
     "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
-    "clearbuild": "find . -path ./node_modules -prune -or -path __tests__ -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | grep -v '__tests__' | xargs --no-run-if-empty rm"
+    "clearbuild": "find . -path ./node_modules -prune -or -path __tests__ -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | grep -v '__tests__' | xargs rm"
   },
   "main": "./index.js",
   "bin": {
