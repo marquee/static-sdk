@@ -14,6 +14,7 @@ ENDPOINTS =
 
 
 fs      = require 'fs'
+path    = require 'path'
 request = require 'request'
 W       = require 'when'
 
@@ -183,7 +184,7 @@ class APIResults
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
-    constructor: ({ token, host, project }) ->
+    constructor: ({ token, host, project, use_cache, project_directory }) ->
         # The actual token permissions are not determined by the prefix, but
         # we can assume it reflects the permissions defined in the database.
         unless token.substring(0,2) is 'r0'
@@ -191,6 +192,9 @@ class ContentAPI
             throw new SDKError('tokens', "ContentAPI token MUST be read-only. Given token is labled #{ TOKEN_PERM_MAP[token.substring(0,2)] }.")
         @_token = token
         @_host = host
+        @_project_directory = project_directory
+        if use_cache
+            @_setUpCache()
 
         # If being used within the context of a publication, assemble a User
         # Agent string that includes the publication information. Otherwise,
@@ -223,18 +227,52 @@ class ContentAPI
                 'Authorization' : "Token #{ @_token }"
             url: url
             qs: opts.query
-        SDKError.log("Making request to Content API: #{ colors.info(url) }, #{ opts.query }")
-        request.get _options, (error, response, data) ->
-            throw error if error
-            # This API client is **read-only** and MUST only ever receive
-            # a 200 from the API (or an error status), NEVER 201 or 204.
-            unless response.statusCode is 200
-                throw new SDKError('api', "Content API error: #{ response.statusCode }\n\n#{ data }", response.statusCode)
+        SDKError.log("Making request to Content API: #{ colors.cyan(url) }, #{ JSON.stringify(opts.query) }")
+
+
+        _returnData = (data) ->
             if data.map?
                 result = data.map (o) -> new Model(o.published_json)
             else
                 result = new Model(data.published_json)
             opts.callback(result)
+
+
+        cache_key = url
+        _query_keys = Object.keys(opts.query)
+        _query_keys.sort()
+        for _k in _query_keys
+            cache_key += "#{ _k }=#{ opts.query[_k] }"
+        if @_cache?[cache_key]
+            SDKError.log(SDKError.colors.grey('Using response from API cache.'))
+            _returnData(@_cache[cache_key])
+        else
+            request.get _options, (error, response, data) =>
+                throw error if error
+                # This API client is **read-only** and MUST only ever receive
+                # a 200 from the API (or an error status), NEVER 201 or 204.
+                unless response.statusCode is 200
+                    throw new SDKError('api', "Content API error: #{ response.statusCode }\n\n#{ data }", response.statusCode)
+                @_setCacheItem(cache_key, data)
+                _returnData(data)
+
+    _setUpCache: ->
+        @_CACHE_FILE = path.join(@_project_directory, '.cache.json')
+        try
+            @_cache = JSON.parse(fs.readFileSync(@_CACHE_FILE).toString())
+            SDKError.log(SDKError.colors.grey('Loaded API cache from file.'))
+        catch e
+            console.log e.message
+            console.log e.stack
+            SDKError.log(SDKError.colors.grey('No API cache file. Creating new cache...'))
+            @_cache = {}
+
+    _setCacheItem: (key, value) ->
+        if @_cache?
+            @_cache[key] = value
+            fs.writeFileSync(@_CACHE_FILE, JSON.stringify(@_cache))
+            SDKError.log(SDKError.colors.grey('Updated API cache file.'))
+
 
     # This is a good spot to make a generator or some sort of iterator instead,
     # since this holds all the objects in memory.

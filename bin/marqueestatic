@@ -7,6 +7,7 @@ program
     .option('-p, --production', 'Build for production (minify)')
     .option('-f, --force', 'Force the action, overriding checks and guards')
     .option('-c, --configuration <name>', 'A configuration to use')
+    .option('--use-cache', 'Cache API responses (for development)')
     .parse(process.argv);
 
 if (program.production) {
@@ -20,8 +21,8 @@ var _options = {
     force: program.force || false,
     configuration: program.configuration || null,
     production: program.production || false,
+    use_cache: program.useCache || false,
 }
-
 switch (_command) {
     case 'deploy':
         process.env.NODE_ENV = 'production';

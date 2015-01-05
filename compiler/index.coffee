@@ -72,9 +72,11 @@ module.exports = (project_directory, options, onCompile=null) ->
 
         # Set up the Content API wrapper for the project.
         api = new ContentAPI
-            token   : project_config.CONTENT_API_TOKEN
-            host    : project_config.CONTENT_API_HOST
-            project : project_package
+            token               : project_config.CONTENT_API_TOKEN
+            host                : project_config.CONTENT_API_HOST
+            project             : project_package
+            project_directory   : project_directory
+            use_cache           : options.use_cache
 
         # Create the file handling functions for the project.
         _writeFile = require('./writeFile')(build_directory)
