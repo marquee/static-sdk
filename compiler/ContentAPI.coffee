@@ -267,5 +267,12 @@ class ContentAPI
             SDKError.log("Got #{ result.length } channels from API.")
             cb?(result)
 
+    ENTRY   : ENTRY
+    PACKAGE : PACKAGE
+    POST    : POST
+    CHANNEL : CHANNEL
+    IMAGE   : IMAGE
+    TEXT    : TEXT
+    EMBED   : EMBED
 
 module.exports = ContentAPI
