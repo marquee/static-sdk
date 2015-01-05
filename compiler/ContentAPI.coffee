@@ -146,6 +146,38 @@ class Model
         return new Model(data_copy)
 
 
+class APIResults
+    constructor: (array_of_results) ->
+        @_items = array_of_results
+        @length = @_items.length
+
+        @_items.forEach (item, i) =>
+            @[i] = item
+            @[item.id] = item if item.id
+
+
+    aggregateBy: (property) ->
+        result = {}
+        @_items.forEach (item) ->
+            if item[property]?
+                result[item[property]] ?= []
+                result[item[property]].push(item)
+        return result
+
+    forEach: -> @_items.forEach(arguments...)
+    map: -> @_items.map(arguments...)
+    slice: -> @_items.slice(arguments...)
+    shift: ->
+        _res = @_items.shift()
+        @length = @_items.length
+        return _res
+    pop: ->
+        _res = @_items.pop()
+        @length = @_items.length
+        return _res
+
+
+
 
 
 # Content API wrapper
@@ -218,8 +250,10 @@ class ContentAPI
         num_last_batch = -1
         _makeRequest = =>
             if num_last_batch is 0
-                deferred_result.resolve(results)
-                cb?(results)
+                _results = new APIResults(results)
+
+                deferred_result.resolve(_results)
+                cb?(_results)
             else
                 @_sendRequest
                     url         : ENDPOINTS[query.type]
