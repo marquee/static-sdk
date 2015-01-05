@@ -15,6 +15,7 @@ ENDPOINTS =
 
 fs      = require 'fs'
 request = require 'request'
+W       = require 'when'
 
 sdk_ua_string = require './sdk_ua_string'
 
@@ -145,6 +146,38 @@ class Model
         return new Model(data_copy)
 
 
+class APIResults
+    constructor: (array_of_results) ->
+        @_items = array_of_results
+        @length = @_items.length
+
+        @_items.forEach (item, i) =>
+            @[i] = item
+            @[item.id] = item if item.id
+
+
+    aggregateBy: (property) ->
+        result = {}
+        @_items.forEach (item) ->
+            if item[property]?
+                result[item[property]] ?= []
+                result[item[property]].push(item)
+        return result
+
+    forEach: -> @_items.forEach(arguments...)
+    map: -> @_items.map(arguments...)
+    slice: -> @_items.slice(arguments...)
+    shift: ->
+        _res = @_items.shift()
+        @length = @_items.length
+        return _res
+    pop: ->
+        _res = @_items.pop()
+        @length = @_items.length
+        return _res
+
+
+
 
 
 # Content API wrapper
@@ -207,6 +240,9 @@ class ContentAPI
     # since this holds all the objects in memory.
     filter: (query, cb) ->
         # if no callback, return queryset?
+
+        deferred_result = W.defer()
+
         LIMIT = 10
         query._limit ?= LIMIT
         query._offset ?= 0
@@ -214,7 +250,10 @@ class ContentAPI
         num_last_batch = -1
         _makeRequest = =>
             if num_last_batch is 0
-                cb(results)
+                _results = new APIResults(results)
+
+                deferred_result.resolve(_results)
+                cb?(_results)
             else
                 @_sendRequest
                     url         : ENDPOINTS[query.type]
@@ -225,6 +264,7 @@ class ContentAPI
                         query._offset += LIMIT
                         _makeRequest()
         _makeRequest()
+        return deferred_result.promise
 
     entries: (cb) ->
         @filter
@@ -233,7 +273,7 @@ class ContentAPI
             _sort: '-published_date'
         , (result) ->
             SDKError.log("Got #{ result.length } entries from API.")
-            cb(result)
+            cb?(result)
 
     packages: (cb) ->
         @filter
@@ -242,7 +282,7 @@ class ContentAPI
             _sort: '-published_date'
         , (result) ->
             SDKError.log("Got #{ result.length } packages from API.")
-            cb(result)
+            cb?(result)
 
     posts: (cb) ->
         @filter
@@ -251,7 +291,7 @@ class ContentAPI
             is_public: true
         , (result) ->
             SDKError.log("Got #{ result.length } posts from API.")
-            cb(result)
+            cb?(result)
 
     channels: (cb) ->
         @filter
@@ -259,7 +299,14 @@ class ContentAPI
             _sort: 'created_date'
         , (result) ->
             SDKError.log("Got #{ result.length } channels from API.")
-            cb(result)
+            cb?(result)
 
+    ENTRY   : ENTRY
+    PACKAGE : PACKAGE
+    POST    : POST
+    CHANNEL : CHANNEL
+    IMAGE   : IMAGE
+    TEXT    : TEXT
+    EMBED   : EMBED
 
 module.exports = ContentAPI
