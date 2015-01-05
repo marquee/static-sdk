@@ -11,10 +11,10 @@ Card = React.createClass
         variants = new Classes()
         variants.add('full_cover', @props.children instanceof Cover)
         if @props.link
-            tag = React.DOM.a
+            tag = 'a'
             variants.set('link')
         else
-            tag = React.DOM.div
+            tag = 'div'
         <tag
             id          = @props.id
             className   = "Card #{ @props.className or '' } #{ variants }"

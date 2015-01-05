@@ -26,13 +26,13 @@ module.exports = React.createClass
         # Unknown roles are ignored and not rendered.
         switch @props.block.role
             when 'paragraph'
-                blocktag = React.DOM.p
+                blocktag = 'p'
             when 'quote'
-                blocktag = React.DOM.blockquote
+                blocktag = 'blockquote'
             when 'pre'
-                blocktag = React.DOM.pre
+                blocktag = 'pre'
             when 'heading'
-                blocktag = React.DOM["h#{ @props.block.heading_level or 1 + 1}"]
+                blocktag = "h#{ @props.block.heading_level or 1 + 1}"
             else
                 console.warn("TextBlock got unknown role: #{ @props.block.role }")
                 return null
