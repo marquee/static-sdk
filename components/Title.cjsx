@@ -6,7 +6,7 @@ module.exports = React.createClass
         level: 3
     }
     render: ->
-        tag = React.DOM["h#{ @props.level }"]
+        tag = "h#{ @props.level }"
         if @props.link
             contents = <a className='_TitleLink' href=@props.link>{@props.title}</a>
         else

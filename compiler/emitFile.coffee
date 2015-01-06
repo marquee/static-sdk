@@ -24,8 +24,8 @@ module.exports = ({ project_directory, project, config, writeFile }) ->
                 return [null, file_content]
 
             when 'object'
-                if React?.isValidComponent(file_content)
-                    output_content = React.renderComponentToStaticMarkup(file_content)
+                if React?.isValidElement(file_content)
+                    output_content = React.renderToStaticMarkup(file_content)
                     output_content = "<!doctype html>#{ output_content }"
                     return ['text/html', output_content]
 

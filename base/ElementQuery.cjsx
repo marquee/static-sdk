@@ -119,5 +119,5 @@ module.exports = React.createClass
             """
         if process.env.NODE_ENV is 'production'
             eq_script = UglifyJS.minify(eq_script, fromString: true).code
-        console.log eq_script.length
+
         <script dangerouslySetInnerHTML={__html: eq_script} />
