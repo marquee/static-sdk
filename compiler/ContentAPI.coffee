@@ -232,9 +232,15 @@ class ContentAPI
 
         _returnData = (data) ->
             if data.map?
-                result = data.map (o) -> new Model(o.published_json)
+                result = data.map (o) ->
+                    if o.published_json
+                        return new Model(o.published_json)
+                    return new Model(o)
             else
-                result = new Model(data.published_json)
+                if data.published_json
+                    result = new Model(data.published_json)
+                else
+                    result = new Model(data)
             opts.callback(result)
 
 
