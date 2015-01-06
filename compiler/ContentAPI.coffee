@@ -281,6 +281,12 @@ class ContentAPI
 
         deferred_result = W.defer()
 
+        # Other types don't have the `type` property, so this needs to be
+        # removed from the query for the filtering to work correctly.
+        url = ENDPOINTS[query.type]
+        unless query.type in [ENTRY, PACKAGE]
+            delete query.type
+
         LIMIT = 10
         query._limit ?= LIMIT
         query._offset ?= 0
@@ -294,7 +300,7 @@ class ContentAPI
                 cb?(_results)
             else
                 @_sendRequest
-                    url         : ENDPOINTS[query.type]
+                    url         : url
                     query       : query
                     callback    : (_results) ->
                         results.push(_results...)
