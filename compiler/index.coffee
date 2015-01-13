@@ -144,6 +144,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         emitFile        : _emitFile
                         config          : project_config
                         project         : project_package
+                        payload         : options.payload
                         done            : _done
                         info            : build_info
                         includeAssets   : _makeIncludeAssets(asset_hash)

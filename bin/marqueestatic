@@ -16,25 +16,65 @@ if (program.production) {
     process.env.NODE_ENV = 'development';
 }
 
-var _command = program.args[0];
-var _options = {
-    force: program.force || false,
-    configuration: program.configuration || null,
-    production: program.production || false,
-    use_cache: program.useCache || false,
+// Payload is either an Object or null.
+function continueCommand(payload) {
+
+    var _command = program.args[0];
+    var _options = {
+        force: program.force || false,
+        configuration: program.configuration || null,
+        production: program.production || false,
+        use_cache: program.useCache || false,
+        payload: payload,
+    }
+
+    switch (_command) {
+        case 'deploy':
+            process.env.NODE_ENV = 'production';
+            require('../deployment')(process.cwd(), _options);
+            break;
+        case 'build':
+            require('../development/build')(process.cwd(), _options);
+            break;
+        case 'develop':
+            require('../development/develop')(process.cwd(), _options);
+            break;
+        default:
+            if(_command) {
+                console.log('Unknown command: `' + _command + '`');
+            } else {
+                console.log('No command given.');
+            }
+            console.log('You must specify a command, `marqueestatic <command>`. See `marqueestatic --help`.')
+            process.exit(1);
+    }
 }
-switch (_command) {
-    case 'deploy':
-        process.env.NODE_ENV = 'production';
-        require('../deployment')(process.cwd(), _options);
-        break;
-    case 'build':
-        require('../development/build')(process.cwd(), _options);
-        break;
-    case 'develop':
-        require('../development/develop')(process.cwd(), _options);
-        break;
-    default:
-        console.log('Unknown command: `' + _command + '`');
-        process.exit(1);
+
+
+if(process.stdin.isTTY) {
+    // The command is being called un-piped.
+    continueCommand(null);
+} else {
+    // The command is being piped a payload from stdin.
+    var payload_str = ''
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('readable', function() {
+        var chunk = process.stdin.read();
+        if (chunk !== null) {
+            payload_str += chunk;
+        }
+    });
+
+    process.stdin.on('end', function() {
+        console.log("Payload is|" + payload_str)
+        try {
+            var payload = JSON.parse(payload_str);
+        } catch (e) {
+            console.error('Payload is not valid JSON!\nError from JSON.parse:\n')
+            console.error(e.message)
+            console.error(e.stack)
+            process.exit(1)
+        }
+        continueCommand(payload);
+    });
 }
