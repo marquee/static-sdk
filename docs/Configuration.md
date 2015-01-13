@@ -75,8 +75,9 @@ make any changs to content. The SDK will reject tokens that are read-write.
 Static sites are deployed to [Amazon S3](http://aws.amazon.com/s3/). The
 configuration needs these properties to do so: `AWS_BUCKET`,
 `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`. The given key MUST have — and
-SHOULD only have — `s3:PutObject` and `s3:PutObjectAcl` permissions on the
-publication’s bucket.
+SHOULD only have — `s3:ListBucket`, `s3:DeleteObject`, `s3:GetObject`,
+`s3:PutObject`, and `s3:PutObjectAcl` permissions on the publication’s bucket
+and the bucket’s contents.
 
 The permissions can be managed on the
 [IAM User control panel](https://console.aws.amazon.com/iam/home?#users). A
@@ -89,15 +90,20 @@ suitable user policy looks like this:
           "Sid": "Stmt1411849330000",
           "Effect": "Allow",
           "Action": [
+            "s3:ListBucket",
+            "s3:GetObject",
+            "s3:DeleteObject",
             "s3:PutObject",
             "s3:PutObjectAcl"
           ],
           "Resource": [
+            "arn:aws:s3:::shortname.marquee.pub",
             "arn:aws:s3:::shortname.marquee.pub/*"
           ]
         }
       ]
     }
+
 
 ### Bucket
 
