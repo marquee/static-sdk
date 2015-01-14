@@ -6,6 +6,7 @@ path                    = require 'path'
 
 compileAssets           = require './compileAssets'
 ContentAPI              = require './ContentAPI'
+loadConfiguration       = require './loadConfiguration'
 SDKError                = require './SDKError'
 { formatProjectPath }   = SDKError
 
@@ -40,23 +41,7 @@ module.exports = (project_directory, options, onCompile=null) ->
         SDKError.log("Project entrypoint: #{ formatProjectPath(project_directory, project_main) }")
 
         # Load and validate the Marquee-specific compiler configuration.
-        project_config = {}
-
-        unless project_package.marquee
-            throw new SDKError('configuration', "Project missing `package.marquee`.")
-
-        for k,v of project_package.marquee
-            unless k is 'configurations'
-                project_config[k] = v
-
-        # Override config with specified configuration values.
-        if options.configuration
-            unless project_package.marquee.configurations[options.configuration]
-                _available_configs = Object.keys(project_package.marquee.configurations).map (c) -> "`#{ c }`"
-                _available_configs = _available_configs.join(', ')
-                throw new SDKError('configuration', "Unknown configuration specified: `#{ options.configuration }`. Package has #{ _available_configs }.")
-            for k,v of project_package.marquee.configurations[options.configuration]
-                project_config[k] = v
+        project_config = loadConfiguration(project_package, options.configuration)
 
         ['CONTENT_API_TOKEN', 'CONTENT_API_HOST', 'HOST'].forEach (prop) ->
             unless project_config[prop]
@@ -87,10 +72,11 @@ module.exports = (project_directory, options, onCompile=null) ->
             writeFile           : _writeFile
         )
 
-        # Set a timeout for the compiler. Must complete within 60 seconds.
+        # Set a timeout for the compiler.
+        TIMEOUT = 30 * 60 # 30 minutes
         _done_timeout = setTimeout ->
-            throw new SDKError('compiler', 'Compiler timeout. Compiler MUST call `done` within 60 seconds.')
-        , 60 * 1000
+            throw new SDKError('compiler', "Compiler timeout. Compiler MUST call `done` within #{ TIMEOUT } seconds.")
+        , TIMEOUT * 1000
 
         _done = ->
             SDKError.clearPrefix()
@@ -144,6 +130,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         emitFile        : _emitFile
                         config          : project_config
                         project         : project_package
+                        payload         : options.payload
                         done            : _done
                         info            : build_info
                         includeAssets   : _makeIncludeAssets(asset_hash)

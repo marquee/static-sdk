@@ -1,9 +1,13 @@
-SDKError            = require '../compiler/SDKError'
-runCompilation      = require '../compiler'
-walkSync            = require '../compiler/walkSync'
-getCurrentCommit    = require '../compiler/getCurrentCommit'
-putFilesToS3        = require './putFilesToS3'
-path                = require 'path'
+SDKError                    = require '../compiler/SDKError'
+runCompilation              = require '../compiler'
+walkSync                    = require '../compiler/walkSync'
+getCurrentCommit            = require '../compiler/getCurrentCommit'
+loadConfiguration           = require '../compiler/loadConfiguration'
+putFilesToS3                = require './putFilesToS3'
+getChangedFiles             = require './getChangedFiles'
+deleteFilesFromS3           = require './deleteFilesFromS3'
+minifyAndCompressInPlace    = require './minifyAndCompressInPlace'
+path                        = require 'path'
 
 module.exports = (project_directory, options={}) ->
 
@@ -30,17 +34,22 @@ module.exports = (project_directory, options={}) ->
         SDKError.log('Pre-deploy build...\n\n')
         build_directory = runCompilation project_directory, options, (files, assets, project_package) ->
 
-            console.log('\n')
+            project_config = loadConfiguration(project_package, options.configuration)
 
             ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_BUCKET'].forEach (prop) ->
-                unless project_package.marquee[prop]
+                unless project_config[prop]
                     throw new SDKError('configuration.deploy', "Project missing `package.marquee.#{ prop }`.")
 
-            files_to_deploy = walkSync(build_directory, ignore=['.'])
-            file_count = SDKError.colors.grey("(#{ files_to_deploy.length } files)")
-            _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
-            project_name_and_commit = "#{ SDKError.formatProjectPath(project_directory) }#{ _sha }"
-            SDKError.log("Deploying #{ project_name_and_commit } #{ file_count } to #{ SDKError.colors.cyan(project_package.marquee.HOST) }")
 
-            putFilesToS3 build_directory, files_to_deploy, project_package.marquee, ->
-                SDKError.log("\nDeployed #{ project_name_and_commit } to #{ SDKError.colors.cyan.underline('http://' + project_package.marquee.HOST) }")
+            local_files = walkSync(build_directory, ignore=['.'])
+            minifyAndCompressInPlace local_files, ->
+                getChangedFiles build_directory, local_files, project_config, (files_to_deploy) ->
+
+                    file_count = SDKError.colors.grey("(#{ files_to_deploy.changed.length + files_to_deploy.deleted.length } files changed, #{ local_files.length } total)")
+                    _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
+                    project_name_and_commit = "#{ SDKError.formatProjectPath(project_directory) }#{ _sha }"
+                    SDKError.log("Deploying #{ project_name_and_commit } #{ file_count } to #{ SDKError.colors.cyan(project_config.HOST) }")
+
+                    putFilesToS3 build_directory, files_to_deploy, project_config, ->
+                        deleteFilesFromS3 files_to_deploy, project_config, ->
+                            SDKError.log("Deployed #{ project_name_and_commit } to #{ SDKError.colors.cyan.underline('http://' + project_config.HOST) }")

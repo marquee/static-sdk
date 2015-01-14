@@ -43,14 +43,13 @@ class NOAT
         start = parseInt(start)
         end = parseInt(end)
 
-        @_validateRange(start, end)
-
-        @annotations.push
-            tag     : tag
-            start   : start
-            end     : end
-            attrs   : attrs
-        @_markup = null
+        if @_validateRange(start, end)
+            @annotations.push
+                tag     : tag
+                start   : start
+                end     : end
+                attrs   : attrs
+            @_markup = null
 
     _applyAnnotations: ->
         @_markup = _addTextAnnotations(@text, @annotations)
@@ -62,11 +61,15 @@ class NOAT
 
     _validateRange: (start, end) ->
         if start > end
-            throw new Error("start (#{ start }) must be <= end (#{ end })")
+            console.error("start (#{ start }) must be <= end (#{ end })")
+            return false
         if start < 0
-            throw new Error("start (#{ start }) must be >= 0")
+            console.error("start (#{ start }) must be >= 0")
+            return false
         if end > @text.length
-            throw new Error("end (#{ end }) must be <= length of text (#{ @text.length })")
+            console.error("end (#{ end }) must be <= length of text (#{ @text.length })")
+            return false
+        return true
 
 
 _openTag = (t) ->
