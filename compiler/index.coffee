@@ -87,10 +87,11 @@ module.exports = (project_directory, options, onCompile=null) ->
             writeFile           : _writeFile
         )
 
-        # Set a timeout for the compiler. Must complete within 60 seconds.
+        # Set a timeout for the compiler.
+        TIMEOUT = 30 * 60 # 30 minutes
         _done_timeout = setTimeout ->
-            throw new SDKError('compiler', 'Compiler timeout. Compiler MUST call `done` within 60 seconds.')
-        , 60 * 1000
+            throw new SDKError('compiler', "Compiler timeout. Compiler MUST call `done` within #{ TIMEOUT } seconds.")
+        , TIMEOUT * 1000
 
         _done = ->
             SDKError.clearPrefix()
