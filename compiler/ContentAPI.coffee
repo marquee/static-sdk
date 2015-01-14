@@ -178,12 +178,82 @@ class APIResults
         return _res
 
 
+class ContentCache
+    constructor: ({ api, project, project_directory, active }) ->
+        @_cache_directory = path.join(project_directory, '.data-cache')
+        @_api = api
+        @_pass_through = not active
+
+
+
+    updateCachedObject: (obj) =>
+        target_file = path.join(@_cache_directory, "#{ obj.id }.json")
+        fs.writeFileSync(target_file, JSON.stringify(obj))
+
+    removeCachedObject: (id) ->
+
+    getCachedObject: (id) ->
+        target_file = path.join(@_cache_directory, "#{ id }.json")
+        try
+            file_content = fs.readFileSync(target_file).toString()
+        catch e
+            return null
+        return JSON.parse(file_content)
+
+    _updateCachedItems: (content_objects) ->
+        unless fs.existsSync(@_cache_directory)
+            fs.mkdirSync(@_cache_directory)
+        content_objects.forEach(@updateCachedObject)
+
+
+    _getCachedIDs: ->
+        try
+            cached_files = fs.readdirSync(@_cache_directory)
+        catch e
+            return null
+
+        results = []
+        cached_files.forEach (f) =>
+            results.push(f.split('.').shift()) unless f[0] is '.'
+        return results
+
+    _getCachedObjects: (ids) ->
+        objects = []
+        ids.forEach (id) =>
+            objects.push(
+                    new Model(
+                        JSON.parse(
+                            fs.readFileSync(
+                                path.join(@_cache_directory, "#{ id }.json")
+                            ).toString()
+                        )
+                    )
+                )
+        return objects
+
+    entries: (cb) ->
+        if @_pass_through
+            return @_api.entries(arguments...)
+        console.log 'CachedContent::entries'
+        cached_ids = @_getCachedIDs()
+        if cached_ids
+            cached_ids = cached_ids.filter (f) -> f.split('_').shift() is ENTRY
+            return @_getCachedObjects(cached_ids)
+        return @_api.entries (entries) =>
+            @_updateCachedItems(entries)
+            cb?(entries)
+    packages: -> []
+    posts: -> []
+    channels: -> []
+    filter: ->
+        return []
 
 
 
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
+    @ContentCache = ContentCache
     constructor: ({ token, host, project, use_cache, project_directory }) ->
         # The actual token permissions are not determined by the prefix, but
         # we can assume it reflects the permissions defined in the database.
@@ -360,3 +430,4 @@ class ContentAPI
     EMBED   : EMBED
 
 module.exports = ContentAPI
+

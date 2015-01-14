@@ -78,6 +78,11 @@ module.exports = (project_directory, options, onCompile=null) ->
             project_directory   : project_directory
             use_cache           : options.use_cache
 
+        cache = new ContentAPI.ContentCache
+            api                 : api
+            project             : project_package
+            project_directory   : project_directory
+
         # Create the file handling functions for the project.
         _writeFile = require('./writeFile')(build_directory)
         _emitFile = require('./emitFile')(
@@ -147,6 +152,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         payload         : options.payload
                         done            : _done
                         info            : build_info
+                        cache           : cache
                         includeAssets   : _makeIncludeAssets(asset_hash)
                 catch e
                     throw new SDKError('compiler', e)

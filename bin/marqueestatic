@@ -7,7 +7,8 @@ program
     .option('-p, --production', 'Build for production (minify)')
     .option('-f, --force', 'Force the action, overriding checks and guards')
     .option('-c, --configuration <name>', 'A configuration to use')
-    .option('--use-cache', 'Cache API responses (for development)')
+    .option('--cache-api-requests', 'Cache API responses (for development)')
+    .option('--cache-content', 'Cache content by ID (for webhook listener)')
     .parse(process.argv);
 
 if (program.production) {
@@ -24,7 +25,7 @@ function continueCommand(payload) {
         force: program.force || false,
         configuration: program.configuration || null,
         production: program.production || false,
-        use_cache: program.useCache || false,
+        use_cache: program.cacheApiRequests || false,
         payload: payload,
     }
 
