@@ -25,68 +25,34 @@ if (program.verbose) {
     global.VERBOSE = false;
 }
 
-// Payload is either an Object or null.
-function continueCommand(payload) {
-
-    var _command = program.args[0];
-    var _options = {
-        force: program.force || false,
-        configuration: program.configuration || null,
-        production: program.production || false,
-        use_cache: program.useCache || false,
-        host: program.host || 'localhost',
-        port: program.port || '5000',
-        payload: payload,
-        verbose: program.verbose || false,
-    }
-
-    switch (_command) {
-        case 'deploy':
-            process.env.NODE_ENV = 'production';
-            require('../deployment')(process.cwd(), _options);
-            break;
-        case 'build':
-            require('../development/build')(process.cwd(), _options);
-            break;
-        case 'develop':
-            require('../development/develop')(process.cwd(), _options);
-            break;
-        default:
-            if(_command) {
-                console.log('Unknown command: `' + _command + '`');
-            } else {
-                console.log('No command given.');
-            }
-            console.log('You must specify a command, `marqueestatic <command>`. See `marqueestatic --help`.')
-            process.exit(1);
-    }
+var _command = program.args[0];
+var _options = {
+    force: program.force || false,
+    configuration: program.configuration || null,
+    production: program.production || false,
+    use_cache: program.useCache || false,
+    host: program.host || 'localhost',
+    port: program.port || '5000',
+    verbose: program.verbose || false,
 }
 
-
-if(process.stdin.isTTY) {
-    // The command is being called un-piped.
-    continueCommand(null);
-} else {
-    // The command is being piped a payload from stdin.
-    var payload_str = ''
-    process.stdin.setEncoding('utf8');
-    process.stdin.on('readable', function() {
-        var chunk = process.stdin.read();
-        if (chunk !== null) {
-            payload_str += chunk;
+switch (_command) {
+    case 'deploy':
+        process.env.NODE_ENV = 'production';
+        require('../deployment')(process.cwd(), _options);
+        break;
+    case 'build':
+        require('../development/build')(process.cwd(), _options);
+        break;
+    case 'develop':
+        require('../development/develop')(process.cwd(), _options);
+        break;
+    default:
+        if(_command) {
+            console.log('Unknown command: `' + _command + '`');
+        } else {
+            console.log('No command given.');
         }
-    });
-
-    process.stdin.on('end', function() {
-        console.log("Payload is|" + payload_str)
-        try {
-            var payload = JSON.parse(payload_str);
-        } catch (e) {
-            console.error('Payload is not valid JSON!\nError from JSON.parse:\n')
-            console.error(e.message)
-            console.error(e.stack)
-            process.exit(1)
-        }
-        continueCommand(payload);
-    });
+        console.log('You must specify a command, `marqueestatic <command>`. See `marqueestatic --help`.')
+        process.exit(1);
 }
