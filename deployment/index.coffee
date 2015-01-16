@@ -48,8 +48,8 @@ module.exports = (project_directory, options={}) ->
                     file_count = SDKError.colors.grey("(#{ files_to_deploy.changed.length + files_to_deploy.deleted.length } files changed, #{ local_files.length } total)")
                     _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
                     project_name_and_commit = "#{ SDKError.formatProjectPath(project_directory) }#{ _sha }"
-                    SDKError.log("Deploying #{ project_name_and_commit } #{ file_count } to #{ SDKError.colors.cyan(project_config.HOST) }")
+                    SDKError.alwaysLog("Deploying #{ project_name_and_commit } #{ file_count } to #{ SDKError.colors.cyan(project_config.HOST) }")
 
                     putFilesToS3 build_directory, files_to_deploy, project_config, ->
                         deleteFilesFromS3 files_to_deploy, project_config, ->
-                            SDKError.log("Deployed #{ project_name_and_commit } to #{ SDKError.colors.cyan.underline('http://' + project_config.HOST) }")
+                            SDKError.alwaysLog("Deployed #{ project_name_and_commit } to #{ SDKError.colors.cyan.underline('http://' + project_config.HOST) }")

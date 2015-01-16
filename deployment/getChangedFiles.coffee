@@ -72,9 +72,6 @@ module.exports = (build_directory, local_files, project_config, callback) ->
                     remote: null
 
         unknown.forEach (f) ->
-            if f.remote.Key is 'sitemap.xml'
-                console.log getEtagFor(f), f.remote
-                # process.exit()
             if getEtagFor(f) isnt JSON.parse(f.remote.ETag)
                 changed.push(f)
             else
@@ -85,4 +82,4 @@ module.exports = (build_directory, local_files, project_config, callback) ->
         callback
             changed: changed
             deleted: deleted
-    # SDKError.log("Uploading #{ SDKError.colors.cyan(rel_path) }... #{ _file_size }")
+
