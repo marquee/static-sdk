@@ -17,7 +17,7 @@ runBatches = (batches, project_config, callback) ->
                 Bucket: project_config.AWS_BUCKET
                 Delete:
                     Objects: keys
-            SDKError.log(SDKError.colors("Deleting #{ keys.length } files from S3..."))
+            SDKError.log(SDKError.colors.grey("Deleting #{ keys.length } files from S3..."))
             s3.deleteObjects s3_options, (err) ->
                 if err?
                     throw new SDKError('deploy.s3', err)

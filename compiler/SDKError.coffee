@@ -97,8 +97,11 @@ SDKError.clearPrefix = -> _prefix = ''
 SDKError.indent = -> _prefix = '\t'
 SDKError.unindent = -> SDKError.clearPrefix()
 
-SDKError.log = (message) ->
+SDKError.alwaysLog = (message) ->
     util.log("#{ _prefix }#{ message }")
+SDKError.log = (message) ->
+    if global.VERBOSE
+        util.log("#{ _prefix }#{ message }")
 
 SDKError.colors = colors
 
