@@ -320,7 +320,7 @@ class ContentAPI
         @filter
             type: ENTRY
             is_released: true
-            _sort: '-published_date'
+            _sort: '-first_released_date'
         , (result) ->
             SDKError.log("Got #{ result.length } entries from API.")
             cb?(result)
@@ -329,7 +329,7 @@ class ContentAPI
         @filter
             type: PACKAGE
             is_released: true
-            _sort: '-published_date'
+            _sort: '-first_released_date'
         , (result) ->
             SDKError.log("Got #{ result.length } packages from API.")
             cb?(result)
