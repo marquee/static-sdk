@@ -7,6 +7,8 @@ program
     .option('-p, --production', 'Build for production (minify)')
     .option('-f, --force', 'Force the action, overriding checks and guards')
     .option('-c, --configuration <name>', 'A configuration to use')
+    .option('--host <host>', 'Set the development server host, eg 0.0.0.0 for external access (default `localhost`)')
+    .option('--port <port>', 'Set the development server port (default `5000`)')
     .option('--use-cache', 'Cache API responses (for development)')
     .parse(process.argv);
 
@@ -25,6 +27,8 @@ function continueCommand(payload) {
         configuration: program.configuration || null,
         production: program.production || false,
         use_cache: program.useCache || false,
+        host: program.host || 'localhost',
+        port: program.port || '5000',
         payload: payload,
     }
 
