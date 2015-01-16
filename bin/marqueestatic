@@ -10,12 +10,19 @@ program
     .option('--host <host>', 'Set the development server host, eg 0.0.0.0 for external access (default `localhost`)')
     .option('--port <port>', 'Set the development server port (default `5000`)')
     .option('--use-cache', 'Cache API responses (for development)')
+    .option('--verbose', 'Show non-error info messages')
     .parse(process.argv);
 
 if (program.production) {
     process.env.NODE_ENV = 'production';
 } else {
     process.env.NODE_ENV = 'development';
+}
+
+if (program.verbose) {
+    global.VERBOSE = true;
+} else {
+    global.VERBOSE = false;
 }
 
 // Payload is either an Object or null.
@@ -30,6 +37,7 @@ function continueCommand(payload) {
         host: program.host || 'localhost',
         port: program.port || '5000',
         payload: payload,
+        verbose: program.verbose || false,
     }
 
     switch (_command) {

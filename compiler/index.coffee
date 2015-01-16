@@ -22,7 +22,7 @@ module.exports = (project_directory, options, onCompile=null) ->
     # Provide the commit sha to the build, if available.
     getCurrentCommit project_directory, (commit_sha) ->
         _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
-        SDKError.log("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
+        SDKError.alwaysLog("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
 
         # Load the project's package.json file, if present and valid.
         project_package_file = path.join(project_directory, 'package.json')
@@ -122,7 +122,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                             assets              : args
 
                 # Finally, invoke the compiler.
-                SDKError.log("Invoking compiler from #{ SDKError.colors.green(project_package.main) }")
+                SDKError.alwaysLog("Invoking compiler from #{ SDKError.colors.green(project_package.main) }")
                 SDKError.setPrefix(SDKError.colors.grey('* compiler: '))
                 try
                     buildFn
