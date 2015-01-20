@@ -98,6 +98,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             writeFile           : _writeFile
             exportMetadata      : _exportMetadata
         )
+        _emitRedirect = require('./emitRedirect')(_emitFile)
 
         # Set a timeout for the compiler.
         TIMEOUT = 30 * 60 # 30 minutes
@@ -156,6 +157,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                     buildFn
                         api             : api
                         emitFile        : _emitFile
+                        emitRedirect    : _emitRedirect
                         config          : project_config
                         project         : project_package
                         payload         : options.payload
