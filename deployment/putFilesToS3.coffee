@@ -7,7 +7,7 @@ AWS     = require 'aws-sdk'
 SDKError = require '../compiler/SDKError'
 
 fs = require 'fs'
-
+path = require 'path'
 
 
 COMPRESSABLE = ['js', 'css', 'svg', 'html', 'txt', 'json', 'xml']
@@ -25,6 +25,11 @@ module.exports = (build_directory, files_to_deploy, project_config, callback) ->
 
     to_upload = files_to_deploy.changed.length
 
+    metadata = JSON.parse(
+            fs.readFileSync(
+                    path.join(build_directory, '.metadata.json')
+                ).toString()
+        )
     files_to_deploy.changed.forEach (f) ->
         rel_path = f.local.local_path.replace(build_directory + '/','')
 
@@ -38,6 +43,15 @@ module.exports = (build_directory, files_to_deploy, project_config, callback) ->
             ACL             : 'public-read'
             ContentType     : mime.lookup(rel_path)
             StorageClass    : 'REDUCED_REDUNDANCY'
+
+        if metadata[rel_path]
+            s3_options.Metadata = metadata[rel_path]
+            if metadata[rel_path]['Content-Type']?
+                s3_options.ContentType = metadata[rel_path]['Content-Type']
+            if metadata[rel_path]['content-type']?
+                s3_options.ContentType = metadata[rel_path]['content-type']
+            if metadata[rel_path]['CONTENT-TYPE']?
+                s3_options.ContentType = metadata[rel_path]['CONTENT-TYPE']
 
         _upload = (body) ->
             total_uploaded += body.length
