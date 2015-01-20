@@ -7,7 +7,7 @@ path        = require 'path'
 fs          = require 'fs'
 mime        = require 'mime'
 
-module.exports = ({ project_directory, project, config, writeFile }) ->
+module.exports = ({ project_directory, project, config, writeFile, exportMetadata }) ->
 
 
     # Require the project's copy of React so that the below validation and
@@ -46,15 +46,18 @@ module.exports = ({ project_directory, project, config, writeFile }) ->
     _processPath = (file_path) ->
         # Turn paths that end in a directory into `path/index.html` for clean URLs
         if file_path.indexOf('.') is -1
-            return "#{ file_path }/index.html"
+            return "#{ file_path }/index.html".replace(/\/{2,}/g,'/')
         return file_path
 
     files_emitted = []
 
     # The actual function given to the compiler for generating files.
-    emitFile = (file_path, file_content) ->
+    emitFile = (file_path, file_content, options={}) ->
         output_path                     = _processPath(file_path)
         [output_type, output_content]   = _processContent(file_content)
+
+        if options.content_type
+            output_type = options.content_type
 
         # If _processContent didn't specify a content type, guess based on
         # the output path.
@@ -69,6 +72,8 @@ module.exports = ({ project_directory, project, config, writeFile }) ->
             type        : output_type
 
         files_emitted.push(output_path)
+
+        exportMetadata(file_path, options.metadata) if options.metadata
 
     emitFile.files_emitted = files_emitted
 

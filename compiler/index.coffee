@@ -55,6 +55,32 @@ module.exports = (project_directory, options, onCompile=null) ->
         unless typeof buildFn is 'function'
             throw new SDKError('entrypoint', "Project main MUST export a function. Got #{ SDKError.colors.underline(typeof buildFn) }.")
 
+
+        # Set up metadata exporting function.
+        metadata_for_s3 = {}
+
+        # This is used by the metadata argument of emitFile to gather metadata
+        # for each emitted file, to be added to the object’s S3 metadata.
+        _exportMetadata = (file_path, file_meta) ->
+            if file_meta
+                try
+                    JSON.stringify(file_meta)
+                catch e
+                    throw new SDKError('emitFile.metadata', 'emitFile metadata MUST be JSON-serializable')
+                if file_path[0] is '/'
+                    file_path = file_path.substring(1)
+                metadata_for_s3[file_path] = file_meta
+
+        # Save out the metadata to a `.metadata.json` file in the build
+        # directory. Used by the deploy process to actually apply the metadata.
+        _writeMetadata = ->
+            metadata_content = JSON.stringify(metadata_for_s3)
+            SDKError.log(SDKError.colors.grey("Writing #{ metadata_content.length } bytes of metadata..."))
+            fs.writeFileSync(
+                    path.join(build_directory, '.metadata.json')
+                    metadata_content
+                )
+
         # Set up the Content API wrapper for the project.
         api = new ContentAPI
             token               : project_config.CONTENT_API_TOKEN
@@ -70,7 +96,9 @@ module.exports = (project_directory, options, onCompile=null) ->
             project             : project_package
             config              : project_config
             writeFile           : _writeFile
+            exportMetadata      : _exportMetadata
         )
+        _emitRedirect = require('./emitRedirect')(_emitFile)
 
         # Set a timeout for the compiler.
         TIMEOUT = 30 * 60 # 30 minutes
@@ -81,6 +109,7 @@ module.exports = (project_directory, options, onCompile=null) ->
         _done = ->
             SDKError.clearPrefix()
             clearTimeout(_done_timeout)
+            _writeMetadata()
             # Check that the project has necessary files.
             unless '404.html' in _emitFile.files_emitted
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
@@ -128,6 +157,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                     buildFn
                         api             : api
                         emitFile        : _emitFile
+                        emitRedirect    : _emitRedirect
                         config          : project_config
                         project         : project_package
                         payload         : options.payload
