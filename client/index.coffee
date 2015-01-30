@@ -1,4 +1,5 @@
 module.exports =
+    client_modules  : require './client_modules'
     Block           : require './Block'
     ContactForm     : require './ContactForm'
     ImageBlock      : require './ImageBlock'
