@@ -126,3 +126,17 @@ vs destructuring or specific require:
 Asset = require 'marquee-static-sdk/base/Asset'
 ```
 
+### Uncommitted changes detected, but no changes apparent
+
+The compiler will halt if uncommitted changes are detected during a deploy, or
+only warn if the `--force` flag is used. Sometimes this will happen even when
+there aren’t any changes apparent in the project. Make sure there are no
+untracked files, and that files such as `.DS_Store` are properly ignored.
+(GitX apparently does not show OS X system files like that, even if not
+blacklisted by the `.gitignore`.)
+
+Running `git diff-index HEAD && git ls-files --exclude-standard --others` in
+the project will show the changes the compiler is seeing.
+
+Note: future versions of the SDK may also block deploys if run from a
+non-master branch.
