@@ -73,6 +73,9 @@ class CDNImage
 
         # Handle legacy images, approximating the resize effect.
         if @_obj
+            unless @_obj.content?
+                console.warn("Legacy image object without content: #{ @_obj.id }")
+                return null
             if _params.width? and _params.width > 640
                 return @_obj.content['1280']?.url
             return @_obj.content['640']?.url
