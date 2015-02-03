@@ -5,12 +5,7 @@ React = require 'react'
 module.exports = React.createClass
     displayName: 'ImageBlock'
     render: ->
-        caption = null
-        if @props.annotations
-            for anno in @props.annotations
-                if anno.type is 'caption'
-                    caption = anno.content
-                    break
+
         if @props.block.content?
             src_1280 = @props.block.content['1280']?.url
             src_640 = @props.block.content['640']?.url
