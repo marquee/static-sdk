@@ -27,13 +27,13 @@ _render = (props) =>
             console.warn("Asset got unknown asset type (#{ _ext })")
             return null
 
+    # Ensure the asset is in the output directory.
     _dest_path = _source_path.replace(
             global.build_info.asset_cache_directory
             global.build_info.asset_dest_directory
         )
-    fs.exists _dest_path, (_exists) ->
-        unless _exists
-            fs.copySync(_source_path, _dest_path)
+    unless fs.existsSync(_dest_path)
+        fs.copySync(_source_path, _dest_path)
 
     return output
 

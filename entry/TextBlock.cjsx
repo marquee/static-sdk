@@ -43,4 +43,7 @@ module.exports = React.createClass
         variants.add('effect', @props.block.layout.effect) if @props.block.layout?.effect
         variants.add('role', @props.block.role)
 
-        <blocktag className="Block TextBlock #{ variants }" dangerouslySetInnerHTML={__html: text.toString()} />
+        <blocktag
+            id          = @props.block.id
+            className   = "Block TextBlock #{ variants }"
+            dangerouslySetInnerHTML={__html: text.toString()} />

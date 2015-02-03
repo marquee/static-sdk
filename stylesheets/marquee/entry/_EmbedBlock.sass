@@ -1,0 +1,103 @@
+@import "../_partials.sass"
+
+=_intrinsic_ratio_content
+    position        : absolute
+    top             : 0
+    left            : 0
+    width           : 100%
+    height          : 100% !important
+
+=_intrinsic_ratio_wrapper($ratio: 16/9)
+    position        : relative
+    height          : 0
+    +_set_ratio($ratio)
+
+=_set_ratio($ratio: 16/9)
+    padding-bottom: percentage(1 / $ratio)
+
+
+
+.EmbedBlock
+    $_small_width: $Block-column_width--main / 4 - $Block-body_padding
+
+    +layer(images)
+
+    clear: both
+    max-width: $Block-column_width--main
+    width: 100%
+
+    &.-column_position--inset
+        max-width: $Block-column_width--text
+    &.-column_position--outset
+        &.-size--small
+            ._Content
+                width: calc((100% - #{ $Block-column_width--text }) / 2 )
+
+    +respond-to-gt-extra_small
+
+        &.-position--left
+            ._Content
+                float: left
+                margin-right: $Block-margin
+
+        &.-position--right
+            ._Content
+                float: right
+                margin-left: $Block-margin
+    
+        &.-size--small
+            &.-position--center,
+            ._Content
+                max-width: $_small_width
+
+        &.-size--medium
+            &.-position--center
+                max-width: $Block-column_width--text
+            ._Content
+                max-width: $Block-column_width--text
+            &.-position--right
+                ._Content
+                    width: 51%
+                        // Not 50%, which, because of rounding, ends up being
+                        // 1 pixel too narrow, resulting in a blurry image.
+            &.-position--left
+                ._Content
+                    width: 51%
+
+        &.-size--large
+            &.-position--left
+                ._Content
+                    width: 100%
+                    max-width: $Block-column_width--main / 4 * 3
+            &.-position--right
+                ._Content
+                    width: 100%
+                    max-width: $Block-column_width--main / 4 * 3
+            &.-position--center
+                ._Content
+                    width: 100%
+                    max-width: $Block-column_width--main
+
+        &.-size--full
+            max-width: none
+            ._Content
+                width: 100%
+                max-width: none
+
+    ._Content
+        width           : 100%
+        float           : none
+        margin-left     : 0
+        margin-right    : 0
+        margin-bottom   : $Block-margin
+        max-width       : none
+        +_intrinsic_ratio_wrapper
+        iframe
+            +_intrinsic_ratio_content
+
+    ._CaptionText
+        display: block
+    ._Credit
+        display: block
+
+

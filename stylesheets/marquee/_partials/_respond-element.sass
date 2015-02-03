@@ -17,11 +17,11 @@ $break-extra_large : 1440px !default
         @content
 
 @mixin eq-width-gte($size)
-    &[min-width~="#{ $min }"]
+    &[min-width~="#{ $size }"]
         @content
 
 @mixin eq-width-lte($size)
-    &[max-width~="#{ $min }"]
+    &[max-width~="#{ $size }"]
         @content
 
 
