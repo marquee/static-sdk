@@ -53,6 +53,7 @@ module.exports = React.createClass
             data-aspect_ratio   = aspect_ratio.toFixed(3)
             data-pinned         = is_pinned
             data-zoomable       = {not is_pinned}
+            id                  = @props.block.id
         >
             <div className='_Content'>
                 {image}
