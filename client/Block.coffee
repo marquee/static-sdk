@@ -1,7 +1,7 @@
 Metric = require './Metric'
 
 
-module.exports = ->
+module.exports = (content_container='.Entry__ ._Content__') ->
     seen_metric     = new Metric('Block')
     blocks          = []
     track_timeout   = null
@@ -59,7 +59,7 @@ module.exports = ->
                 block.track_timeout = setTimeout ->
                     block.was_seen = true
                     block.el.dataset.seen = true
-                    # Track that a block was visible for at least 1000ms
+                    # Track that a block was visible for at least 2000ms
                     # Record the depth in terms of...
                     seen_metric.track
                         type        : 'seen'
@@ -80,5 +80,5 @@ module.exports = ->
     # TODO: Block.getVisibleBlocks()
     gatherBlocks()
     if blocks.length > 0
-        entry_content_el = document.querySelector('.Entry__ ._Content__')
+        entry_content_el = document.querySelector(content_container)
         window.addEventListener('scroll', throttle(checkDepth, 100))
