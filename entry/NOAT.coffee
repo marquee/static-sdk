@@ -185,7 +185,7 @@ _addTextAnnotations = (text, annotations) ->
 
         # Add the escaped segment text content, but track the length of the
         # original text to preserve annotation positions.
-        output += _escapeHTML(seg_text)
+        output += _escapeHTML(seg_text).replace(/\n/g, '<br />')
         i += seg_text.length
 
     # Close any tags that are still open (should only be any that are set to
