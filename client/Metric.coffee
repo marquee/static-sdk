@@ -44,7 +44,8 @@ class Metric
             event_data._ms_since_last = null
 
         @_fire(@_name, event_data)
-        @_fire('*', event_data) unless @_name is '*'
+        # Trackers must opt-in specifically to Metrics prefixed with `_`.
+        @_fire('*', event_data) unless @_name is '*' or @_name[0] is '_'
 
     _fire: (metric_name, event_data) ->
         _subscriptions[metric_name]?.forEach (tracker) =>
