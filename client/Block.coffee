@@ -2,7 +2,7 @@ Metric = require './Metric'
 
 
 module.exports = ->
-    seen_metric     = new Metric('Block:seen')
+    seen_metric     = new Metric('Block')
     blocks          = []
     track_timeout   = null
 
@@ -51,7 +51,7 @@ module.exports = ->
         _blockIsVisible = (_top, _height) ->
             return _top < visibility_threshold and _top + _height > window.pageYOffset
 
-        blocks.forEach (block) ->
+        blocks.forEach (block, i) ->
             clearTimeout(block.track_timeout)
             _top = getPageYPosition(block.content_el)
             _height = block.content_el.offsetHeight
@@ -62,17 +62,19 @@ module.exports = ->
                     # Track that a block was visible for at least 1000ms
                     # Record the depth in terms of...
                     seen_metric.track
+                        type        : 'seen'
+                        id          : block.content_el.dataset.content_id
                         # ...block order
                         depth       : block.depth
                         # ...block order as percentage of block count
-                        percent     : block.depth / blocks.length
+                        percent     : Number((block.depth / blocks.length).toFixed(2))
                         # ...pixel position on page
                         px_top      : _top
                         # ...pixel position as percentage of page pixels
-                        px_percent  : _top / entry_content_el.offsetHeight
+                        px_percent  : Number((_top / entry_content_el.offsetHeight).toFixed(2))
                         # ...pixel height of block as percentage of page pixels
-                        px_portion  : block.content_el.offsetHeight / entry_content_el.offsetHeight
-                , 1000
+                        px_portion  : Number((block.content_el.offsetHeight / entry_content_el.offsetHeight).toFixed(2))
+                , 2000
     # TODO: window.addEventListener 'copy'
 
     # TODO: Block.getVisibleBlocks()
