@@ -2,7 +2,8 @@ fs = require 'fs'
 path = require 'path'
 
 # Using a synchronous version of walk for simplicity
-module.exports = walkSync = (dir, ignore=['_','.']) ->
+module.exports = walkSync = (dir, ignore=null) ->
+    ignore ?= ['.']
     results = []
     list = fs.readdirSync(dir)
     for f in list
@@ -10,7 +11,7 @@ module.exports = walkSync = (dir, ignore=['_','.']) ->
             file = path.join(dir,f)
             stat = fs.statSync(file)
             if stat?.isDirectory()
-                results.push(walkSync(file)...)
+                results.push(walkSync(file, ignore)...)
             else
                 results.push(file)
     return results

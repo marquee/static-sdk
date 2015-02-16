@@ -145,7 +145,9 @@ compileAssets = (opts) ->
     fs.ensureDirSync(asset_cache_dir)
     fs.ensureDirSync(asset_dest_dir)
 
-    assets = walkSync(asset_source_dir, ignore=['_','.'])
+    # Ignore _ prefixed files to prevent trying to compile imported sass files
+    # on their own.
+    assets = walkSync(asset_source_dir, ['_','.'])
     to_process = assets.length
     assets.forEach (asset) ->
         processAsset

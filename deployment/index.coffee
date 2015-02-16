@@ -41,7 +41,8 @@ module.exports = (project_directory, options={}) ->
                     throw new SDKError('configuration.deploy', "Project missing `package.marquee.#{ prop }`.")
 
 
-            local_files = walkSync(build_directory, ignore=['.'])
+            # Allow _ prefixed files through the deploy process.
+            local_files = walkSync(build_directory, ['.'])
             minifyAndCompressInPlace local_files, ->
                 getChangedFiles build_directory, local_files, project_config, (files_to_deploy) ->
 
