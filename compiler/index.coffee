@@ -128,7 +128,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                 global.config = project_config
                 if project_config.ROOT_PREFIX
                     asset_dest_directory = path.join(build_directory, project_config.ROOT_PREFIX, 'assets')
-                    _prefix = "#{ project_config.ROOT_PREFIX }"
+                    _prefix = "/#{ project_config.ROOT_PREFIX }"
                 else
                     asset_dest_directory = path.join(build_directory, 'assets')
                     _prefix = ''
