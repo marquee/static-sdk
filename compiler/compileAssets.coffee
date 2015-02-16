@@ -128,12 +128,13 @@ compileAssets = (opts) ->
         project_config
     } = opts
 
-    if project_config.asset_directory
-        asset_source_dir    = path.join(project_directory, project_config.asset_directory)
-    else
-        asset_source_dir    = path.join(project_directory, 'assets')
+    asset_source_dir    = path.join(project_directory, 'assets')
     asset_cache_dir     = path.join(build_directory, '.asset-cache')
-    asset_dest_dir      = path.join(build_directory, 'assets')
+
+    if project_config.ROOT_PREFIX
+        asset_dest_dir = path.join(build_directory, project_config.ROOT_PREFIX, 'assets')
+    else
+        asset_dest_dir = path.join(build_directory, 'assets')
 
     # Asset folder is not strictly required, so only warn if it doesn't exist.
     unless fs.existsSync(asset_source_dir)

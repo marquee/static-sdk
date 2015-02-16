@@ -126,7 +126,12 @@ module.exports = (project_directory, options, onCompile=null) ->
                 # Make the config globally available. Yes, globals are Bad(tm), but this
                 # makes for a substantially simpler compiler.
                 global.config = project_config
-                asset_dest_directory = path.join(build_directory, 'assets')
+                if project_config.ROOT_PREFIX
+                    asset_dest_directory = path.join(build_directory, project_config.ROOT_PREFIX, 'assets')
+                    _prefix = "#{ project_config.ROOT_PREFIX }"
+                else
+                    asset_dest_directory = path.join(build_directory, 'assets')
+                    _prefix = ''
                 if asset_hash
                     asset_dest_directory = path.join(asset_dest_directory, asset_hash)
                 global.build_info =
@@ -137,10 +142,12 @@ module.exports = (project_directory, options, onCompile=null) ->
                     build_directory         : build_directory
                     asset_dest_directory    : asset_dest_directory
                     asset_cache_directory   : path.join(build_directory, '.asset-cache')
+                
+
                 if asset_hash
-                    global.ASSET_URL = "/assets/#{ asset_hash }/"
+                    global.ASSET_URL = "#{ _prefix }/assets/#{ asset_hash }/"
                 else
-                    global.ASSET_URL = '/assets/'
+                    global.ASSET_URL = "#{ _prefix }/assets/"
 
                 _makeIncludeAssets = (asset_hash) ->
                     return (args...) ->

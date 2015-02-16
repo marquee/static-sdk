@@ -17,10 +17,14 @@ class Metric
         @_last_tracked = null
 
     # Can take either a key/value pair, or an object.
-    track: (event_data_or_key, value=null) =>
+    # Options can be an Object or null, and is passed along to the Trackers.
+    # It can be anything, and it is up to the Trackers to decide what to do.
+    # Use-case: marking some events as `instant`, ie they should be tracked
+    # immediately instead of buffered.
+    track: (event_data_or_key, value=null, options=null) =>
 
         # Skip preparing the track if nothing is subscribed.
-        unless _subscriptions[@_name] or _subscriptions['*']
+        unless _subscriptions[@_name] or (_subscriptions['*'] and @_name[0] isnt '_')
             return
 
         if typeof event_data_or_key is 'object'
@@ -43,15 +47,16 @@ class Metric
             @_last_tracked = event_data._date
             event_data._ms_since_last = null
 
-        @_fire(@_name, event_data)
-        @_fire('*', event_data) unless @_name is '*'
+        @_fire(@_name, event_data, options)
+        # Trackers must opt-in specifically to Metrics prefixed with `_`.
+        @_fire('*', event_data, options) unless @_name is '*' or @_name[0] is '_'
 
-    _fire: (metric_name, event_data) ->
+    _fire: (metric_name, event_data, options) ->
         _subscriptions[metric_name]?.forEach (tracker) =>
             if tracker.track?
-                tracker.track(@_name, event_data)
+                tracker.track(@_name, event_data, options)
             else
-                tracker(@_name, event_data)
+                tracker(@_name, event_data, options)
 
     # Trackers can subscribe to specific metrics, or any using 
     # Metric.subscribe(tracker) or Metric.subscribe('*', tracker)

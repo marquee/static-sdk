@@ -1,11 +1,12 @@
 Metric = require './Metric'
 
 
-module.exports = ->
-    seen_metric     = new Metric('Block:seen')
+module.exports = (content_container='.Entry__ ._Content__') ->
+    seen_metric     = new Metric('Block')
     blocks          = []
     track_timeout   = null
 
+    num_seen        = 0
 
     getPageYPosition = (el) ->
         node = el
@@ -51,7 +52,7 @@ module.exports = ->
         _blockIsVisible = (_top, _height) ->
             return _top < visibility_threshold and _top + _height > window.pageYOffset
 
-        blocks.forEach (block) ->
+        blocks.forEach (block, i) ->
             clearTimeout(block.track_timeout)
             _top = getPageYPosition(block.content_el)
             _height = block.content_el.offsetHeight
@@ -59,24 +60,29 @@ module.exports = ->
                 block.track_timeout = setTimeout ->
                     block.was_seen = true
                     block.el.dataset.seen = true
-                    # Track that a block was visible for at least 1000ms
+                    num_seen += 1
+                    # Track that a block was visible for at least 2000ms
                     # Record the depth in terms of...
                     seen_metric.track
+                        type            : 'seen'
+                        id              : block.content_el.dataset.content_id
                         # ...block order
-                        depth       : block.depth
+                        depth           : block.depth
                         # ...block order as percentage of block count
-                        percent     : block.depth / blocks.length
+                        depth_percent   : Number((block.depth / blocks.length).toFixed(2))
+                        # ...percentage of all blocks seen
+                        seen_percent    : Number((num_seen / blocks.length).toFixed(2))
                         # ...pixel position on page
-                        px_top      : _top
-                        # ...pixel position as percentage of page pixels
-                        px_percent  : _top / entry_content_el.offsetHeight
+                        top_px          : _top
+                        # ...pixel position as percentage of content pixels
+                        top_percent     : Number((_top / entry_content_el.offsetHeight).toFixed(2))
                         # ...pixel height of block as percentage of page pixels
-                        px_portion  : block.content_el.offsetHeight / entry_content_el.offsetHeight
-                , 1000
+                        px_portion      : Number((block.content_el.offsetHeight / entry_content_el.offsetHeight).toFixed(2))
+                , 2000
     # TODO: window.addEventListener 'copy'
 
     # TODO: Block.getVisibleBlocks()
     gatherBlocks()
     if blocks.length > 0
-        entry_content_el = document.querySelector('.Entry__ ._Content__')
+        entry_content_el = document.querySelector(content_container)
         window.addEventListener('scroll', throttle(checkDepth, 100))
