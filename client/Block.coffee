@@ -6,6 +6,7 @@ module.exports = (content_container='.Entry__ ._Content__') ->
     blocks          = []
     track_timeout   = null
 
+    num_seen        = 0
 
     getPageYPosition = (el) ->
         node = el
@@ -59,21 +60,24 @@ module.exports = (content_container='.Entry__ ._Content__') ->
                 block.track_timeout = setTimeout ->
                     block.was_seen = true
                     block.el.dataset.seen = true
+                    num_seen += 1
                     # Track that a block was visible for at least 2000ms
                     # Record the depth in terms of...
                     seen_metric.track
-                        type        : 'seen'
-                        id          : block.content_el.dataset.content_id
+                        type            : 'seen'
+                        id              : block.content_el.dataset.content_id
                         # ...block order
-                        depth       : block.depth
+                        depth           : block.depth
                         # ...block order as percentage of block count
-                        percent     : Number((block.depth / blocks.length).toFixed(2))
+                        depth_percent   : Number((block.depth / blocks.length).toFixed(2))
+                        # ...percentage of all blocks seen
+                        seen_percent    : Number((num_seen / blocks.length).toFixed(2))
                         # ...pixel position on page
-                        px_top      : _top
-                        # ...pixel position as percentage of page pixels
-                        px_percent  : Number((_top / entry_content_el.offsetHeight).toFixed(2))
+                        top_px          : _top
+                        # ...pixel position as percentage of content pixels
+                        top_percent     : Number((_top / entry_content_el.offsetHeight).toFixed(2))
                         # ...pixel height of block as percentage of page pixels
-                        px_portion  : Number((block.content_el.offsetHeight / entry_content_el.offsetHeight).toFixed(2))
+                        px_portion      : Number((block.content_el.offsetHeight / entry_content_el.offsetHeight).toFixed(2))
                 , 2000
     # TODO: window.addEventListener 'copy'
 
