@@ -53,6 +53,11 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
 
     # The actual function given to the compiler for generating files.
     emitFile = (file_path, file_content, options={}) ->
+
+        # Allow for scoping the entire site under a /path/
+        if config.ROOT_PREFIX
+            file_path = path.join(config.ROOT_PREFIX, file_path)
+
         output_path                     = _processPath(file_path)
         [output_type, output_content]   = _processContent(file_content)
 
