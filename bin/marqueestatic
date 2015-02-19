@@ -11,6 +11,7 @@ program
     .option('--port <port>', 'Set the development server port (default `5000`)')
     .option('--use-cache', 'Cache API responses (for development)')
     .option('--verbose', 'Show non-error info messages')
+    .option('--fake-deploy', 'Run through the deploy process but do not actually upload or delete data')
     .parse(process.argv);
 
 if (program.production) {
@@ -34,6 +35,7 @@ var _options = {
     host: program.host || 'localhost',
     port: program.port || '5000',
     verbose: program.verbose || false,
+    fake_deploy: program.fakeDeploy || false,
 }
 
 switch (_command) {

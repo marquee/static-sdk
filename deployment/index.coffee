@@ -11,7 +11,7 @@ path                        = require 'path'
 
 module.exports = (project_directory, options={}) ->
 
-    SDKError.log(SDKError.colors.grey("Attempting to deploy: #{ project_directory }"))
+    SDKError.log(SDKError.colors.grey("#{ if options.fake_deploy then '(fake) ' else '' }Attempting to deploy: #{ project_directory }"))
 
     getCurrentCommit project_directory, (commit_sha) ->
 
@@ -51,6 +51,14 @@ module.exports = (project_directory, options={}) ->
                     project_name_and_commit = "#{ SDKError.formatProjectPath(project_directory) }#{ _sha }"
                     SDKError.alwaysLog("Deploying #{ project_name_and_commit } #{ file_count } to #{ SDKError.colors.cyan(project_config.HOST) }")
 
+                    _uploadDone = ->
+                        SDKError.alwaysLog("Deployed #{ project_name_and_commit } to #{ SDKError.colors.cyan.underline('http://' + project_config.HOST) }")
+
+                    if options.fake_deploy
+                        SDKError.alwaysLog('Simulated deploy. Skipping upload...')
+                        _uploadDone()
+                        return
+
                     putFilesToS3 build_directory, files_to_deploy, project_config, ->
                         deleteFilesFromS3 files_to_deploy, project_config, ->
-                            SDKError.alwaysLog("Deployed #{ project_name_and_commit } to #{ SDKError.colors.cyan.underline('http://' + project_config.HOST) }")
+                            _uploadDone()
