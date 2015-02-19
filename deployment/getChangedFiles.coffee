@@ -82,4 +82,5 @@ module.exports = (build_directory, local_files, project_config, callback) ->
         callback
             changed: changed
             deleted: deleted
+            unchanged: unchanged
 

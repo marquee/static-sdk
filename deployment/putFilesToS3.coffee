@@ -12,6 +12,11 @@ path = require 'path'
 
 COMPRESSABLE = ['js', 'css', 'svg', 'html', 'txt', 'json', 'xml']
 
+DEFAULT_CACHE_CONTROLS =
+    'html': 'max_age=1800' # 30 min
+    'json': 'max_age=3600' # 60 min
+    # Nothing for js, css, because those typically have a content-based hash.
+
 module.exports = (build_directory, files_to_deploy, project_config, callback) ->
     if files_to_deploy.changed.length is 0
         callback()
@@ -44,14 +49,26 @@ module.exports = (build_directory, files_to_deploy, project_config, callback) ->
             ContentType     : mime.lookup(rel_path)
             StorageClass    : 'REDUCED_REDUNDANCY'
 
+        # Apply per-extension project-configured CacheControl values.
+        if project_config.cache_control?[_ext]
+            s3_options.CacheControl = project_config.cached_control?[_ext]
+        # Apply per-extension default CacheControl values.
+        else if DEFAULT_CACHE_CONTROLS[_ext]
+            s3_options.CacheControl = DEFAULT_CACHE_CONTROLS[_ext]
+
+        # Apply per-file metadata.
         if metadata[rel_path]
             s3_options.Metadata = metadata[rel_path]
-            if metadata[rel_path]['Content-Type']?
-                s3_options.ContentType = metadata[rel_path]['Content-Type']
-            if metadata[rel_path]['content-type']?
-                s3_options.ContentType = metadata[rel_path]['content-type']
-            if metadata[rel_path]['CONTENT-TYPE']?
-                s3_options.ContentType = metadata[rel_path]['CONTENT-TYPE']
+            for k,v of metadata[rel_path]
+                # ContentType and CacheControl can be overridden.
+                if k.toLowerCase() is 'content-type'
+                    s3_options.ContentType = v
+                else if k.toLowerCase() is 'cache-control'
+                    s3_options.CacheControl = v
+                # Other metadata gets scoped under Metadata.
+                else
+                    s3_options.Metadata ?= {}
+                    s3_options.Metadata[k] = v
 
         _upload = (body) ->
             total_uploaded += body.length
