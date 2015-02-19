@@ -51,7 +51,7 @@ module.exports = (build_directory, files_to_deploy, project_config, callback) ->
 
         # Apply per-extension project-configured CacheControl values.
         if project_config.cache_control?[_ext]
-            s3_options.CacheControl = project_config.cached_control?[_ext]
+            s3_options.CacheControl = project_config.cache_control[_ext]
         # Apply per-extension default CacheControl values.
         else if DEFAULT_CACHE_CONTROLS[_ext]
             s3_options.CacheControl = DEFAULT_CACHE_CONTROLS[_ext]
