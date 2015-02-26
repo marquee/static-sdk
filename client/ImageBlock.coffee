@@ -38,11 +38,13 @@ module.exports = ->
                         image_el.style.height = "100vh"
 
                     if not image_block.dataset.loaded and visibilityCheck(image_block)
-                        if content_el.offsetWidth / px_ratio > 640
+                        if content_el.offsetWidth * px_ratio > 1330 and image_block.dataset.src_2560
+                            src = image_block.dataset.src_2560
+                        else if content_el.offsetWidth * px_ratio > 668
                             src = image_block.dataset.src_1280
                         else
                             src = image_block.dataset.src_640
-                        console.log("ImageBlock: loading #{ src }")
+                        console.info("ImageBlock: loading #{ src }")
                         if is_pinned
                             image_el.style.backgroundImage = "url('#{ src }')"
                             image_block.dataset.loaded = true
