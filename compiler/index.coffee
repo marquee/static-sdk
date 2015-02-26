@@ -143,6 +143,8 @@ module.exports = (project_directory, options, onCompile=null) ->
                     asset_dest_directory    : asset_dest_directory
                     asset_cache_directory   : path.join(build_directory, '.asset-cache')
                 
+                if project_config.FULLY_QUALIFY_ASSET_URL
+                    _prefix = "//#{ project_config.HOST }#{ _prefix }"
 
                 if asset_hash
                     global.ASSET_URL = "#{ _prefix }/assets/#{ asset_hash }/"

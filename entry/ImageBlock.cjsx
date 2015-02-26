@@ -7,9 +7,12 @@ module.exports = React.createClass
     render: ->
 
         if @props.block.content?
+            src_2560 = @props.block.content['2560']?.url or undefined
             src_1280 = @props.block.content['1280']?.url
             src_640 = @props.block.content['640']?.url
         unless src_640 and src_1280
+            # These two sizes are required. The large one should always be
+            # present, but is optional.
             return null
 
         variants = new Classes()
@@ -45,6 +48,7 @@ module.exports = React.createClass
             className           = "Block ImageBlock #{ variants }"
             data-src_640        = src_640
             data-src_1280       = src_1280
+            data-src_2560       = src_2560
             data-aspect_ratio   = aspect_ratio.toFixed(3)
             data-pinned         = is_pinned
             data-zoomable       = {not is_pinned}
