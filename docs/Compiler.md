@@ -138,5 +138,8 @@ blacklisted by the `.gitignore`.)
 Running `git diff-index HEAD && git ls-files --exclude-standard --others` in
 the project will show the changes the compiler is seeing.
 
+If `git status` shows no changes, you can probably safely run
+`git reset --hard HEAD` to clear this error.
+
 Note: future versions of the SDK may also block deploys if run from a
 non-master branch.
