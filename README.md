@@ -1,7 +1,7 @@
+> This is _pre-release_ software. Unless you work at Marquee, or are one of its clients or partners, you probably should not do anything important with this yet.
+
 Marquee Static SDK
 ==================
-
-> This is _pre-release_ software. Unless you work at Marquee, or are one of its clients or partners, you probably should not do anything important with this yet.
 
 [![NPM version](https://badge.fury.io/js/marquee-static-sdk.svg)](http://badge.fury.io/js/marquee-static-sdk)
 
