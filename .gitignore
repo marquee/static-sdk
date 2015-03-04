@@ -5,3 +5,4 @@ node_modules
 *.html
 .env.json
 !__tests__/_preprocessor.js
+.termconfig
