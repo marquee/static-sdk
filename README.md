@@ -5,10 +5,9 @@ Marquee Static SDK
 
 [![NPM version](https://badge.fury.io/js/marquee-static-sdk.svg)](http://badge.fury.io/js/marquee-static-sdk)
 
-The Marquee Static SDK is framework for compiling web publications and deploying them into static hosting environments. The SDK as a whole is designed to work with the [Marquee](http://marquee.by) [editorial suite](http://marquee.by/editorial/) and [content platform](http://marquee.by/platform/), but parts of it may be used in a standalone fashion.
+The Marquee Static SDK is framework for compiling web publications and deploying them into static hosting environments. The SDK as a whole is designed to work with the [Marquee](http://marquee.by) editorial suite and content platform, but parts of it may be used in a standalone fashion.
 
 This package requires [node](https://nodejs.org/) and is distributed through [npm](https://www.npmjs.com/package/marquee-static-sdk/). It assumes a willingness to work in a command line environment and a basic familiarity with node and [git](http://git-scm.com/). Care is taken to keep the learning curve minimal, making projects developed using this SDK accessible to a wide variety of skill sets.
-
 
 
 ## Technical Overview
@@ -18,7 +17,6 @@ The SDK provides components and tools for building _compilers_ that compile stru
 Included in the SDK is a local development server that automatically compiles changes, and an asset pipeline optimized for a [browserify](http://browserify.org/)- and Sass-based workflow that provides minification and hashing in production mode. There is also a set of common components using [React.js](http://facebook.github.io/react/) to generate markup as well as necessary client-side JS and structural styles.
 
 For compilation on content-change, Marquee runs a service that executes per-publication compilers whenever a publication’s content is released. This service also will run a compiler when it receives a git push, providing a way to centralize publication deployments. The Marquee content platform also has a search endpoint that can be used client-side to provide full text search and facilitate more dynamic effects.
-
 
 
 ## Getting Started
@@ -39,14 +37,13 @@ _Note:_ the SDK has not been tested on Windows and very likely will not work pro
 
     The Static SDK requires at least node `v0.10.x`. If you get a `command not found` error for node, go to [nodejs.org](https://nodejs.org) to download and install node. Generally any version of git should work. If you do not have git, get it [here](http://git-scm.com/).
 
-2.  Create a local copy of the sample project by running this:
+2.  Create a new directory for your publication and extract the latest release of the sample project:
 
     ```sh
-    $ git clone https://github.com/marquee/sample-static-project.git
-    $ cd sample-static-project
+    $ mkdir <project name> && cd <project name>
+    $ curl -L https://github.com/marquee/static-sdk-sample/tarball/0.1.0 > sdk-sample.tar.gz
+    $ tar -zxf sdk-sample.tar.gz -C . --strip-components 1
     ```
-
-    The first command will clone the sample project into its own directory; the second command changes into that directory.
 
 3.  Start the development server with the following command:
 
