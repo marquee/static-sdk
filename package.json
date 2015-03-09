@@ -10,7 +10,7 @@
     "build:source": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./ && rm ./docs/_compile_docs.js",
     "deploy:docs": "npm run build:source && ./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx --production",
     "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
-    "clearbuild": "find . -path ./node_modules -prune -or -path __tests__ -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | grep -v '__tests__' | xargs rm"
+    "clearbuild": "find . -path ./node_modules -prune -or -path __tests__ -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | grep -v '__tests__' | xargs rm -f"
   },
   "main": "./index.js",
   "bin": {
@@ -56,10 +56,10 @@
     ]
   },
   "homepage": "http://marquee.by",
-  "bugs": "https://github.com/marquee/marquee-static-sdk",
+  "bugs": "https://github.com/marquee/static-sdk",
   "repository": {
     "type": "git",
-    "url": "git://github.com/marquee/marquee-static-sdk.git"
+    "url": "git://github.com/marquee/static-sdk.git"
   },
   "author": "Alec Perkins <alec@marquee.by>",
   "license": "Unlicense",
@@ -67,6 +67,10 @@
     {
       "name": "Alec Perkins",
       "email": "alec@marquee.by"
+    },
+    {
+      "name": "Alex Cabrera",
+      "email": "alex@marquee.by"
     }
   ]
 }

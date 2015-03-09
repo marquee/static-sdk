@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+   - "0.12"
+   - "0.11"
+   - "0.10"
+notifications:
+   webhooks: https://hooks.slack.com/services/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
