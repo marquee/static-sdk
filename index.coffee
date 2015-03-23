@@ -4,3 +4,4 @@ module.exports =
     cards       : require './cards'
     client      : require './client'
     entry       : require './entry'
+    utils       : require './utils'

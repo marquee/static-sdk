@@ -73,7 +73,7 @@ Metric.subscribe(new Analytics.Gauges());
 
 # The following will record an event the first time an entry content block is
 # visible for at least one second.
-Metric.subscribe('Block:seen',
+Metric.subscribe('Block',
     new Analytics.GoogleAnalytics(
         function(name, event_data){
             return ['entry', 'block_seen', entry_params.entry.slug, 1, true]

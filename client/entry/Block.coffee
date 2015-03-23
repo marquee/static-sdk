@@ -1,4 +1,4 @@
-Metric = require './Metric'
+Metric = require '../Metric'
 
 
 module.exports = (content_container='.Entry__ ._Content__') ->

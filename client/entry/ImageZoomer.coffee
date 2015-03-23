@@ -1,8 +1,8 @@
 
 DEVICE_PIXEL_RATIO              = window.devicePixelRatio or 1
-listenToThrottledWindowEvent    = require './utils/listenToThrottledWindowEvent'
-getElPositionAndSize            = require './utils/getElPositionAndSize'
-Metric                          = require './Metric'
+listenToThrottledWindowEvent    = require '../utils/listenToThrottledWindowEvent'
+getElPositionAndSize            = require '../utils/getElPositionAndSize'
+Metric                          = require '../Metric'
 
 TRANSITION_DURATION = 500
 
