@@ -2,8 +2,8 @@
 
 Marquee Static SDK
 ==================
-
-[![NPM version](https://badge.fury.io/js/marquee-static-sdk.svg)](http://badge.fury.io/js/marquee-static-sdk)
+ 
+[![NPM version](https://badge.fury.io/js/marquee-static-sdk.svg)](http://badge.fury.io/js/marquee-static-sdk) [![Build Status](https://travis-ci.org/marquee/static-sdk.svg)](https://travis-ci.org/marquee/static-sdk)
 
 The Marquee Static SDK is framework for compiling web publications and deploying them into static hosting environments. The SDK as a whole is designed to work with the [Marquee](http://marquee.by) editorial suite and content platform, but parts of it may be used in a standalone fashion.
 
@@ -16,7 +16,7 @@ The SDK provides components and tools for building _compilers_ that compile stru
 
 Included in the SDK is a local development server that automatically compiles changes, and an asset pipeline optimized for a [browserify](http://browserify.org/)- and Sass-based workflow that provides minification and hashing in production mode. There is also a set of common components using [React.js](http://facebook.github.io/react/) to generate markup as well as necessary client-side JS and structural styles.
 
-For compilation on content-change, Marquee runs a service that executes per-publication compilers whenever a publication’s content is released. This service also will run a compiler when it receives a git push, providing a way to centralize publication deployments. The Marquee content platform also has a search endpoint that can be used client-side to provide full text search and facilitate more dynamic effects.
+For compilation on content-change, Marquee runs a service that executes per-publication compilers whenever a publication’s content is released. This service also will run a compiler when it receives a git push, providing a way to centralize publication deployments. The Marquee content platform also has a search endpoint that can be used client-side to provide full text search and facilitate more dynamic effects. Additional custom or third party microservices and backends may be used to create a rich, progressively enhanced reader experience.
 
 
 ## Getting Started

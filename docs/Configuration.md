@@ -17,8 +17,7 @@ property. They also need an entrypoint specified, under `"main"`.
         "HOST"                      : "<example.com>",
         "SITE_TITLE"                : "<Site Title>",
         "SITE_TWITTER_SCREEN_NAME"  : "<@screen_name>",
-        "auto_assets"               : true,
-        "manual_only"               : false
+        "auto_assets"               : true
     }
 
 * `PUBLICATION_SHORT_NAME` - the `short_name` of the publication on Marquee
@@ -32,7 +31,6 @@ property. They also need an entrypoint specified, under `"main"`.
 * `SITE_TITLE` - the title of the publication, used in the `<title>` attribute
 * `SITE_TWITTER_SCREEN_NAME` - the Twitter `screen_name` for the publication, used for Twitter Cards
 * `auto_assets` - set to `false` to disable automatic asset compilation
-* `manual_only` - set to `true` to disable automatic deploy by the Marquee hosting service
 
 ### Multiple Configurations
 
@@ -49,12 +47,12 @@ overriding any matching key names.
         "configurations": {
             "<name>": {
                 "AWS_BUCKET": "<alternate-bucket.tld>",
-                "manual_only": true
+                "auto_build": false
             }
         }
     }
 
-The `manual_only` option is useful in these configurations to avoid compiling
+The `auto_buil` option is useful in these configurations to avoid compiling
 to staging on every deploy or content change.
 
 ## Entrypoint
@@ -72,15 +70,14 @@ make any changs to content. The SDK will reject tokens that are read-write.
 
 ## Deployment
 
-Static sites are deployed to [Amazon S3](http://aws.amazon.com/s3/). The
-configuration needs these properties to do so: `AWS_BUCKET`,
-`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`. The given key MUST have — and
-SHOULD only have — `s3:ListBucket`, `s3:DeleteObject`, `s3:GetObject`,
-`s3:PutObject`, and `s3:PutObjectAcl` permissions on the publication’s bucket
-and the bucket’s contents.
+Static sites are deployed to [Amazon S3][s3]. The configuration needs these
+properties to do so: `AWS_BUCKET`, `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`. The given key MUST have — and SHOULD only have —
+`s3:ListBucket`, `s3:DeleteObject`, `s3:GetObject`, `s3:PutObject`, and
+`s3:PutObjectAcl` permissions on the publication’s bucket and the bucket’s
+contents.
 
-The permissions can be managed on the
-[IAM User control panel](https://console.aws.amazon.com/iam/home?#users). A
+The permissions can be managed on the [IAM User control panel][iam]. A
 suitable user policy looks like this:
 
     {
@@ -107,8 +104,13 @@ suitable user policy looks like this:
 
 ### Bucket
 
-The bucket MUST be configured as a [static site host](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html). The Index Document MUST be set
-to `index.html`, and the Error Document SHOULD be `404.html`. (The Error
-Document MAY be named differently, provided the compiler emits the correct
-file name.) Note: S3 requires that the bucket name and the site host name
-ddmatch. A compiler MAY target multiple buckets, using [Multiple Configurations](./#multiple-configurations).
+The bucket MUST be configured as a [static site host][static-hosting]. The
+Index Document MUST be set to `index.html`, and the Error Document SHOULD be
+`404.html`. (The Error Document MAY be named differently, provided the
+compiler emits the correct file name.) Note: S3 requires that the bucket name
+and the site host name match. A compiler MAY target multiple buckets, using
+[Multiple Configurations](./#multiple-configurations).
+
+[s3]: http://aws.amazon.com/s3/
+[iam]: https://console.aws.amazon.com/iam/home?#users
+[static-hosting]: http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html

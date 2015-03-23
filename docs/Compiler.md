@@ -8,11 +8,34 @@ compile the publication.
 
 The bare minimum for a compiler is the following:
 
-```javascript
-module.exports = function (kwargs) {
-    kwargs.emitFile('index.html', 'Hello, world!');
-    kwargs.done();
-}
+```coffeescript
+module.exports = ({
+    api, config, done, info, emitFile, emitRedirect
+}) ->
+    emitFile('index.html', 'Hello, world!')
+    done()
+```
+
+## `api`
+
+The `api` argument is an API wrapper for the Content API initialized with
+the project’s token info from its configuration. It provides four methods for
+retrieving content. It only supplies released versions of content.
+
+* `api.entries()`
+* `api.packages()`
+* `api.channels()`
+* `api.posts()`
+
+Each method accepts a callback, or returns a promise and can be used with a
+library such as `when`.
+
+```coffeescript
+W = require 'when'
+W.all([
+    api.entries()
+    api.packages()
+]).then ([entries, packages]) ->
 ```
 
 ## `emitFile`
@@ -32,6 +55,14 @@ emitFile('index.html', html_content_string)
 emitFile('404.html', <NotFound />)
 ```
 
+Because React cannot represent the doctype, the output string will have
+`<!doctype html>` prepended to it. To emit only a fragment, without the
+doctype, set the option `fragment` to `true`:
+
+```cjsx
+emitFile('fragments/call-to-action.html', <CallToAction />, fragment: true)
+```
+
 For clean URLs, any path that does not end in an extension will output the
 file as an `index.html` inside a folder with the given path.
 
@@ -49,13 +80,16 @@ emitFile('data.json', { key: "value" })
 ```
 
 
+
 ## CJSX
 
-The preferred way to author a publication compiler is in [CJSX](https://github.com/jsdf/coffee-react-transform),
-the [CoffeeScript](http://coffeescript.org) variant of the JSX language for
+The preferred way to author a publication compiler is in
+[CJSX](https://github.com/jsdf/coffee-react-transform), the
+[CoffeeScript](http://coffeescript.org) variant of the JSX language for
 [React](http://reactjs.com). It is not required, but provides for clean,
 uncrufty code on top of a robust component architecture. Regular CoffeeScript
-or JavaScript may be used, provided it follows the 
+or JavaScript may be used, provided it follows the CommonJS convention and
+exports a proper main function.
 
 Most compiled publications are not especially interactive and do not need to
 be constructed as a full React-powered client-side application. However, the
@@ -81,7 +115,8 @@ JSON data baked into JSON files using `emitFile`, or with HTML fragments
 instead of full pages. For example, to do search, the compiler can make
 by-word indexes of the content using certain fields; the client then performs
 the same word normalization, requests the corresponding `<word>.json` files,
-and generates the result list.
+and generates the result list. Proper search can also be accomplished with
+a search API endpoint, such as the one provided by the Marquee content platform.
 
 
 
@@ -97,12 +132,15 @@ object is never used directly. The compiled JS that the two output uses
 React.
 
 
-### “Compiler timeout. Compiler MUST call done within 60 seconds.”
+### “Compiler timeout. Compiler MUST call done within 30 minutes.”
 
 Either the compiler does not call `done()` somewhere in its execution, or
 the compilation process takes too long. This is required because the compiler
 MAY perform asynchronous actions and it needs to tell the SDK that it’s done,
 so that the SDK can perform additional actions.
+
+Sometimes, this can show up during development if a compile encountered an
+error, then a new file save triggered a fresh compilation.
 
 
 ### “Object has no method apply” or “Cannot call method 'apply' of undefined”
