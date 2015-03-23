@@ -52,8 +52,10 @@ overriding any matching key names.
         }
     }
 
-The `auto_buil` option is useful in these configurations to avoid compiling
+The `auto_build` option is useful in these configurations to avoid compiling
 to staging on every deploy or content change.
+
+
 
 ## Entrypoint
 
@@ -61,12 +63,16 @@ The entrypoint specified by `"main"` is the module that is loaded by the SDK
 and starts the compiler. It MAY be a `js`, `coffee`, `jsx`, or `cjsx` file,
 MAY be named anything, and MAY be located anywhere in the project.
 
+
+
 ## Tokens
 
 The `CONTENT_API_TOKEN` MUST be a read-only token, identifiable by the `r0_`
 prefix. (The prefix has no actual bearing on the permissions. It is only a
 label.) Read-only tokens are used to ensure that the static generator cannot
 make any changs to content. The SDK will reject tokens that are read-write.
+
+
 
 ## Deployment
 

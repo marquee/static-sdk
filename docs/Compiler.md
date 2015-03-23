@@ -1,10 +1,15 @@
 # Compiler
 
 The compiler is a set of functions that compile pure content into markup, or
-some other format, for presentation.
+some other format, for presentation. It is provided with means for accessing
+the Marquee Content API, and is executed to generate files to be deployed on
+a static site.
 
-The main compiler function, specified by the `package.main`, is invoked to
-compile the publication.
+
+## Main
+
+The main compiler function, specified by the `package.main`, is invoked by the
+SDK to compile the publication.
 
 The bare minimum for a compiler is the following:
 
@@ -16,7 +21,14 @@ module.exports = ({
     done()
 ```
 
-## `api`
+Compilers are “just” JavaScript running on a node platform, and are thus free
+to do mostly whatever they need to. However, they SHOULD NOT rely on state
+persisted to disk, as they MAY be executed in fresh contexts at arbitrary
+times. They MAY make requests to the Marquee Content API, as well as any other
+available service.
+
+
+### `api`
 
 The `api` argument is an API wrapper for the Content API initialized with
 the project’s token info from its configuration. It provides four methods for
@@ -38,7 +50,35 @@ W.all([
 ]).then ([entries, packages]) ->
 ```
 
-## `emitFile`
+```coffeescript
+api.entries (entries) ->
+```
+
+
+### `config`
+
+The `config` object contains the active configuration for the current build,
+including environment, key information, and other project-specific properties.
+It is based on, but may vary slightly from, the `marquee` property in the
+project’s `package.json` file. See [Configuration](./configuration/) for more
+information about how this works.
+
+
+### `done`
+
+The `done` function MUST be called when the compiler has finished emitting all
+the files necessary. Be sure to call it _after_ asynchronous functions return.
+Otherwise, the SDK will move on with the serving or uploading process and
+leave some files behind. There is a timeout and the compiler MUST call done
+within 30 minutes. If not, it will be killed by the SDK.
+
+
+### `info`
+
+The `info` object contains the data from the project’s `package.json` file.
+
+
+### `emitFile`
 
 The `emitFile` function is used to generate the actual files that make up the
 site content.
@@ -77,6 +117,17 @@ a JSON-formatted string.
 
 ```coffeescript
 emitFile('data.json', { key: "value" })
+```
+
+
+### `emitRedirect`
+
+The `emitRedirect` function allows for creating a 301 redirect from one URL
+to another; it’s commonly used when migrating to a new URL structure. It takes
+a path or slug like `emitFile` and a URL to redirect to.
+
+```coffeescript
+emitRedirect('/entries/old-slug/', '/articles/new-slug/')
 ```
 
 
