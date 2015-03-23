@@ -18,7 +18,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
     if fs.existsSync(path.join(project_react_path, 'package.json'))
         React = require(project_react_path)
 
-    _processContent = (file_content) ->
+    _processContent = (file_content, options={}) ->
         switch typeof file_content
             when 'string'
                 return [null, file_content]
@@ -26,7 +26,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
             when 'object'
                 if React?.isValidElement(file_content)
                     output_content = React.renderToStaticMarkup(file_content)
-                    output_content = "<!doctype html>#{ output_content }"
+                    output_content = "<!doctype html>#{ output_content }" unless options.fragment
                     return ['text/html', output_content]
 
                 # It looks like a React component but somehow React wasn't
@@ -59,7 +59,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
             file_path = path.join(config.ROOT_PREFIX, file_path)
 
         output_path                     = _processPath(file_path)
-        [output_type, output_content]   = _processContent(file_content)
+        [output_type, output_content]   = _processContent(file_content, options)
 
         if options.content_type
             output_type = options.content_type
