@@ -7,7 +7,7 @@ module.exports = React.createClass
     # Not required to ease use in development.
     propTypes:
         id      : React.PropTypes.string
-        domain  : React.PropTypes.domain
+        domain  : React.PropTypes.string
 
     render: ->
         return null unless @props.id and @props.domain

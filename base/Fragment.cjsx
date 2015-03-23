@@ -9,7 +9,10 @@ module.exports = React.createClass
 
     propTypes:
         children    : React.PropTypes.element.isRequired
-        className   : React.PropTypes.string
+        className   : React.PropTypes.oneOfType([
+                React.PropTypes.string
+                React.PropTypes.object
+            ])
         id          : React.PropTypes.string
 
     getDefaultProps: -> {

@@ -11,7 +11,10 @@ module.exports = React.createClass
 
     propTypes:
         children    : React.PropTypes.arrayOf(React.PropTypes.element).isRequired
-        className   : React.PropTypes.string
+        className   : React.PropTypes.oneOfType([
+            React.PropTypes.string
+            React.PropTypes.object
+        ])
         title       : React.PropTypes.string
 
     getDefaultProps: -> {

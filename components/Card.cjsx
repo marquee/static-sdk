@@ -9,10 +9,16 @@ Card = React.createClass
     displayName: 'Card'
 
     propTypes:
-        children    : React.PropTypes.element.isRequired
+        children    : React.PropTypes.oneOfType([
+                React.PropTypes.element
+                React.PropTypes.arrayOf(React.PropTypes.element)
+            ]).isRequired
         link        : React.PropTypes.string
         id          : React.PropTypes.string
-        className   : React.PropTypes.string
+        className   : React.PropTypes.oneOfType([
+                React.PropTypes.string
+                React.PropTypes.object
+            ])
 
     render: ->
         variants = new Classes()

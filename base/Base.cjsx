@@ -15,7 +15,7 @@ React   = require 'react'
     ElementQuery
     ActivateClientModules
     Namespace
-} = require '.'
+} = require './index'
 
 module.exports = React.createClass
     displayName: 'Base'
@@ -23,7 +23,10 @@ module.exports = React.createClass
     propTypes:
         children        : React.PropTypes.arrayOf(React.PropTypes.element).isRequired
         canonical       : React.PropTypes.string
-        className       : React.PropTypes.string
+        className       : React.PropTypes.oneOfType([
+            React.PropTypes.string
+            React.PropTypes.object
+        ])
         client_modules  : React.PropTypes.objectOf(React.PropTypes.array)
         extra_body      : React.PropTypes.element
         extra_head      : React.PropTypes.element

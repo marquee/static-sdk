@@ -9,8 +9,14 @@ module.exports = React.createClass
 
     propTypes:
         align       : React.PropTypes.string
-        className   : React.PropTypes.string
-        children    : React.PropTypes.element
+        className   : React.PropTypes.oneOfType([
+                React.PropTypes.string
+                React.PropTypes.object
+            ])
+        children    : React.PropTypes.oneOfType([
+                React.PropTypes.element
+                React.PropTypes.arrayOf(React.PropTypes.element)
+            ])
         image       : React.PropTypes.oneOfType([
                 React.PropTypes.string
                 React.PropTypes.object
