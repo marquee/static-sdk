@@ -4,6 +4,10 @@ React = require 'react'
 
 module.exports = React.createClass
     displayName: 'ImageBlock'
+
+    propTypes:
+        block: React.PropTypes.object.isRequired
+
     render: ->
 
         if @props.block.content?

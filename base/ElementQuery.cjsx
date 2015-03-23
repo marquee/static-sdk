@@ -95,11 +95,21 @@ UglifyJS = require 'uglify-js'
 fs = require 'fs'
 path = require 'path'
 element_query_engine = fs.readFileSync(path.join(__dirname, '_element_query_engine.js')).toString()
+
 module.exports = React.createClass
     displayName: 'ElementQuery'
+
+    propTypes:
+        styles: React.PropTypes.oneOfType([
+            React.PropTypes.string
+            React.PropTypes.arrayOf(React.PropTypes.string)
+        ])
+
+
     getDefaultProps: -> {
         styles: ['style.sass']
     }
+
     render: ->
         unless @props.styles.map?
             stylesheets = [@props.styles]

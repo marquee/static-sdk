@@ -1,8 +1,8 @@
 React = require 'react'
 
-fs = require 'fs'
-path = require 'path'
-UglifyJS        = require 'uglify-js'
+fs          = require 'fs'
+path        = require 'path'
+UglifyJS    = require 'uglify-js'
 
 module.exports = React.createClass
     displayName: 'JSONData'
@@ -38,7 +38,14 @@ module.exports = React.createClass
 
         if @props.file
             # Parse it to ensure it is valid JSON data.
-            json_data = JSON.parse(fs.readFileSync(path.join(global.build_info.project_directory, @props.file)).toString())
+            json_data = JSON.parse(
+                    fs.readFileSync(
+                        path.join(
+                            global.build_info.project_directory,
+                            @props.file
+                        )
+                    ).toString()
+                )
         else
             json_data = @props.children
 

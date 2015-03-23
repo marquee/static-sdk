@@ -3,6 +3,12 @@ _rawScript = require './_rawScript'
 
 module.exports = React.createClass
     displayName: 'Chartbeat'
+
+    # Not required to ease use in development.
+    propTypes:
+        id      : React.PropTypes.string
+        domain  : React.PropTypes.domain
+
     render: ->
         return null unless @props.id and @props.domain
         _rawScript """

@@ -6,9 +6,21 @@ React = require 'react'
 
 module.exports = React.createClass
     displayName: 'Cover'
+
+    propTypes:
+        align       : React.PropTypes.string
+        className   : React.PropTypes.string
+        children    : React.PropTypes.element
+        image       : React.PropTypes.oneOfType([
+                React.PropTypes.string
+                React.PropTypes.object
+            ])
+        link        : React.PropTypes.string
+
     getDefaultProps: -> {
         align: 'center'
     }
+
     render: ->
         variants = new Classes(@props.className)
         variants.set('align', @props.align)

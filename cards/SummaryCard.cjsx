@@ -1,6 +1,6 @@
 React = require 'react'
 
-# Required individually for smaller browserification
+# Required individually for smaller browserification.
 Card        = require '../components/Card'
 Cover       = require '../components/Cover'
 Info        = require '../components/Info'
@@ -11,6 +11,10 @@ Summary     = require '../components/Summary'
 
 module.exports = React.createClass
     displayName: 'SummaryCard'
+
+    propTypes:
+        item: React.PropTypes.object.isRequired
+
     render: ->
         date = @props.item.display_date
         unless date

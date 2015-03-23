@@ -3,6 +3,10 @@ _rawScript = require './_rawScript'
 
 module.exports = React.createClass
     displayName: 'Gauges'
+
+    propTypes:
+        id: React.PropTypes.string
+
     render: ->
         return null unless @props.id
         _rawScript """

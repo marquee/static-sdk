@@ -11,6 +11,10 @@ TAG_MAP =
 
 module.exports = React.createClass
     displayName: 'TextBlock'
+
+    propTypes:
+        block: React.PropTypes.object.isRequired
+
     render: ->
         # Only render if `content` is not null.
         return null unless @props.block.content?

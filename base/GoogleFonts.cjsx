@@ -2,10 +2,14 @@ React = require 'react'
 
 DeferredStylesheet = React.createClass
     displayName: 'DeferredStylesheet'
+
+    propTypes:
+        href: React.PropTypes.string.isRequired
+
     render: ->
         <script dangerouslySetInnerHTML={
             __html: """
-                (function(){
+                (function(w){
                     function loadFont() {
                         var el = document.createElement('link');
                         el.href = '#{ @props.href }';
@@ -16,15 +20,25 @@ DeferredStylesheet = React.createClass
                     var oldonload = window.onload;
                     window.onload = (typeof window.onload != 'function') ?
                       loadFont : function() { oldonload(); loadFont(); };
-                })();
+                })(window);
             """
         }></script>
 
+
+
 module.exports = React.createClass
     displayName: 'GoogleFonts'
+
+    propTypes:
+        fonts   : React.PropTypes.objectOf(React.PropTypes.array).isRequired
+        text    : React.PropTypes.string
+        defer   : React.PropTypes.bool
+
     getDefaultProps: -> {
+        defer: false
         text: ''
     }
+
     render: ->
         fonts = []
         for name,weights of @props.fonts

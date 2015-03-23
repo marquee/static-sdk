@@ -7,6 +7,13 @@ Cover = require './Cover'
 
 Card = React.createClass
     displayName: 'Card'
+
+    propTypes:
+        children    : React.PropTypes.element.isRequired
+        link        : React.PropTypes.string
+        id          : React.PropTypes.string
+        className   : React.PropTypes.string
+
     render: ->
         variants = new Classes()
         variants.add('full_cover', @props.children instanceof Cover)

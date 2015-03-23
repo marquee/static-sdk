@@ -2,11 +2,22 @@ React = require 'react'
 
 module.exports = React.createClass
     displayName: 'Byline'
+
+    proptTypes:
+        byline  : React.PropTypes.oneOfType([
+                React.PropTypes.string
+                React.PropTypes.arrayOf(React.PropTypes.string)
+            ]).isRequired
+        label   : React.PropTypes.string
+        join    : React.PropTypes.string
+        and     : React.PropTypes.string
+
     getDefaultProps: -> {
-        label: 'By '
-        join: ', '
-        and: '&'
+        label   : 'By '
+        join    : ', '
+        and     : '&'
     }
+
     render: ->
         names = @props.byline
         label = @props.label
