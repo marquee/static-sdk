@@ -37,13 +37,18 @@ module.exports = React.createClass
         if effect is 'pin'
             variants.set('pinned')
             is_pinned = true
+            is_zoomable = false
             image = <div className = '_Image' />
         else
             variants.set('size', size)
             unless size is 'full'
                 variants.set('position', position)
+            is_zoomable = true
             image = <img className='_Image' />
 
+        if @props.block.link_to
+            image = <a className='_ImageLink' href=@props.block.link_to>{image}</a>
+            is_zoomable = false
         <figure
             className           = "Block ImageBlock #{ variants }"
             data-src_640        = src_640
@@ -51,7 +56,7 @@ module.exports = React.createClass
             data-src_2560       = src_2560
             data-aspect_ratio   = aspect_ratio.toFixed(3)
             data-pinned         = is_pinned
-            data-zoomable       = {not is_pinned}
+            data-zoomable       = is_zoomable
             id                  = @props.block.id
         >
             <div className='_Content'>
