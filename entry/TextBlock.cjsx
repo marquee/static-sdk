@@ -19,7 +19,11 @@ module.exports = React.createClass
         text = new NOAT(@props.block.content)
         @props.block.annotations?.forEach (anno) ->
             attrs = {}
-            attrs.href = anno.url if anno.type is 'link'
+            if anno.type is 'link'
+                # Avoid trying to render links without a url specified.
+                unless anno.url
+                    return
+                attrs.href = anno.url
             text.add(TAG_MAP[anno.type], anno.start, anno.end, attrs)
 
         # Choose the appropriate tag for the given block's role.
