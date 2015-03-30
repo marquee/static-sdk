@@ -24,3 +24,13 @@ module.exports = React.createClass
         <script dangerouslySetInnerHTML={
             __html: _script
         }/>
+
+    statics:
+        # Merges last-to-first for cleaner usage syntax, unlike normal
+        # underscore.extend.
+        merge: (module_deps...) ->
+            modules = {}
+            while module_deps.length > 0
+                for k,v of module_deps.pop()
+                    modules[k] = v
+            return modules
