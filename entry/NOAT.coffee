@@ -199,6 +199,8 @@ _addTextAnnotations = (text, annotations) ->
 
 # Escape HTML entities.
 _escapeHTML = (str) ->
+    unless typeof str is 'string'
+        str = str.toString()
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 
 

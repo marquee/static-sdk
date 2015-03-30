@@ -1,5 +1,7 @@
 React = require 'react'
 
+url = require 'url'
+
 NOAT = require './NOAT'
 { Classes } = require 'shiny'
 
@@ -23,7 +25,14 @@ module.exports = React.createClass
         text = new NOAT(@props.block.content)
         @props.block.annotations?.forEach (anno) ->
             attrs = {}
-            attrs.href = anno.url if anno.type is 'link'
+            if anno.type is 'link'
+                # Avoid trying to render links without a url specified.
+                unless anno.url
+                    return
+                attrs.href = anno.url
+                _parsed = url.parse(anno.url)
+                if _parsed.host and _parsed.host isnt global.config.HOST
+                    attrs['data-external'] = true
             text.add(TAG_MAP[anno.type], anno.start, anno.end, attrs)
 
         # Choose the appropriate tag for the given block's role.
