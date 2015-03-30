@@ -14,7 +14,7 @@ callbacks   = {}
 metric      = null
 on_visible  = []
 
-DEBUG ?= false
+
 
 
 loadEl = (el, url=null, callback=null) ->
@@ -100,5 +100,4 @@ init.off = (ev_name, callback=null) ->
         callbacks[ev_name] = []
 
 module.exports = init
-require('marquee-static-sdk/client/client_modules').register(
-    'AsyncLoad', module.exports)
+require('./client_modules').register('AsyncLoad', module.exports)

@@ -3,7 +3,7 @@ Metric = require '../Metric'
 getElPositionAndSize            = require '../utils/getElPositionAndSize'
 listenToThrottledWindowEvent    = require '../utils/listenToThrottledWindowEvent'
 
-module.exports = (content_container='.Entry__ ._Content__') ->
+init = (content_container='.Entry__ ._Content__') ->
     seen_metric     = new Metric('Block')
     blocks          = []
     track_timeout   = null
@@ -66,3 +66,7 @@ module.exports = (content_container='.Entry__ ._Content__') ->
     if blocks.length > 0
         entry_content_el = document.querySelector(content_container)
         listenToThrottledWindowEvent('scroll', checkDepth)
+
+module.exports =
+    activate: init
+require('../client_modules').register('Block', module.exports)

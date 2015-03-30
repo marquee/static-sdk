@@ -1,6 +1,6 @@
 listenToThrottledWindowEvent = require '../utils/listenToThrottledWindowEvent'
 
-module.exports = ->
+init = ->
     progress_bars = []
     for indicator_el in document.querySelectorAll('.ReadingProgress')
         progress_bars.push(indicator_el.querySelector('._ProgressBar'))
@@ -13,3 +13,7 @@ module.exports = ->
             width = 0
         progress_bars.forEach (bar) ->
             bar.style.width = width
+
+module.exports =
+    activate: init
+require('../client_modules').register('ReadingProgress', module.exports)

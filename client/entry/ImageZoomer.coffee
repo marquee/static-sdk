@@ -191,4 +191,4 @@ class ImageZoomer
 
 
 module.exports = ImageZoomer
-require('./client_modules').register('ImageZoomer', module.exports)
+require('../client_modules').register('ImageZoomer', module.exports)

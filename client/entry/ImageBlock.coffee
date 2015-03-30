@@ -1,6 +1,6 @@
 listenToThrottledWindowEvent = require '../utils/listenToThrottledWindowEvent'
 
-module.exports = ->
+init = ->
     px_ratio = window.devicePixelAspectRatio or 1
 
     last_called             = null
@@ -70,3 +70,7 @@ module.exports = ->
         renderAllImages()
         listenToThrottledWindowEvent('resize', renderAllImages)
         listenToThrottledWindowEvent('scroll', renderAllImages)
+
+module.exports =
+    activate: init
+require('../client_modules').register('ImageBlock', module.exports)
