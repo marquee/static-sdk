@@ -1,4 +1,6 @@
-module.exports = ->
+listenToThrottledWindowEvent = require '../utils/listenToThrottledWindowEvent'
+
+init = ->
     px_ratio = window.devicePixelAspectRatio or 1
 
     last_called             = null
@@ -13,7 +15,9 @@ module.exports = ->
         while node.offsetParent?
             y_pos += node.offsetTop
             node = node.offsetParent
-        return window.pageYOffset + (window.innerHeight * (1 + VISIBILITY_THRESHOLD)) > y_pos or not window.pageYOffset?
+        return window.pageYOffset + (
+                window.innerHeight * (1 + VISIBILITY_THRESHOLD)
+            ) > y_pos or not window.pageYOffset?
 
 
     gatherImages = ->
@@ -64,5 +68,9 @@ module.exports = ->
     gatherImages()
     if image_resize_fns.length > 0
         renderAllImages()
-        window.addEventListener('resize', renderAllImages)
-        window.addEventListener('scroll', renderAllImages)
+        listenToThrottledWindowEvent('resize', renderAllImages)
+        listenToThrottledWindowEvent('scroll', renderAllImages)
+
+module.exports =
+    activate: init
+require('../client_modules').register('ImageBlock', module.exports)

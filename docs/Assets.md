@@ -12,10 +12,13 @@ copied over, but available for `require` or `@import`. They also may be used
 by the `<Asset>` component. Any files in a tree that starts with a `.` or `_`
 are ignored.
 
+[asset flow diagram]
+
 All `.js` and `.css` files, and the output of `.coffee` and `.sass` files, are
 minifed when building with the `--production` flag, and gzipped when deployed.
 Production builds also will hash the compiled assets and use that for URLs
 to bust caches.
+
 
 
 ## Style & script entrypoints
@@ -26,8 +29,14 @@ using `@import` or `require` as appropriate. The entrypoints are each bundled
 into single files by the build, using `sass` and `browserify`.
 
 To take advantage of caching, the entire site SHOULD use one stylesheet and
-one script bundle for all pages. Script modules are activated as necessary
-on each page.
+one script bundle for all pages. That way, after the reader’s first visit, all
+subsequent pages will load much more quickly as the common assets are cached.
+Script modules are activated as necessary on each page using the
+`client_modules` system.
+
+See [Client Modules](./client-modules/) for more information about activating
+modules and passing per-page arguments.
+
 
 
 ## `<Asset>`
@@ -48,8 +57,10 @@ To inline scripts or styles into the page, set the prop `inline=true`:
 
 This will compile the specified file, using browserify, and inline the bundle
 into the page (minified with `--production` or a deploy). Inlining is useful
-for critical styles, or a script like `elementQuery` used to adjust the
-layout, which should be included with the first request for the page.
+for critical styles, or scripts that adjust the layout and should be executed
+immediately. A common use for this is element queries, for which the SDK
+provides a [specialized component](./element-queries/).
+
 
 
 ## `emitAssets`

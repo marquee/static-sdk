@@ -10,9 +10,10 @@ wrapper for customized snippets.
 
 ## Metrics
 
-In addition to general page-view tracking, a common analytics tool is tracking
-of specific user-initiated events during their time on the page. Marquee’s SDK
-provides a client script module called Metric for tracking these events.
+In addition to general page-view tracking, a common analytics tool is the
+tracking of specific user-initiated events during their time on the page.
+Marquee’s SDK provides a client script module called Metric for tracking these
+events.
 
 All the built-in components are wired to use the Metric system, and the module
 is available for use by any custom client scripts. This allows different
@@ -28,6 +29,7 @@ ImageBlock module tracks user interaction with zoomable images, providing the
 specific image zoomed and its position on the page. All Metric events —
 built-in and custom — include absolute time-on-page information and, if
 supported by the user’s browser, tab focus timing information.
+
 
 ### Built-in
 
@@ -53,6 +55,7 @@ All Metrics include the following properties:
         * `px_portion` - the pixel height of block as percentage of page pixels
 * `ImageBlock:zoom`
 
+
 ### Tracker
 
 Different analytics services support different event payloads. To connect an
@@ -66,31 +69,26 @@ For example, this snippet subscribes a Google Analytics Tracker to the
 Analytics event tracking. It will record an event in Google Analytics the
 first time an Entry’s content block is visible for at least one second.
 
-```javascript
-// Google Analytics requires a parse function since it has a specific format
-// for event data: category, action, label, value, non-interaction.
-// https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide#Anatomy
-Metric.subscribe('Block:seen',
-    new trackers.GoogleAnalytics(
-        function(name, event_data){
-            return ['entry', 'block_seen', entry_params.entry.slug, 1, true]
-        }
-    )
-);
+```coffeescript
+# Google Analytics requires a parse function since it has a specific format
+# for event data: category, action, label, value, non-interaction.
+# https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide#Anatomy
+Metric.subscribe 'Block:seen', new trackers.GoogleAnalytics (name, event_data) ->
+    return ['entry', 'block_seen', entry_params.entry.slug, 1, true]
 ```
 
 Other services accept unstructured event data, so the subscription is more
 simply:
 
-```javascript
-Metric.subscribe('Block:seen', new trackers.Gauges());
+```coffeescript
+Metric.subscribe('Block:seen', new trackers.Gauges())
 ```
 
 Also, a tracker can be subscribed to all Metric events by omitting the event
 name:
 
-```javascript
-Metric.subscribe(new trackers.Gauges());
+```coffeescript
+Metric.subscribe(new trackers.Gauges())
 ```
 
 Some service’s libraries may buffer the events into batches, so the requests
@@ -105,30 +103,29 @@ Metric module itself performs no requests.
 To add support for Metrics inside a custom client script, first require the
 `Metric` module:
 
-```javascript
-var Metric = require('marquee-static-sdk/client/Metric');
+```coffeescript
+Metric = require('marquee-static-sdk/client/Metric')
 ```
 
-Next, create a Metric for a specific kind of event. The convention is to
-CamelCase the module name and snake_case the specific event name, separated by
-a colon.
+Next, create a Metric for a specific kind of event.
 
-```javascript
-var event_metric = new Metric('ModuleName:event_name');
+```coffeescript
+event_metric = new Metric('ModuleName')
 ```
 
 Then, whenever that event should be tracked:
 
-```javascript
-event_metric.track({
+```coffeescript
+event_metric.track
     arbitrary: 'data' 
-});
 ```
 
 where the `track()` function is given a JSON serializable Object. The event
 will also have the built-in properties described above added automatically.
+In addition, the tracker is free to add any additional parameters to the event
+when it sends it, such as screen size, user agent strings, etc.
 
 A client script can use as many Metrics as desired, though be mindful of
-performance and the user’s experience — if the page has to fire a dozen events
+performance and the user’s experience; if the page has to fire a dozen events
 every time the mouse moves or the screen is touched, it could feel sluggish or
-run up a bandwidth bill.
+run up a bandwidth bill. Well-made Trackers will buffer and batch save events.

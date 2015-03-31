@@ -1,8 +1,8 @@
 
 DEVICE_PIXEL_RATIO              = window.devicePixelRatio or 1
-listenToThrottledWindowEvent    = require './utils/listenToThrottledWindowEvent'
-getElPositionAndSize            = require './utils/getElPositionAndSize'
-Metric                          = require './Metric'
+listenToThrottledWindowEvent    = require '../utils/listenToThrottledWindowEvent'
+getElPositionAndSize            = require '../utils/getElPositionAndSize'
+Metric                          = require '../Metric'
 
 TRANSITION_DURATION = 500
 
@@ -191,4 +191,4 @@ class ImageZoomer
 
 
 module.exports = ImageZoomer
-require('./client_modules').register('ImageZoomer', module.exports)
+require('../client_modules').register('ImageZoomer', module.exports)

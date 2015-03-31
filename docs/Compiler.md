@@ -1,21 +1,84 @@
 # Compiler
 
 The compiler is a set of functions that compile pure content into markup, or
-some other format, for presentation.
+some other format, for presentation. It is provided with means for accessing
+the Marquee Content API, and is executed to generate files to be deployed on
+a static site.
 
-The main compiler function, specified by the `package.main`, is invoked to
-compile the publication.
+
+## Main
+
+The main compiler function, specified by the `package.main`, is invoked by the
+SDK to compile the publication.
 
 The bare minimum for a compiler is the following:
 
-```javascript
-module.exports = function (kwargs) {
-    kwargs.emitFile('index.html', 'Hello, world!');
-    kwargs.done();
-}
+```coffeescript
+module.exports = ({
+    api, config, done, info, emitFile, emitRedirect
+}) ->
+    emitFile('index.html', 'Hello, world!')
+    done()
 ```
 
-## `emitFile`
+Compilers are “just” JavaScript running on a node platform, and are thus free
+to do mostly whatever they need to. However, they SHOULD NOT rely on state
+persisted to disk, as they MAY be executed in fresh contexts at arbitrary
+times. They MAY make requests to the Marquee Content API, as well as any other
+available service.
+
+
+### `api`
+
+The `api` argument is an API wrapper for the Content API initialized with
+the project’s token info from its configuration. It provides four methods for
+retrieving content. It only supplies released versions of content.
+
+* `api.entries()`
+* `api.packages()`
+* `api.channels()`
+* `api.posts()`
+
+Each method accepts a callback, or returns a promise and can be used with a
+library such as `when`.
+
+```coffeescript
+W = require 'when'
+W.all([
+    api.entries()
+    api.packages()
+]).then ([entries, packages]) ->
+```
+
+```coffeescript
+api.entries (entries) ->
+```
+
+
+### `config`
+
+The `config` object contains the active configuration for the current build,
+including environment, key information, and other project-specific properties.
+It is based on, but may vary slightly from, the `marquee` property in the
+project’s `package.json` file. See [Configuration](./configuration/) for more
+information about how this works.
+
+
+### `done`
+
+The `done` function MUST be called when the compiler has finished emitting all
+the files necessary. Be sure to call it _after_ asynchronous functions return.
+Otherwise, the SDK will move on with the serving or uploading process and
+leave some files behind. There is a timeout and the compiler MUST call done
+within 30 minutes. If not, it will be killed by the SDK.
+
+
+### `info`
+
+The `info` object contains the data from the project’s `package.json` file.
+
+
+### `emitFile`
 
 The `emitFile` function is used to generate the actual files that make up the
 site content.
@@ -30,6 +93,14 @@ emitFile('index.html', html_content_string)
 
 ```coffeescript
 emitFile('404.html', <NotFound />)
+```
+
+Because React cannot represent the doctype, the output string will have
+`<!doctype html>` prepended to it. To emit only a fragment, without the
+doctype, set the option `fragment` to `true`:
+
+```cjsx
+emitFile('fragments/call-to-action.html', <CallToAction />, fragment: true)
 ```
 
 For clean URLs, any path that does not end in an extension will output the
@@ -49,13 +120,27 @@ emitFile('data.json', { key: "value" })
 ```
 
 
+### `emitRedirect`
+
+The `emitRedirect` function allows for creating a 301 redirect from one URL
+to another; it’s commonly used when migrating to a new URL structure. It takes
+a path or slug like `emitFile` and a URL to redirect to.
+
+```coffeescript
+emitRedirect('/entries/old-slug/', '/articles/new-slug/')
+```
+
+
+
 ## CJSX
 
-The preferred way to author a publication compiler is in [CJSX](https://github.com/jsdf/coffee-react-transform),
-the [CoffeeScript](http://coffeescript.org) variant of the JSX language for
+The preferred way to author a publication compiler is in
+[CJSX](https://github.com/jsdf/coffee-react-transform), the
+[CoffeeScript](http://coffeescript.org) variant of the JSX language for
 [React](http://reactjs.com). It is not required, but provides for clean,
 uncrufty code on top of a robust component architecture. Regular CoffeeScript
-or JavaScript may be used, provided it follows the 
+or JavaScript may be used, provided it follows the CommonJS convention and
+exports a proper main function.
 
 Most compiled publications are not especially interactive and do not need to
 be constructed as a full React-powered client-side application. However, the
@@ -81,7 +166,8 @@ JSON data baked into JSON files using `emitFile`, or with HTML fragments
 instead of full pages. For example, to do search, the compiler can make
 by-word indexes of the content using certain fields; the client then performs
 the same word normalization, requests the corresponding `<word>.json` files,
-and generates the result list.
+and generates the result list. Proper search can also be accomplished with
+a search API endpoint, such as the one provided by the Marquee content platform.
 
 
 
@@ -97,12 +183,15 @@ object is never used directly. The compiled JS that the two output uses
 React.
 
 
-### “Compiler timeout. Compiler MUST call done within 60 seconds.”
+### “Compiler timeout. Compiler MUST call done within 30 minutes.”
 
 Either the compiler does not call `done()` somewhere in its execution, or
 the compilation process takes too long. This is required because the compiler
 MAY perform asynchronous actions and it needs to tell the SDK that it’s done,
 so that the SDK can perform additional actions.
+
+Sometimes, this can show up during development if a compile encountered an
+error, then a new file save triggered a fresh compilation.
 
 
 ### “Object has no method apply” or “Cannot call method 'apply' of undefined”

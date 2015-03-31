@@ -5,9 +5,16 @@ moment = require 'moment'
 # http://momentjs.com/docs/#/displaying/
 module.exports = React.createClass
     displayName: 'DateTime'
+
+    propTypes:
+        date    : React.PropTypes.instanceOf(Date)
+        format  : React.PropTypes.string
+        label   : React.PropTypes.string
+
     getDefaultProps: -> {
         format: 'YYYY-M-D'
     }
+
     render: ->
         if @props.date
             date_str = moment(@props.date).format(@props.format)

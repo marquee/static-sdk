@@ -16,7 +16,7 @@ client_modules={
 Inside modules to be selectively activated:
 
 ```
-require('./client_modules.coffee').register('menu', activateMenu)
+require('marquee-static-sdk/client/client_modules').register('menu', activateMenu)
 module.exports = activateMenu
 ```
 
@@ -44,8 +44,8 @@ _activateModule = (namespace, module_name, module_args, is_deferred=false) ->
         console.warn("No module registered for `#{ module_name }` in namespace `#{ namespace }`, deferring.")
 
 activateFn = (namespace='Marquee') ->
-    window[namespace] =
-        activateModules: (modules={}) ->
+    window[namespace] ?= {}
+    window[namespace] = activateModules: (modules={}) ->
             for module_name, module_args of modules
                 _activateModule(namespace, module_name, module_args)
 

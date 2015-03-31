@@ -7,6 +7,10 @@ url             = require 'url'
 { Classes } = require 'shiny'
 module.exports = React.createClass
     displayName: 'EmbedBlock'
+
+    propTypes:
+        block: React.PropTypes.object.isRequired
+
     render: ->
         unless @props.block.content
             return null

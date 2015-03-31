@@ -1,4 +1,4 @@
-# API
+# Content API
 
 ## Error Responses
 
@@ -34,9 +34,9 @@ The access token specified in `package.json` does not have permission to act
 on the requested content object.
 
 This is an uncommon error in the Marquee Content API as we practice
-[non-acknowledgement](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4)
-to avoid disclosing a resource even exists to unauthorized clients. Typically,
-a 404 will be returned whenever a 403 would be expected.
+[non-acknowledgement][rfc2616] to avoid disclosing a resource even exists to
+unauthorized clients. Typically, a 404 will be returned whenever a 403 would
+be expected.
 
 Note: S3 has the opposite behavior, returning 403 when a client might expect
 a 404. It has the same effect, and is arguably more semantic, but often
@@ -54,4 +54,7 @@ The specified content object was previously deleted.
 ### 500 Internal Server Error
 
 There was a problem with the Content API. Try the request again. If requests
-continue to return 500s, contact developers@marquee.by.
+continue to return 500s, contact [developers@marquee.by](mailto:developers@marquee.by).
+
+
+[rfc2616]: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4

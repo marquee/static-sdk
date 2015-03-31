@@ -1,15 +1,13 @@
 # Element Queries
 
-[Element queries](http://css-tricks.com/use-cases-requirements-element-queries/)
-are a way to have CSS rules apply to an element based on its size. Using
-element queries requires defining them in the styles, and including a polyfill
-snippet of JavaScript that manipulates the elements to add attribuets matching
-the selectors in the CSS.
+[Element queries][eqs] are a way to have CSS rules apply to an element based
+on its size. Using element queries requires defining them in the styles, and
+including a polyfill snippet of JavaScript that manipulates the elements to
+add attributes matching the selectors in the CSS.
 
-The Marquee Static SDK includes a forked version of the
-[elementQuery](https://github.com/tysonmatanich/elementQuery) polyfill, and
-some Sass helpers, for using them on projects. (Note: this fork only supports
-px values.)
+The Marquee Static SDK includes a forked version of the [elementQuery][eq]
+polyfill, and some Sass helpers, for using them on projects. (Note: this fork
+only supports px values.)
 
 
 
@@ -87,3 +85,6 @@ selectors and includes the parsed form with the engine at render time. The
 generated output is ready to take effect immediately. Also, since it is
 potentially essential to the layout, it works best when inlined into the
 rendered page.
+
+[eqs]: http://css-tricks.com/use-cases-requirements-element-queries/
+[eq]: https://github.com/tysonmatanich/elementQuery

@@ -47,6 +47,26 @@ buildLinkFor = (entry, service) ->
 
 module.exports = React.createClass
     displayName: 'ShareEntry'
+
+    propTypes:
+        services: React.PropTypes.oneOf([
+                'linkedin'
+                'facebook'
+                'twitter'
+                'googleplus'
+                'pinterest'
+                'appdotnet'
+                'email'
+            ])
+        entry: React.PropTypes.shape
+            full_link   : React.PropTypes.string.isRequired
+            cover_image : React.PropTypes.oneOfType([
+                    React.PropTypes.string
+                    React.PropTypes.object
+                ]).isRequired
+            title       : React.PropTypes.string.isRequired
+            summary     : React.PropTypes.string.isRequired
+
     render: ->
         <div className='ShareEntry'>
             <span className='_Label'>Share</span>

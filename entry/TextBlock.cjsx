@@ -1,5 +1,7 @@
 React = require 'react'
 
+url = require 'url'
+
 NOAT = require './NOAT'
 { Classes } = require 'shiny'
 
@@ -11,6 +13,10 @@ TAG_MAP =
 
 module.exports = React.createClass
     displayName: 'TextBlock'
+
+    propTypes:
+        block: React.PropTypes.object.isRequired
+
     render: ->
         # Only render if `content` is not null.
         return null unless @props.block.content?
@@ -24,6 +30,9 @@ module.exports = React.createClass
                 unless anno.url
                     return
                 attrs.href = anno.url
+                _parsed = url.parse(anno.url)
+                if _parsed.host and _parsed.host isnt global.config.HOST
+                    attrs['data-external'] = true
             text.add(TAG_MAP[anno.type], anno.start, anno.end, attrs)
 
         # Choose the appropriate tag for the given block's role.

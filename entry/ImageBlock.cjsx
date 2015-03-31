@@ -1,9 +1,14 @@
 React = require 'react'
+url = require 'url'
 
 { Classes } = require 'shiny'
 
 module.exports = React.createClass
     displayName: 'ImageBlock'
+
+    propTypes:
+        block: React.PropTypes.object.isRequired
+
     render: ->
 
         if @props.block.content?
@@ -47,7 +52,12 @@ module.exports = React.createClass
             image = <img className='_Image' />
 
         if @props.block.link_to
-            image = <a className='_ImageLink' href=@props.block.link_to>{image}</a>
+            _parsed = url.parse(@props.block.link_to)
+            image = <a
+                    className       = '_ImageLink'
+                    href            = @props.block.link_to
+                    data-external   = {_parsed.host and _parsed.host isnt global.config.HOST}
+                >{image}</a>
             is_zoomable = false
         <figure
             className           = "Block ImageBlock #{ variants }"

@@ -1,4 +1,4 @@
-module.exports = ->
+init = ->
     openShareWindow = (share_link) ->
         options =
             scrollbars  : 'yes'
@@ -34,3 +34,7 @@ module.exports = ->
                         if JSON.parse(service.dataset.popup)
                             e.preventDefault()
                             openShareWindow(service.href)
+
+
+module.exports = init
+require('./client_modules').register('ShareEntry', module.exports)

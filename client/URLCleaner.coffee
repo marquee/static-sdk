@@ -18,3 +18,5 @@ module.exports = ->
         window._gaq.push(_stripParameters)
     else
         _stripParameters()
+
+require('./client_modules').register('URLCleaner', module.exports)

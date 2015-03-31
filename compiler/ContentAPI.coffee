@@ -215,6 +215,9 @@ class ContentAPI
         else
             @_ua = sdk_ua_string
 
+    _nameCacheFile: (key) ->
+        path.join(@_CACHE_DIRECTORY, key.replace(/[^\w]+/g,'-'))
+
     _sendRequest: (opts) ->
 
         opts.query ?= {}
@@ -247,15 +250,13 @@ class ContentAPI
             opts.callback(result)
 
 
-        cache_key = url
+        cache_key = "#{ @_token }--#{ url }"
         _query_keys = Object.keys(opts.query)
         _query_keys.sort()
         for _k in _query_keys
             cache_key += "#{ _k }=#{ opts.query[_k] }"
-        if @_cache?[cache_key]
-            SDKError.log(SDKError.colors.grey('Using response from API cache.'))
-            _returnData(@_cache[cache_key])
-        else
+
+        _fetchData = =>
             request.get _options, (error, response, data) =>
                 throw error if error
                 # This API client is **read-only** and MUST only ever receive
@@ -265,22 +266,28 @@ class ContentAPI
                 @_setCacheItem(cache_key, data)
                 _returnData(data)
 
+        if @_CACHE_DIRECTORY
+            fs.readFile @_nameCacheFile(cache_key), (err, data) ->
+                if err?
+                    _fetchData()
+                    return
+                SDKError.log(SDKError.colors.grey("Using response from API cache (#{ data.length } bytes)."))
+                _returnData( JSON.parse( data.toString() ) )
+        else
+            _fetchData()
+
     _setUpCache: ->
-        @_CACHE_FILE = path.join(@_project_directory, '.cache.json')
-        try
-            @_cache = JSON.parse(fs.readFileSync(@_CACHE_FILE).toString())
-            SDKError.log(SDKError.colors.grey('Loaded API cache from file.'))
-        catch e
-            console.log e.message
-            console.log e.stack
-            SDKError.log(SDKError.colors.grey('No API cache file. Creating new cache...'))
-            @_cache = {}
+        @_CACHE_DIRECTORY = path.join(@_project_directory, '.api-cache')
+        unless fs.existsSync(@_CACHE_DIRECTORY)
+            SDKError.log(SDKError.colors.grey('No API cache. Creating new cache...'))
+            fs.mkdirSync(@_CACHE_DIRECTORY)
 
     _setCacheItem: (key, value) ->
-        if @_cache?
-            @_cache[key] = value
-            fs.writeFileSync(@_CACHE_FILE, JSON.stringify(@_cache))
-            SDKError.log(SDKError.colors.grey('Updated API cache file.'))
+        if @_CACHE_DIRECTORY?
+            cache_file = @_nameCacheFile(key)
+            value = JSON.stringify(value)
+            fs.writeFileSync(cache_file, value)
+            SDKError.log(SDKError.colors.grey("Updated API cache file (#{ value.length } bytes)."))
 
 
     # This is a good spot to make a generator or some sort of iterator instead,
@@ -322,8 +329,6 @@ class ContentAPI
     entries: (cb) ->
         @filter
             type: ENTRY
-            is_released: true
-            _sort: '-first_released_date'
         , (result) ->
             SDKError.log("Got #{ result.length } entries from API.")
             cb?(result)

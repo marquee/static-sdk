@@ -4,14 +4,15 @@ module.exports = React.createClass
     displayName: 'MarqueeBranding'
     getDefaultProps: -> {
             source      : global.config?.PUBLICATION_SHORT_NAME
-            medium      : 'MarqueeBranding'
+            medium      : 'web'
             campaign    : 'sdk_site'
+            content     : 'MarqueeBranding'
             logo_only   : false
         }
     render: ->
         link = 'http://marquee.by'
         if @props.source
-            params = ['source','medium','campaign'].map (p) =>
+            params = ['source','medium','campaign','content'].map (p) =>
                 "utm_#{ p }=#{ @props[p] }"
             link += "?#{ params.join('&') }"
 

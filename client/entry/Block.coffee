@@ -1,31 +1,14 @@
-Metric = require './Metric'
+Metric = require '../Metric'
 
+getElPositionAndSize            = require '../utils/getElPositionAndSize'
+listenToThrottledWindowEvent    = require '../utils/listenToThrottledWindowEvent'
 
-module.exports = (content_container='.Entry__ ._Content__') ->
+init = (content_container='.Entry__ ._Content__') ->
     seen_metric     = new Metric('Block')
     blocks          = []
     track_timeout   = null
 
     num_seen        = 0
-
-    getPageYPosition = (el) ->
-        node = el
-        y_pos = 0
-        while node.offsetParent?
-            y_pos += node.offsetTop
-            node = node.offsetParent
-        return y_pos
-
-
-    throttle = (fn, cooldown) ->
-        last_called = new Date(0)
-        _callFn = (args...) ->
-            now = new Date()
-            if now - last_called >= cooldown
-                last_called = now
-                fn(args...)
-        return _callFn
-
 
     gatherBlocks = ->
         i = 0
@@ -43,7 +26,6 @@ module.exports = (content_container='.Entry__ ._Content__') ->
                     el          : el
                     was_seen    : false
 
-
     checkDepth = ->
         visibility_threshold = window.pageYOffset + window.innerHeight
 
@@ -54,7 +36,7 @@ module.exports = (content_container='.Entry__ ._Content__') ->
 
         blocks.forEach (block, i) ->
             clearTimeout(block.track_timeout)
-            _top = getPageYPosition(block.content_el)
+            _top = getElPositionAndSize(block.content_el).top
             _height = block.content_el.offsetHeight
             if _blockIsVisible(_top, _height) and not block.was_seen
                 block.track_timeout = setTimeout ->
@@ -79,10 +61,12 @@ module.exports = (content_container='.Entry__ ._Content__') ->
                         # ...pixel height of block as percentage of page pixels
                         px_portion      : Number((block.content_el.offsetHeight / entry_content_el.offsetHeight).toFixed(2))
                 , 2000
-    # TODO: window.addEventListener 'copy'
 
-    # TODO: Block.getVisibleBlocks()
     gatherBlocks()
     if blocks.length > 0
         entry_content_el = document.querySelector(content_container)
-        window.addEventListener('scroll', throttle(checkDepth, 100))
+        listenToThrottledWindowEvent('scroll', checkDepth)
+
+module.exports =
+    activate: init
+require('../client_modules').register('Block', module.exports)

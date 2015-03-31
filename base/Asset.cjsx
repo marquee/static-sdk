@@ -1,6 +1,6 @@
-React = require 'react'
-fs = require 'fs-extra'
-path = require 'path'
+fs      = require 'fs-extra'
+path    = require 'path'
+React   = require 'react'
 
 _render = (props) =>
     full_path = "#{ global.ASSET_URL }#{ props.path }"
@@ -62,6 +62,10 @@ _renderInline = (props) ->
 
 module.exports = React.createClass
     displayName: 'Asset'
+    propTypes:
+        path    : React.PropTypes.string.isRequired
+        async   : React.PropTypes.bool
+        inline  : React.PropTypes.bool
     render: ->
         if @props.inline
             return _renderInline(@props)
