@@ -46,7 +46,9 @@ module.exports = React.createClass
             className = "Block EmbedBlock #{ variants }"
         >
             <div className='_Content'>
-                {embed}
+                <div className='_EmbedWrapper'>
+                    {embed}
+                </div>
                 {
                     if caption or credit
                         <figcaption className='_Caption'>
