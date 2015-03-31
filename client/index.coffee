@@ -6,6 +6,6 @@ module.exports =
     entry           : require './entry'
     Metric          : require './Metric'
     ShareEntry      : require './ShareEntry'
-    Trackers        : require './Trackers'
+    trackers        : require './trackers'
     URLCleaner      : require './URLCleaner'
     utils           : require './utils'
