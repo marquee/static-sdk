@@ -54,7 +54,7 @@ setUpLoadOnVisible = ->
                 loadEl(el)
 
     listenToThrottledWindowEvent 'scroll', _checkVisibility, ->
-        win_y = window.scrollY
+        win_y = window.pageYOffset
         win_h = window.innerHeight
 
 
