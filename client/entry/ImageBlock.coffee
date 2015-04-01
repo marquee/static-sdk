@@ -30,7 +30,7 @@ init = ->
                 is_pinned   = JSON.parse(el.dataset.pinned)
 
                 image_resize_fns.push ->
-                    if image_block.datset.is_loading is 'true'
+                    if image_block.dataset.is_loading is 'true'
                         return
 
                     height = content_el.offsetWidth / image_block.dataset.aspect_ratio
