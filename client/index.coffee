@@ -4,6 +4,7 @@ module.exports =
     client_modules  : require './client_modules'
     ContactForm     : require './ContactForm'
     entry           : require './entry'
+    ExternalLink    : require './ExternalLink'
     Metric          : require './Metric'
     ShareEntry      : require './ShareEntry'
     trackers        : require './trackers'
