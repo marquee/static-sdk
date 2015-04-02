@@ -30,6 +30,9 @@ init = ->
                 is_pinned   = JSON.parse(el.dataset.pinned)
 
                 image_resize_fns.push ->
+                    if image_block.dataset.is_loading is 'true'
+                        return
+
                     height = content_el.offsetWidth / image_block.dataset.aspect_ratio
 
                     height += caption_el?.offsetHeight or 0
@@ -42,6 +45,7 @@ init = ->
                         image_el.style.height = "100vh"
 
                     if not image_block.dataset.loaded and visibilityCheck(image_block)
+                        image_block.datset.is_loading = true
                         if content_el.offsetWidth * px_ratio > 1330 and image_block.dataset.src_2560
                             src = image_block.dataset.src_2560
                         else if content_el.offsetWidth * px_ratio > 668
@@ -52,10 +56,12 @@ init = ->
                         if is_pinned
                             image_el.style.backgroundImage = "url('#{ src }')"
                             image_block.dataset.loaded = true
+                            image_block.datset.is_loading = false
                         else
                             image_el.src = src
                             image_el.onload = ->
                                 image_block.dataset.loaded = true
+                                image_block.datset.is_loading = false
 
 
     renderAllImages = ->
