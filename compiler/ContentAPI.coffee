@@ -7,8 +7,8 @@ TEXT    = 'text'
 EMBED   = 'embed'
 
 ENDPOINTS =
-    container   : 'content/'
-    package     : 'content/'
+    container   : 'releases/'
+    package     : 'releases/'
     post        : 'posts/'
     channel     : 'channels/'
 
@@ -17,11 +17,13 @@ fs      = require 'fs'
 path    = require 'path'
 request = require 'request'
 W       = require 'when'
-
+url     = require 'url'
 sdk_ua_string = require './sdk_ua_string'
 
 SDKError = require './SDKError'
 colors = SDKError.colors
+
+parseLinkHeader = require 'parse-link-header'
 
 # Wraps the CDN image URLs for easier manipulation of CDN resizing parameters.
 # Also abstracts the legacy image format.
@@ -80,11 +82,10 @@ class CDNImage
                 return @_obj.content['1280']?.url
             return @_obj.content['640']?.url
 
-        url = @_url
         param_list = []
         for k,v of _params
             param_list.push("#{ k }=#{ v }") unless k is 'multiplier'
-        return "#{ url }?#{ param_list.join('&') }"
+        return "#{ @_url }?#{ param_list.join('&') }"
 
 class Model
     constructor: (source_data) ->
@@ -223,7 +224,10 @@ class ContentAPI
         opts.query ?= {}
         opts.query._include_published = true
 
-        url = "http://#{ @_host }/#{ opts.url }"
+        if url.parse(opts.url).protocol
+            _url = opts.url
+        else
+            _url = "http://#{ @_host }/#{ opts.url }"
 
         _options =
             json: true
@@ -231,12 +235,12 @@ class ContentAPI
                 'Accept'        : 'application/json'
                 'User-Agent'    : @_ua
                 'Authorization' : "Token #{ @_token }"
-            url: url
+            url: _url
             qs: opts.query
-        SDKError.log("Making request to Content API: #{ colors.cyan(url) }, #{ JSON.stringify(opts.query) }")
+        SDKError.log("Making request to Content API: #{ colors.cyan(_url) }, #{ JSON.stringify(opts.query) }")
 
 
-        _returnData = (data) ->
+        _returnData = (data, next_url=null) ->
             if data.map?
                 result = data.map (o) ->
                     if o.published_json
@@ -247,10 +251,10 @@ class ContentAPI
                     result = new Model(data.published_json)
                 else
                     result = new Model(data)
-            opts.callback(result)
+            opts.callback(result, next_url)
 
 
-        cache_key = "#{ @_token }--#{ url }"
+        cache_key = "#{ @_token }--#{ _url }"
         _query_keys = Object.keys(opts.query)
         _query_keys.sort()
         for _k in _query_keys
@@ -258,13 +262,17 @@ class ContentAPI
 
         _fetchData = =>
             request.get _options, (error, response, data) =>
-                throw error if error
+                if error
+                    console.error(_url)
+                    throw error
                 # This API client is **read-only** and MUST only ever receive
                 # a 200 from the API (or an error status), NEVER 201 or 204.
                 unless response.statusCode is 200
                     throw new SDKError('api', "Content API error: #{ response.statusCode }\n\n#{ data }", response.statusCode)
-                @_setCacheItem(cache_key, data)
-                _returnData(data)
+                { headers } = response
+                @_setCacheItem(cache_key, { data, headers })
+                next_url = parseLinkHeader(headers.link)?.next?.url
+                _returnData(data, next_url)
 
         if @_CACHE_DIRECTORY
             fs.readFile @_nameCacheFile(cache_key), (err, data) ->
@@ -272,7 +280,11 @@ class ContentAPI
                     _fetchData()
                     return
                 SDKError.log(SDKError.colors.grey("Using response from API cache (#{ data.length } bytes)."))
-                _returnData( JSON.parse( data.toString() ) )
+                { data, headers } = JSON.parse(data.toString())
+                unless data and headers
+                    throw new SDKError('api', "Invalid API cache: clear the cache (`rm -r .api-cache`) and try again.")
+                next_url = parseLinkHeader(headers.link)?.next?.url
+                _returnData(data, next_url)
         else
             _fetchData()
 
@@ -289,6 +301,33 @@ class ContentAPI
             fs.writeFileSync(cache_file, value)
             SDKError.log(SDKError.colors.grey("Updated API cache file (#{ value.length } bytes)."))
 
+    filterReleases: (query, cb) ->
+        deferred_result = W.defer()
+
+        # Other types don't have the `type` property, so this needs to be
+        # removed from the query for the filtering to work correctly.
+        _url = ENDPOINTS[query.type]
+        unless query.type in [ENTRY, PACKAGE]
+            delete query.type
+
+        results = []
+        next_url = _url
+        _makeRequest = =>
+            unless next_url
+                _results = new APIResults(results)
+
+                deferred_result.resolve(_results)
+                cb?(_results)
+            else
+                @_sendRequest
+                    url         : next_url
+                    query       : query
+                    callback    : (_results, _next_url) ->
+                        next_url = _next_url
+                        results.push(_results...)
+                        _makeRequest()
+        _makeRequest()
+        return deferred_result.promise
 
     # This is a good spot to make a generator or some sort of iterator instead,
     # since this holds all the objects in memory.
@@ -299,7 +338,7 @@ class ContentAPI
 
         # Other types don't have the `type` property, so this needs to be
         # removed from the query for the filtering to work correctly.
-        url = ENDPOINTS[query.type]
+        _url = ENDPOINTS[query.type]
         unless query.type in [ENTRY, PACKAGE]
             delete query.type
 
@@ -316,7 +355,7 @@ class ContentAPI
                 cb?(_results)
             else
                 @_sendRequest
-                    url         : url
+                    url         : _url
                     query       : query
                     callback    : (_results) ->
                         results.push(_results...)
@@ -327,17 +366,15 @@ class ContentAPI
         return deferred_result.promise
 
     entries: (cb) ->
-        @filter
+        @filterReleases
             type: ENTRY
         , (result) ->
             SDKError.log("Got #{ result.length } entries from API.")
             cb?(result)
 
     packages: (cb) ->
-        @filter
+        @filterReleases
             type: PACKAGE
-            is_released: true
-            _sort: '-first_released_date'
         , (result) ->
             SDKError.log("Got #{ result.length } packages from API.")
             cb?(result)
