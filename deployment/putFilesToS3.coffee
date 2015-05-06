@@ -35,6 +35,12 @@ module.exports = (build_directory, files_to_deploy, project_config, callback) ->
                     path.join(build_directory, '.metadata.json')
                 ).toString()
         )
+
+    # Sort files by reverse "depth". This helps ensure that entries get
+    # uploaded before links to them are (ie the homepage).
+    files_to_deploy.changed.sort (a,b) ->
+        b.local.local_path.split('/').length - a.local.local_path.split('/').length
+
     files_to_deploy.changed.forEach (f) ->
         rel_path = f.local.local_path.replace(build_directory + '/','')
 
