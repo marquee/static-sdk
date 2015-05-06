@@ -263,14 +263,15 @@ class ContentAPI
         _fetchData = =>
             request.get _options, (error, response, data) =>
                 if error
-                    console.log _url, @_ua
-                throw error if error
+                    console.error(_url)
+                    throw error
                 # This API client is **read-only** and MUST only ever receive
                 # a 200 from the API (or an error status), NEVER 201 or 204.
                 unless response.statusCode is 200
                     throw new SDKError('api', "Content API error: #{ response.statusCode }\n\n#{ data }", response.statusCode)
-                @_setCacheItem(cache_key, data)
-                next_url = parseLinkHeader(response.headers.link)?.next?.url
+                { headers } = response
+                @_setCacheItem(cache_key, { data, headers })
+                next_url = parseLinkHeader(headers.link)?.next?.url
                 _returnData(data, next_url)
 
         if @_CACHE_DIRECTORY
@@ -279,7 +280,11 @@ class ContentAPI
                     _fetchData()
                     return
                 SDKError.log(SDKError.colors.grey("Using response from API cache (#{ data.length } bytes)."))
-                _returnData( JSON.parse( data.toString() ) )
+                { data, headers } = JSON.parse(data.toString())
+                unless data and headers
+                    throw new SDKError('api', "Invalid API cache: clear the cache (`rm -r .api-cache`) and try again.")
+                next_url = parseLinkHeader(headers.link)?.next?.url
+                _returnData(data, next_url)
         else
             _fetchData()
 
@@ -320,7 +325,6 @@ class ContentAPI
                     callback    : (_results, _next_url) ->
                         next_url = _next_url
                         results.push(_results...)
-                        console.log _url, 'RESULTS', results.length, next_url
                         _makeRequest()
         _makeRequest()
         return deferred_result.promise
