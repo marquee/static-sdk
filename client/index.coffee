@@ -3,6 +3,7 @@ module.exports =
     AsyncLoad       : require './AsyncLoad'
     client_modules  : require './client_modules'
     ContactForm     : require './ContactForm'
+    CoverImage      : require './CoverImage'
     entry           : require './entry'
     ExternalLink    : require './ExternalLink'
     Metric          : require './Metric'
