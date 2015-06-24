@@ -5,7 +5,7 @@ ImageBlock = require './ImageBlock'
 TextBlock = require './TextBlock'
 
 module.exports = (content) ->
-    return content.map (block) ->
+    return content?.map (block) ->
         switch block.type
             when 'text'
                 return <TextBlock block=block key=block.id />
