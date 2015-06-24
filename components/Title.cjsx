@@ -4,7 +4,7 @@ module.exports = React.createClass
     displayName: '_Title'
 
     propTypes:
-        title   : React.PropTypes.string
+        title   : React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.array])
         level   : React.PropTypes.oneOf([1,2,3,4,5,6])
         link    : React.PropTypes.string
 
