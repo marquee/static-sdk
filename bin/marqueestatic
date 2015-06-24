@@ -3,7 +3,7 @@
 var program = require('commander');
 
 program
-    .version(require('../_package_data').version)
+    .version(require('../package.json').version)
     .option('-p, --production', 'Build for production (minify)')
     .option('-f, --force', 'Force the action, overriding checks and guards')
     .option('-c, --configuration <name>', 'A configuration to use')
