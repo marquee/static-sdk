@@ -4,7 +4,7 @@ path = require 'path'
 fs = require 'fs-extra'
 marked = require 'marked'
 
-pkg = require '../_package_data.coffee'
+pkg = require '../package.json'
 
 for_deploy = '--production' in process.argv
 

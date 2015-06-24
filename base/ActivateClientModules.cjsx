@@ -14,13 +14,20 @@ module.exports = React.createClass
     render: ->
         return null if not @props.modules or Object.keys(@props.modules).length is 0
 
-        _script = """
-            (function(w){
-                w.addEventListener('load',function(){
+        if @props.immediate
+            _script = """
+                (function(w){
                     w['#{ @props.namespace }'].activateModules(#{ JSON.stringify(@props.modules) });
-                });
-            })(window);
-        """
+                })(window);
+            """
+        else
+            _script = """
+                (function(w){
+                    w.addEventListener('load',function(){
+                        w['#{ @props.namespace }'].activateModules(#{ JSON.stringify(@props.modules) });
+                    });
+                })(window);
+            """
         <script dangerouslySetInnerHTML={
             __html: _script
         }/>

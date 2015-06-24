@@ -6,9 +6,12 @@ NOAT = require './NOAT'
 { Classes } = require 'shiny'
 
 TAG_MAP =
-    emphasis: 'em'
-    strong: 'strong'
-    link: 'a'
+    'emphasis'      : 'em.Annotation.-emphasis'
+    'strong'        : 'strong.Annotation.-strong'
+    'link'          : 'a.Annotation.-link'
+    'small-caps'    : 'i.Annotation.-small_caps'
+    'superscript'   : 'sup.Annotation.-superscript'
+    'subscript'     : 'sub.Annotation.-subscript'
 
 
 module.exports = React.createClass
@@ -33,7 +36,11 @@ module.exports = React.createClass
                 _parsed = url.parse(anno.url)
                 if _parsed.host and _parsed.host isnt global.config.HOST
                     attrs['data-external'] = true
-            text.add(TAG_MAP[anno.type], anno.start, anno.end, attrs)
+            if TAG_MAP[anno.type]
+                [tag, classes...] = TAG_MAP[anno.type].split('.')
+                if classes.length > 0
+                    attrs['class'] = classes.join(' ') 
+                text.add(tag, anno.start, anno.end, attrs)
 
         # Choose the appropriate tag for the given block's role.
         # Unknown roles are ignored and not rendered.
