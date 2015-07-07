@@ -7,3 +7,4 @@ node_modules
 !__tests__/_preprocessor.js
 .termconfig
 npm-debug.log
+.DS_Store
