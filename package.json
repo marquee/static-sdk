@@ -1,6 +1,6 @@
 {
   "name": "marquee-static-sdk",
-  "version": "0.4.0-alpha.5",
+  "version": "0.4.0-alpha.6",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
     "prepublish": "npm test && npm run clearbuild && npm run build",
@@ -19,6 +19,7 @@
   "dependencies": {
     "autoprefixer-core": "^3.1.2",
     "aws-sdk": "^2.0.21",
+    "brfs": "^1.4.0",
     "browserify": "^6.1.0",
     "coffee-react": "^2.1.2",
     "coffee-react-transform": "^2.1.0",

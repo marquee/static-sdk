@@ -1,6 +1,6 @@
 Metric                          = require 'marquee-static-sdk/client/Metric'
 
-AGENT_IS_MOBILE                 = require './utils/AGENT_IS_MOBILE'
+AGENT_IS_MOBILE                 = require './AGENT_IS_MOBILE'
 getElPositionAndSize            = require './utils/getElPositionAndSize'
 listenToThrottledWindowEvent    = require './utils/listenToThrottledWindowEvent'
 makeRequest                     = require './utils/makeRequest'
@@ -29,12 +29,14 @@ loadEl = (el, url=null, callback=null) ->
         el.dataset.asyncload = LOADED
         console.info("AsyncLoad: loaded #{ url }") if DEBUG
 
-        callback?()
-        callbacks.load?.forEach (cb) -> cb()
+        # Defer callback so browser can render the fragment.
+        window.requestAnimationFrame ->
+            callback?()
+            callbacks.load?.forEach (cb) -> cb()
 
-        if el.dataset.asyncload_track
-            metric.track
-                fragment: url
+            if el.dataset.asyncload_track
+                metric.track
+                    fragment: url
 
 
 setUpLoadOnVisible = ->

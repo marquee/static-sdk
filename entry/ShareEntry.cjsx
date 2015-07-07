@@ -34,9 +34,9 @@ buildLinkFor = (entry, service) ->
         when 'email'
             body = """
                 #{ entry.title }
-                by #{ entry.byline }
+                #{ if entry.byline then "by #{ entry.byline }" else '' }
 
-                #{ entry.summary }
+                #{ entry.summary or '' }
 
                 #{ entry.full_link }
             """
@@ -49,23 +49,26 @@ module.exports = React.createClass
     displayName: 'ShareEntry'
 
     propTypes:
-        services: React.PropTypes.oneOf([
-                'linkedin'
-                'facebook'
-                'twitter'
-                'googleplus'
-                'pinterest'
-                'appdotnet'
-                'email'
-            ])
+        services: (props, prop_name, component_name) ->
+            for service in props[prop_name]
+                unless service in [
+                    'linkedin'
+                    'facebook'
+                    'twitter'
+                    'googleplus'
+                    'pinterest'
+                    'appdotnet'
+                    'email'
+                ]
+                    return new Error('')
         entry: React.PropTypes.shape
             full_link   : React.PropTypes.string.isRequired
             cover_image : React.PropTypes.oneOfType([
                     React.PropTypes.string
                     React.PropTypes.object
-                ]).isRequired
+                ])
             title       : React.PropTypes.string.isRequired
-            summary     : React.PropTypes.string.isRequired
+            summary     : React.PropTypes.string
 
     render: ->
         <div className='ShareEntry'>

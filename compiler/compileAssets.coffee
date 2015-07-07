@@ -9,6 +9,7 @@ Sass            = require 'node-sass'
 autoprefixer    = require 'autoprefixer-core'
 browserify      = require 'browserify'
 coffee_reactify = require 'coffee-reactify'
+brfs            = require 'brfs'
 
 walkSync        = require './walkSync'
 sqwish          = require 'sqwish'
@@ -18,7 +19,7 @@ UglifyJS        = require 'uglify-js'
 compileCoffee = (source_path, dest_path, project_directory, cb) ->
     SDKError.log(SDKError.colors.grey("Compiling (coffee): #{ source_path.replace(project_directory, '') }"))
     b = browserify([source_path])
-    compiled = b.transform(coffee_reactify).bundle (err, compiled) ->
+    compiled = b.transform(coffee_reactify).transform(brfs).bundle (err, compiled) ->
         throw err if err
         if process.env.NODE_ENV is 'production'
             SDKError.log(SDKError.colors.grey("Minifying #{ source_path.replace(project_directory,'') }"))
