@@ -26,8 +26,12 @@ module.exports = React.createClass
             when 'left'
                 _x = 0
 
-        if @props.image?.focal_point
-            { x, y } = @props.image?.focal_point
+        image = @props.image
+        image = image._obj if image?._obj
+
+
+        if image?.focal_point
+            { x, y } = image.focal_point
             cx.set('align', 'focal_point')
         else
             cx.set('align', @props.align)
@@ -36,17 +40,17 @@ module.exports = React.createClass
 
         bg_position = "#{ x * 100 }% #{ y * 100}%"
 
-        if @props.image?.content?
-            src_2560        = @props.image.content['2560']?.url or undefined
-            src_1280        = @props.image.content['1280']?.url
-            src_640         = @props.image.content['640']?.url
+        if image?.content?
+            src_2560        = image.content['2560']?.url or undefined
+            src_1280        = image.content['1280']?.url
+            src_640         = image.content['640']?.url
             main_image_url  = src_640
-            aspect_ratio    = @props.image.original?.width / (@props.image.original?.height or 1)
+            aspect_ratio    = image.original?.width / (image.original?.height or 1)
         else
-            main_image_url  = @props.image
-            src_2560        = @props.image
-            src_1280        = @props.image
-            src_640         = @props.image
+            main_image_url  = image
+            src_2560        = image
+            src_1280        = image
+            src_640         = image
 
 
         cx.add('is_empty', not main_image_url)
