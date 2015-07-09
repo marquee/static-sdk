@@ -21,9 +21,10 @@ renderAllImages = ->
 gatherImages = ->
     px_ratio = window.devicePixelAspectRatio or 1
     for el in document.querySelectorAll('.CoverImage')
-        unless el.dataset.is_empty is 'true' or el.dataset.selected_size
+        unless el.dataset.is_empty is 'true' or el.dataset.is_bound
             do ->
                 image_block = el
+                image_block.dataset.is_bound = true
                 image_resize_fns.push ->
                     if image_block.dataset.is_loading is 'true' or image_block.dataset.loaded is 'true'
                         return
