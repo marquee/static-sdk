@@ -13,9 +13,15 @@ path = require 'path'
 COMPRESSABLE = ['js', 'css', 'svg', 'html', 'txt', 'json', 'xml']
 
 DEFAULT_CACHE_CONTROLS =
-    'html': 'max_age=1800' # 30 min
-    'json': 'max_age=3600' # 60 min
-    # Nothing for js, css, because those typically have a content-based hash.
+    'html'  : 'max-age=1800' # 30 min
+    'json'  : 'max-age=3600' # 60 min
+    # These are served under a content-based hash so they should be cached indefinitely.
+    'js'    : 'max-age=31536000' # one year (typical valid max)
+    'css'   : 'max-age=31536000' # one year
+    'jpg'   : 'max-age=31536000' # one year
+    'png'   : 'max-age=31536000' # one year
+    'ico'   : 'max-age=31536000' # one year
+
 
 module.exports = (build_directory, files_to_deploy, project_config, callback) ->
     if files_to_deploy.changed.length is 0
