@@ -51,6 +51,9 @@ switch (_command) {
     case 'develop':
         require('../development/develop')(process.cwd(), _options);
         break;
+    case 'setup':
+        require('../development/setup')(process.cwd(), _options);
+        break;
     default:
         if(_command) {
             console.log('Unknown command: `' + _command + '`');
