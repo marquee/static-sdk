@@ -4,3 +4,4 @@ module.exports =
     Gauges                  : require './Gauges'
     GenericAnalyticsScript  : require './GenericAnalyticsScript'
     GoogleAnalytics         : require './GoogleAnalytics'
+    Stub                    : require './Stub'
