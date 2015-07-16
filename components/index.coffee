@@ -4,6 +4,7 @@ module.exports =
     Category    : require './Category'
     ContactForm : require './ContactForm'
     Cover       : require './Cover'
+    CoverImage  : require './CoverImage'
     CoverCredit : require './CoverCredit'
     DateTime    : require './DateTime'
     Info        : require './Info'

@@ -10,8 +10,8 @@ module.exports = React.createClass
         date        : React.PropTypes.oneOfType([
             React.PropTypes.number
             React.PropTypes.string
-            Date
-        ])
+            React.PropTypes.object
+        ]).isRequired
         format      : React.PropTypes.string
         label       : React.PropTypes.string
         relative    : React.PropTypes.oneOfType([

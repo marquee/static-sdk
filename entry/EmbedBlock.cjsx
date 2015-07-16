@@ -2,7 +2,7 @@ React = require 'react'
 
 querystring     = require 'querystring'
 url             = require 'url'
-
+UglifyJS        = require 'uglify-js'
 
 { Classes } = require 'shiny'
 module.exports = React.createClass
@@ -34,24 +34,41 @@ module.exports = React.createClass
             variants.set('position', position)
 
         embed_video_url = parseVideoURL(@props.block.content)
+        embed_id = "#{ @props.block.id }_content"
         if embed_video_url
             embed = <iframe
-                        className   = '_EmbedFrame'
-                        src         = embed_video_url
-                        frameBorder = 0
+                        id              = embed_id
+                        className       = '_EmbedFrame'
+                        data-frame_src  = embed_video_url
+                        frameBorder     = 0
                         webkitAllowFullScreen
                         mozallowfullscreen
                         allowFullScreen
                     />
         else
-            embed = <div dangerouslySetInnerHTML={ __html: @props.block.content } />
+            embed = <div id=embed_id data-inner_html=@props.block.content />
 
         <figure
-            className = "Block EmbedBlock #{ variants }"
+            id          = @props.block.id
+            className   = "Block EmbedBlock #{ variants }"
         >
             <div className='_Content'>
                 <div className='_EmbedWrapper'>
                     {embed}
+                    <script dangerouslySetInnerHTML={__html: UglifyJS.minify("""
+                        (function(window){
+                            window.addEventListener('load', function(){
+                                var target = document.getElementById('#{ embed_id }');
+                                if (target) {
+                                    if (target.dataset.frame_src) {
+                                        target.setAttribute('src', target.dataset.frame_src);
+                                    } else if (target.dataset.inner_html) {
+                                        target.innerHTML = target.dataset.inner_html;
+                                    }
+                                }
+                            });
+                        })(window);
+                    """, fromString: true).code} />
                 </div>
                 {
                     if caption or credit
