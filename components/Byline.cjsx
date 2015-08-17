@@ -23,6 +23,8 @@ module.exports = React.createClass
         label = @props.label
         if names?.length > 0
             unless typeof names is 'string' or names.length is 1
+                # Make a copy because we're about to mutate it in-place.
+                names = [names...]
                 _last = names[names.length - 1]
                 names[names.length - 1] = "#{ @props.and } #{ _last }"
                 if names.length > 2
