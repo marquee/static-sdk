@@ -8,8 +8,13 @@ UglifyJS        = require 'uglify-js'
 module.exports = React.createClass
     displayName: 'EmbedBlock'
 
+    getDefaultProps: -> {
+        plain: false
+    }
+
     propTypes:
-        block: React.PropTypes.object.isRequired
+        block   : React.PropTypes.object.isRequired
+        plain   : React.PropTypes.bool.isRequired
 
     render: ->
         unless @props.block.content
@@ -28,29 +33,53 @@ module.exports = React.createClass
                         caption = anno.content
                         break
 
-        variants = new Classes()
-        variants.set('size', size)
+        cx = new Classes('Block EmbedBlock')
+        cx.set('size', size)
         unless size is 'full'
-            variants.set('position', position)
+            cx.set('position', position)
 
         embed_video_url = parseVideoURL(@props.block.content)
         embed_id = "#{ @props.block.id }_content"
-        if embed_video_url
-            embed = <iframe
-                        id              = embed_id
-                        className       = '_EmbedFrame'
-                        data-frame_src  = embed_video_url
-                        frameBorder     = 0
-                        webkitAllowFullScreen
-                        mozallowfullscreen
-                        allowFullScreen
-                    />
+
+        if @props.plain
+            if embed_video_url
+                embed = <iframe
+                            src             = embed_video_url
+                            frameBorder     = 0
+                            webkitAllowFullScreen
+                            mozallowfullscreen
+                            allowFullScreen
+                        />
+            else
+                embed = <div dangerouslySetInnerHTML={__html: @props.block.content} />
+
+            return <figure>
+                {embed}
+                {
+                    if caption or credit
+                        <figcaption className='_Caption'>
+                            <p>{caption}</p>
+                            <p>{credit}</p>
+                        </figcaption>
+                }
+            </figure>
         else
-            embed = <div id=embed_id data-inner_html=@props.block.content />
+            if embed_video_url
+                embed = <iframe
+                            id              = embed_id
+                            className       = '_EmbedFrame'
+                            data-frame_src  = embed_video_url
+                            frameBorder     = 0
+                            webkitAllowFullScreen
+                            mozallowfullscreen
+                            allowFullScreen
+                        />
+            else
+                embed = <div id=embed_id data-inner_html=@props.block.content />
 
         <figure
             id          = @props.block.id
-            className   = "Block EmbedBlock #{ variants }"
+            className   = cx
         >
             <div className='_Content'>
                 <div className='_EmbedWrapper'>

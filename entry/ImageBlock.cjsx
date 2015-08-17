@@ -6,8 +6,13 @@ url = require 'url'
 module.exports = React.createClass
     displayName: 'ImageBlock'
 
+    getDefaultProps: -> {
+        plain: false
+    }
+
     propTypes:
-        block: React.PropTypes.object.isRequired
+        block   : React.PropTypes.object.isRequired
+        plain   : React.PropTypes.bool.isRequired
 
     render: ->
 
@@ -19,6 +24,19 @@ module.exports = React.createClass
             # These two sizes are required. The large one should always be
             # present, but is optional.
             return null
+
+        if @props.plain
+            return <figure>
+                <img src=src_640 />
+                {
+                    if caption or credit
+                        <figcaption>
+                            <p>{caption}</p>
+                            <p>{credit}</p>
+                        </figcaption>
+                }
+            </figure>
+
 
         variants = new Classes()
 
