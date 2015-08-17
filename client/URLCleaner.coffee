@@ -8,7 +8,7 @@ module.exports = ->
     # Remove any parameters that start with `utm_` using replaceState.
     _stripParameters = ->
         if window.history?.replaceState?
-            cleaned_search = window.location.search.replace(/utm_[^&]+&?/g, '').replace(/&$/, '').replace(/^\?$/, '')
+            cleaned_search = window.location.search.replace(/utm_[^&]+&?/g, '').replace(/ref=[^&]+&?/g, '').replace(/&$/, '').replace(/^\?$/, '')
             window.history.replaceState({}, '', window.location.pathname + cleaned_search)
         return
 
