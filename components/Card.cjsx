@@ -29,14 +29,12 @@ Card = React.createClass
             variants.set('link')
         else
             tag = 'div'
-        <tag
-            id          = @props.id
-            className   = "Card #{ @props.className or '' } #{ variants }"
-            href        = @props.link
-            title       = @props.title
-        >
-            {@props.children}
-        </tag>
+        return React.createElement tag,
+            id          : @props.id
+            className   : "Card #{ @props.className or '' } #{ variants }"
+            href        : @props.link
+            title       : @props.title
+        , @props.children
 
 
 
