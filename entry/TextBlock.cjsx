@@ -13,12 +13,26 @@ TAG_MAP =
     'superscript'   : 'sup.Annotation.-superscript'
     'subscript'     : 'sub.Annotation.-subscript'
 
+TAG_MAP_PLAIN =
+    'emphasis'      : 'em'
+    'strong'        : 'strong'
+    'link'          : 'a'
+    'small-caps'    : null
+    'superscript'   : 'sup'
+    'subscript'     : 'sub'
+
+
 
 module.exports = React.createClass
     displayName: 'TextBlock'
 
+    getDefaultProps: -> {
+        plain: false
+    }
+
     propTypes:
-        block: React.PropTypes.object.isRequired
+        block   : React.PropTypes.object.isRequired
+        plain   : React.PropTypes.bool.isRequired
 
     render: ->
         # Only render if `content` is not null.
@@ -26,19 +40,23 @@ module.exports = React.createClass
 
         # Render the text content to HTML, applying annotations if any.
         text = new NOAT(@props.block.content)
-        @props.block.annotations?.forEach (anno) ->
+
+        tag_map = if @props.plain then TAG_MAP_PLAIN else TAG_MAP
+
+        @props.block.annotations?.forEach (anno) =>
             attrs = {}
             if anno.type is 'link'
                 # Avoid trying to render links without a url specified.
                 unless anno.url
                     return
                 attrs.href = anno.url
-                _parsed = url.parse(anno.url)
-                if _parsed.host and _parsed.host isnt global.config.HOST
-                    attrs['data-external'] = true
-            if TAG_MAP[anno.type]
-                [tag, classes...] = TAG_MAP[anno.type].split('.')
-                if classes.length > 0
+                unless @props.plain
+                    _parsed = url.parse(anno.url)
+                    if _parsed.host and _parsed.host isnt global.config.HOST
+                        attrs['data-external'] = true
+            if tag_map[anno.type]
+                [tag, classes...] = tag_map[anno.type].split('.')
+                if classes.length > 0 and not @props.plain
                     attrs['class'] = classes.join(' ') 
                 text.add(tag, anno.start, anno.end, attrs)
 
@@ -56,6 +74,9 @@ module.exports = React.createClass
             else
                 console.warn("TextBlock got unknown role: #{ @props.block.role }")
                 return null
+
+        if @props.plain
+            return <blocktag dangerouslySetInnerHTML={__html: text.toString()} />
 
         variants = new Classes()
 

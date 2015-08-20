@@ -15,6 +15,7 @@ Card = React.createClass
             ]).isRequired
         link        : React.PropTypes.string
         id          : React.PropTypes.string
+        title       : React.PropTypes.string
         className   : React.PropTypes.oneOfType([
                 React.PropTypes.string
                 React.PropTypes.object
@@ -32,6 +33,7 @@ Card = React.createClass
             id          = @props.id
             className   = "Card #{ @props.className or '' } #{ variants }"
             href        = @props.link
+            title       = @props.title
         >
             {@props.children}
         </tag>

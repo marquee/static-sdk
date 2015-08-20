@@ -64,7 +64,33 @@ describe 'Byline', ->
             byline, '_Names'
         )
         expect(names.getDOMNode().textContent).toEqual('First Last, Other Name, & Some Person')
-        
+
+    it 'doesn\'t modify original names', ->
+        React = require 'react/addons'
+        Byline = require '../Byline.js'
+        { TestUtils } = React.addons
+
+        name_list = ['First Last','Other Name','Some Person']
+
+        byline = TestUtils.renderIntoDocument(
+            <Byline byline=name_list />
+        )
+
+        names = TestUtils.findRenderedDOMComponentWithClass(
+            byline, '_Names'
+        )
+        expect(names.getDOMNode().textContent).toEqual('First Last, Other Name, & Some Person')
+
+        byline2 = TestUtils.renderIntoDocument(
+            <Byline byline=name_list />
+        )
+
+        names2 = TestUtils.findRenderedDOMComponentWithClass(
+            byline2, '_Names'
+        )
+        expect(names2.getDOMNode().textContent).toEqual('First Last, Other Name, & Some Person')
+
+
     it 'renders byline text with three names and different join/and', ->
         React = require 'react/addons'
         Byline = require '../Byline.js'
