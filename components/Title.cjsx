@@ -1,5 +1,7 @@
 React = require 'react'
 
+{ Classes } = require 'shiny'
+
 module.exports = React.createClass
     displayName: '_Title'
 
@@ -13,10 +15,10 @@ module.exports = React.createClass
     }
     render: ->
         tag = "h#{ @props.level }"
+        cx = new Classes('_Title', @props.className)
         if @props.link
             contents = <a className='_TitleLink' href=@props.link>{@props.title}</a>
+            cx.add('-link')
         else
             contents = @props.title
-        <tag className='_Title'>
-            {contents}
-        </tag>
+        return React.createElement(tag, className: cx, contents)

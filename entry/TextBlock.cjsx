@@ -76,7 +76,7 @@ module.exports = React.createClass
                 return null
 
         if @props.plain
-            return <blocktag dangerouslySetInnerHTML={__html: text.toString()} />
+            return React.createElement(blocktag, dangerouslySetInnerHTML:{__html: text.toString()})
 
         variants = new Classes()
 
@@ -84,7 +84,8 @@ module.exports = React.createClass
         variants.add('effect', @props.block.layout.effect) if @props.block.layout?.effect
         variants.add('role', @props.block.role)
 
-        <blocktag
-            id          = @props.block.id
-            className   = "Block TextBlock #{ variants }"
-            dangerouslySetInnerHTML={__html: text.toString()} />
+        return React.createElement(blocktag,
+            id                      : @props.block.id
+            className               : "Block TextBlock #{ variants }"
+            dangerouslySetInnerHTML : {__html: text.toString()}
+        )
