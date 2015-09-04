@@ -5,17 +5,15 @@ recommended to use this as a starting point only, either as-is for early
 development, or as a template to copy.
 ###
 
-React   = require 'react'
+React = require 'react'
 
-{
-    BuildInfo
-    makeMetaTags
-    Favicon
-    Asset
-    ElementQuery
-    ActivateClientModules
-    Namespace
-} = require './index'
+ActivateClientModules   = require './ActivateClientModules'
+Asset                   = require './Asset'
+BuildInfo               = require './BuildInfo'
+ElementQuery            = require './ElementQuery'
+Favicon                 = require './Favicon'
+Namespace               = require './Namespace'
+makeMetaTags            = require './makeMetaTags'
 
 module.exports = React.createClass
     displayName: 'Base'
