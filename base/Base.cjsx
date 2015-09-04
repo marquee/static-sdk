@@ -21,7 +21,10 @@ module.exports = React.createClass
     displayName: 'Base'
 
     propTypes:
-        children        : React.PropTypes.arrayOf(React.PropTypes.element).isRequired
+        children        : React.PropTypes.oneOfType([
+            React.PropTypes.element
+            React.PropTypes.arrayOf(React.PropTypes.element)
+        ]).isRequired
         canonical       : React.PropTypes.string
         className       : React.PropTypes.oneOfType([
             React.PropTypes.string
