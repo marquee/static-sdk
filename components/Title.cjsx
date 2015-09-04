@@ -18,7 +18,7 @@ module.exports = React.createClass
         cx = new Classes('_Title', @props.className)
         if @props.link
             contents = <a className='_TitleLink' href=@props.link>{@props.title}</a>
-            cx.add('-link')
+            cx.add('link')
         else
             contents = @props.title
         return React.createElement(tag, className: cx, contents)
