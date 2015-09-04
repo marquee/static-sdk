@@ -41,6 +41,7 @@ module.exports = React.createClass
     getDefaultProps: -> {
         className: ''
         client_modules: {}
+        meta: {}
     }
 
     render: ->
