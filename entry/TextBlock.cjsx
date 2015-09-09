@@ -21,6 +21,7 @@ TAG_MAP_PLAIN =
     'superscript'   : 'sup'
     'subscript'     : 'sub'
 
+typeset = require 'typeset'
 
 
 module.exports = React.createClass
@@ -75,8 +76,14 @@ module.exports = React.createClass
                 console.warn("TextBlock got unknown role: #{ @props.block.role }")
                 return null
 
+        # Triggers the actual rendering of annotations.
+        text = text.toString()
+
         if @props.plain
-            return React.createElement(blocktag, dangerouslySetInnerHTML:{__html: text.toString()})
+            return React.createElement(blocktag, dangerouslySetInnerHTML:{__html: text})
+
+        # Add typeset classes.
+        text = typeset(text.toString())
 
         variants = new Classes()
 
@@ -87,5 +94,5 @@ module.exports = React.createClass
         return React.createElement(blocktag,
             id                      : @props.block.id
             className               : "Block TextBlock #{ variants }"
-            dangerouslySetInnerHTML : {__html: text.toString()}
+            dangerouslySetInnerHTML : {__html: text}
         )
