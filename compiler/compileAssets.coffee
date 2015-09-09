@@ -6,7 +6,8 @@ crypto          = require 'crypto'
 SDKError        = require './SDKError'
 { formatProjectPath } = SDKError
 Sass            = require 'node-sass'
-autoprefixer    = require 'autoprefixer-core'
+autoprefixer    = require 'autoprefixer'
+postcss         = require 'postcss'
 browserify      = require 'browserify'
 coffee_reactify = require 'coffee-reactify'
 brfs            = require 'brfs'
@@ -30,22 +31,26 @@ compileCoffee = (source_path, dest_path, project_directory, cb) ->
 
 compileSass = (source_path, dest_path, project_directory, cb) ->
     SDKError.log(SDKError.colors.grey("Compiling (sass): #{ source_path.replace(project_directory, '') }"))
-    Sass.render
+    Sass.render(
         file: source_path
         includePaths: [
             project_directory
             path.join(project_directory, 'node_modules', 'marquee-static-sdk', 'stylesheets')
         ]
-        error: (err) ->
+        , (err, compiled) ->
             throw err if err
-        success: (compiled) ->
-            compiled = autoprefixer.process(compiled).css
-            if process.env.NODE_ENV is 'production'
-                SDKError.log(SDKError.colors.grey("Minifying #{ source_path.replace(project_directory,'') }"))
-                compiled = sqwish.minify(compiled.toString())
-            fs.writeFile dest_path, compiled, (err) ->
+            _prefixing = postcss([autoprefixer]).process(compiled.css)
+            _prefixing.then (result) ->
+                compiled = result.css
+                if process.env.NODE_ENV is 'production'
+                    SDKError.log(SDKError.colors.grey("Minifying #{ source_path.replace(project_directory,'') }"))
+                    compiled = sqwish.minify(compiled.toString())
+                fs.writeFile dest_path, compiled, (err) ->
+                    throw err if err
+                    cb()
+            .catch (err) ->
                 throw err if err
-                cb()
+    )
 
 copyAndMinifyJS = (source, destination, project_directory, callback) ->
     fs.readFile source, (err, file_data) ->
