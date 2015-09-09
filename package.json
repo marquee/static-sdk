@@ -12,6 +12,9 @@
     "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
     "clearbuild": "find . -path ./node_modules -prune -or -path __tests__ -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | grep -v '__tests__' | xargs rm -f"
   },
+  "engines": {
+    "node": ">=0.12"
+  },
   "main": "./index.js",
   "bin": {
     "marqueestatic": "./bin/marqueestatic"
