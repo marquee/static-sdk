@@ -5,6 +5,7 @@ recommended to use this as a starting point only, either as-is for early
 development, or as a template to copy.
 ###
 
+
 React = require 'react'
 
 ActivateClientModules   = require './ActivateClientModules'
@@ -14,6 +15,8 @@ ElementQuery            = require './ElementQuery'
 Favicon                 = require './Favicon'
 Namespace               = require './Namespace'
 makeMetaTags            = require './makeMetaTags'
+makeOGTags              = require './makeOGTags'
+
 
 module.exports = React.createClass
     displayName: 'Base'
@@ -70,6 +73,7 @@ module.exports = React.createClass
                 }
 
                 {makeMetaTags(@props.meta)}
+                {makeOGTags(@props.og)}
 
                 <Asset path='style.sass' />
                 <Favicon />
