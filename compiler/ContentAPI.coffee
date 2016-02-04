@@ -1,16 +1,22 @@
-ENTRY   = 'container'
-PACKAGE = 'package'
-POST    = 'post'
-CHANNEL = 'channel'
-IMAGE   = 'image'
-TEXT    = 'text'
-EMBED   = 'embed'
+ENTRY       = 'container'
+PACKAGE     = 'package'
+POST        = 'post'
+CHANNEL     = 'channel'
+IMAGE       = 'image'
+TEXT        = 'text'
+EMBED       = 'embed'
+TOPIC       = 'topic'
+LOCATION    = 'location'
+PERSON      = 'person'
 
 ENDPOINTS =
     container   : 'releases/'
     package     : 'releases/'
     post        : 'posts/'
     channel     : 'channels/'
+    person      : 'entities/'
+    topic       : 'entities/'
+    location    : 'entities/'
 
 
 fs      = require 'fs'
@@ -306,7 +312,7 @@ class ContentAPI
         # Other types don't have the `type` property, so this needs to be
         # removed from the query for the filtering to work correctly.
         _url = ENDPOINTS[query.type]
-        unless query.type in [ENTRY, PACKAGE]
+        unless query.type in [ENTRY, PACKAGE, PERSON, TOPIC, LOCATION]
             delete query.type
 
         results = []
@@ -338,7 +344,7 @@ class ContentAPI
         # Other types don't have the `type` property, so this needs to be
         # removed from the query for the filtering to work correctly.
         _url = ENDPOINTS[query.type]
-        unless query.type in [ENTRY, PACKAGE]
+        unless query.type in [ENTRY, PACKAGE, PERSON, TOPIC, LOCATION]
             delete query.type
 
         LIMIT = 10
@@ -395,12 +401,36 @@ class ContentAPI
             SDKError.log("Got #{ result.length } channels from API.")
             cb?(result)
 
-    ENTRY   : ENTRY
-    PACKAGE : PACKAGE
-    POST    : POST
-    CHANNEL : CHANNEL
-    IMAGE   : IMAGE
-    TEXT    : TEXT
-    EMBED   : EMBED
+    people: (cb) ->
+        @filterReleases
+            type: PERSON
+        , (result) ->
+            SDKError.log("Got #{ result.length } people from API.")
+            cb?(result)
+
+    locations: (cb) ->
+        @filterReleases
+            type: LOCATION
+        , (result) ->
+            SDKError.log("Got #{ result.length } locations from API.")
+            cb?(result)
+
+    topics: (cb) ->
+        @filterReleases
+            type: TOPIC
+        , (result) ->
+            SDKError.log("Got #{ result.length } topics from API.")
+            cb?(result)
+
+    ENTRY       : ENTRY
+    PACKAGE     : PACKAGE
+    POST        : POST
+    CHANNEL     : CHANNEL
+    IMAGE       : IMAGE
+    TEXT        : TEXT
+    EMBED       : EMBED
+    PERSON      : PERSON
+    LOCATION    : LOCATION
+    TOPIC       : TOPIC
 
 module.exports = ContentAPI
