@@ -10,4 +10,5 @@ module.exports =
     GoogleFonts             : require './GoogleFonts'
     JSONData                : require './JSONData'
     makeMetaTags            : require './makeMetaTags'
+    makeOGTags              : require './makeOGTags'
     Namespace               : require './Namespace'
