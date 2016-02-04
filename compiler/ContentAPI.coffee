@@ -222,7 +222,6 @@ class ContentAPI
     _sendRequest: (opts) ->
 
         opts.query ?= {}
-        opts.query._include_published = true
 
         if url.parse(opts.url).protocol
             _url = opts.url
