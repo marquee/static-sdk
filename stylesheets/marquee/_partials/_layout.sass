@@ -1,0 +1,198 @@
+
+$column-wide    : 1280px !default
+$column-main    : 960px !default
+$column-text    : 720px !default
+$gutter-mobile  : 14px !default
+$gutter-desktop : 28px !default
+
+=column-full($flush: true)
+    max-width: none
+    padding-left: 0
+    padding-right: 0
+    @if $flush == false
+        padding-left    : $gutter-mobile
+        padding-right   : $gutter-mobile
+        +respond-to-gt-small
+            padding-left    : $gutter-desktop
+            padding-right   : $gutter-desktop
+
+=column-main($flush: false)
+    margin-left     : auto
+    margin-right    : auto
+    max-width       : $column-main
+    @if $flush == false
+        padding-left    : $gutter-mobile
+        padding-right   : $gutter-mobile
+        +respond-to-gt-small
+            padding-left    : $gutter-desktop
+            padding-right   : $gutter-desktop
+
+=column-wide($flush: false)
+    margin-left     : auto
+    margin-right    : auto
+    max-width       : $column-wide
+    @if $flush == false
+        padding-left    : $gutter-mobile
+        padding-right   : $gutter-mobile
+        +respond-to-gt-small
+            padding-left    : $gutter-desktop
+            padding-right   : $gutter-desktop
+
+=column-text($flush: false)
+    margin-left     : auto
+    margin-right    : auto
+    max-width       : $column-text
+    @if $flush == false
+        padding-left    : $gutter-mobile
+        padding-right   : $gutter-mobile
+        +respond-to-gt-small
+            padding-left    : $gutter-desktop
+            padding-right   : $gutter-desktop
+
+=column-twothirds
+    width: 100% * 2/3
+
+=column-onethird
+    width: 100% * 1/3
+
+=column-left
+    float: left
+    padding-right: $gutter-desktop / 2
+
+=column-right
+    float: right
+    padding-left: $gutter-desktop / 2
+
+=column($size: 0, $flush: false)
+    margin-left     : auto
+    margin-right    : auto
+    max-width       : $size
+    @if $flush == false
+        padding-left    : $gutter-mobile
+        padding-right   : $gutter-mobile
+        +respond-to-gt-small
+            padding-left    : $gutter-desktop
+            padding-right   : $gutter-desktop
+
+
+=gutter-bottom($multiplier: 1, $padding: true, $values: false)
+    @if $values
+        $small: nth($values, 1)
+        $large: nth($values, 2)
+    @else
+        $small: $gutter-mobile
+        $large: $gutter-desktop
+    $small: $small * $multiplier
+    $large: $large * $multiplier
+
+    @if $padding
+        padding-bottom: $small
+        +respond-to-gt-small
+            padding-bottom: $large
+    @else
+        margin-bottom: $small
+        +respond-to-gt-small
+            margin-bottom: $large
+
+=gutter-top($multiplier: 1, $padding: true, $values: false)
+    @if $values
+        $small: nth($values, 1)
+        $large: nth($values, 2)
+    @else
+        $small: $gutter-mobile
+        $large: $gutter-desktop
+    $small: $small * $multiplier
+    $large: $large * $multiplier
+
+    @if $padding
+        padding-top: $small
+        +respond-to-gt-small
+            padding-top: $large
+    @else
+        margin-top: $small
+        +respond-to-gt-small
+            margin-top: $large
+
+=gutter-right($multiplier: 1, $padding: true, $values: false)
+    @if $values
+        $small: nth($values, 1)
+        $large: nth($values, 2)
+    @else
+        $small: $gutter-mobile
+        $large: $gutter-desktop
+    $small: $small * $multiplier
+    $large: $large * $multiplier
+
+    @if $padding
+        padding-right: $small
+        +respond-to-gt-small
+            padding-right: $large
+    @else
+        margin-right: $small
+        +respond-to-gt-small
+            margin-right: $large
+
+=gutter-left($multiplier: 1, $padding: true, $values: false)
+    @if $values
+        $small: nth($values, 1)
+        $large: nth($values, 2)
+    @else
+        $small: $gutter-mobile
+        $large: $gutter-desktop
+    $small: $small * $multiplier
+    $large: $large * $multiplier
+
+    @if $padding
+        padding-left: $small
+        +respond-to-gt-small
+            padding-left: $large
+    @else
+        margin-left: $small
+        +respond-to-gt-small
+            margin-left: $large
+
+=gutter-all($multiplier: 1, $padding: true, $values: false)
+    +gutter-top($multiplier, $padding, $values)
+    +gutter-right($multiplier, $padding, $values)
+    +gutter-bottom($multiplier, $padding, $values)
+    +gutter-left($multiplier, $padding, $values)
+
+=layout($layout, $onbody: false)
+    @if $onbody
+        &[data-layout="#{ $layout }"]
+            @content
+    @else
+        body[data-layout="#{ $layout }"] &
+            @content
+
+=layout-desktop($onbody: false)
+    +layout(desktop, $onbody)
+        @content
+
+=layout-mobile($onbody: false)
+    +layout(mobile, $onbody)
+        @content
+
+=vertically_center
+    position    : relative
+    top         : 50%
+    transform   : translateY(-50%)
+
+=intrinsic_ratio_content
+    position        : absolute
+    top             : 0
+    left            : 0
+    width           : 100%
+    height          : 100% !important
+
+=intrinsic_ratio_wrapper($ratio: 16/9)
+    position        : relative
+    height          : 0
+    +intrinsic_ratio_set($ratio)
+
+=intrinsic_ratio_set($ratio: 16/9)
+    padding-bottom: percentage(1 / $ratio)
+
+=fill_height($ratio: 1, $min: 1024px)
+    height      : 100vh * $ratio
+    min-height  : $min
