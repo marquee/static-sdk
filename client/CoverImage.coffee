@@ -49,7 +49,7 @@ gatherImages = ->
                         preloader_img = document.createElement('img')
                         preloader_img.src = src
                         preloader_img.onload = ->
-                            image_block.style.backgroundImage = "url('#{ src }')"
+                            image_block.querySelector('._Image').style.backgroundImage = "url('#{ src }')"
                             image_block.dataset.loaded = true
                             image_block.dataset.is_loading = false
 

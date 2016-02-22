@@ -1,0 +1,13 @@
+.CoverImage
+    display: block
+    height: 100%
+    ._Image
+        background-size     : cover
+        background-repeat   : no-repeat
+    &:not(.-intrinsic)
+        ._Image
+            height: 100%
+    &.-intrinsic
+        +intrinsic_ratio_wrapper($ratio: 16/9)
+        ._Image
+            +intrinsic_ratio_content

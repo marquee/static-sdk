@@ -1,21 +1,5 @@
 @import "../_partials.sass"
 
-=_intrinsic_ratio_content
-    position        : absolute
-    top             : 0
-    left            : 0
-    width           : 100%
-    height          : 100% !important
-
-=_intrinsic_ratio_wrapper($ratio: 16/9)
-    position        : relative
-    height          : 0
-    +_set_ratio($ratio)
-
-=_set_ratio($ratio: 16/9)
-    padding-bottom: percentage(1 / $ratio)
-
-
 
 .EmbedBlock
     $_small_width: $Block-column_width--main / 4 - $Block-body_padding
@@ -93,9 +77,9 @@
         max-width       : none
 
     ._EmbedWrapper
-        +_intrinsic_ratio_wrapper
+        +intrinsic_ratio_wrapper
         iframe
-            +_intrinsic_ratio_content
+            +intrinsic_ratio_content
 
     ._CaptionText
         display: block
