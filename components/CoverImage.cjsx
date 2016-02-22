@@ -10,6 +10,7 @@ module.exports = React.createClass
         align: 'center'
         size: null
         noscript: true
+        intrinsic: true
     }
     render: ->
         cx = new Classes('CoverImage', @props.className)
@@ -52,15 +53,11 @@ module.exports = React.createClass
             src_1280        = image
             src_640         = image
 
-
         cx.add('is_empty', not main_image_url)
+        cx.add('intrinsic', @props.intrinsic)
 
         props =
             className               : cx
-            style:
-                backgroundPosition      : bg_position
-                display                 : 'block'
-                height                  : '100%'
             href                    : @props.link
             'data-is_empty'         : not main_image_url
             'data-src_640'          : src_640
@@ -74,8 +71,11 @@ module.exports = React.createClass
                     <img src=main_image_url />
                 </noscript>
 
+        contents = <div className='_Image' style={backgroundPosition: bg_position}>{contents}</div>
+
         if @props.link
             cx.set('link')
             return <a {...props}>{contents}</a>
         else
             return <div {...props}>{contents}</div>
+
