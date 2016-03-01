@@ -10,6 +10,7 @@ SERVICE_PROPER_NAMES =
     pinterest   : 'Pinterest'
     appdotnet   : 'App.net'
     linkedin    : 'LinkedIn'
+    pocket      : 'Pocket'
 
 buildLinkFor = (entry, service) ->
     link    = encodeURIComponent(entry.full_link)
@@ -31,6 +32,8 @@ buildLinkFor = (entry, service) ->
             return "http://www.pinterest.com/pin/create/button/?url=#{link}&media=#{cover}&description=#{title}"
         when 'appdotnet'
             return "https://alpha.app.net/intent/post/?text=#{title}&url=#{link}"
+        when 'pocket'
+            return "https://getpocket.com/edit.php?url=#{link}"
         when 'email'
             body = """
                 #{ entry.title }
@@ -58,6 +61,7 @@ module.exports = React.createClass
                     'googleplus'
                     'pinterest'
                     'appdotnet'
+                    'pocket'
                     'email'
                 ]
                     return new Error('')
