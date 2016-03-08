@@ -1,0 +1,74 @@
+.ShareEntry
+    ._ShareLink
+        display     : inline-block
+        font-size   : inherit
+        height      : 1em
+        line-height : 0
+        padding     : 0.45em
+        text-align  : center
+        text-align  : center
+        width       : 1em
+
+    &.-layout--horizontal
+        ._Services
+            display: inline-block
+
+    &.-layout--vertical
+        ._ShareLink
+            display: block
+
+
+
+// LAF
+
+.ShareEntry
+
+    font-size: 24px
+
+    ._Icon
+        fill: #222222
+
+    &:not(.-greyscale)
+
+        ._ShareLink
+            &.-service--twitter
+                ._Icon
+                    fill: $color-twitter
+
+            &.-service--facebook
+                ._Icon
+                    fill: $color-facebook
+
+            &.-service--pocket
+                ._Icon
+                    fill: $color-pocket
+
+            &.-service--pinterest
+                ._Icon
+                    fill: $color-pinterest
+
+            &.-service--linkedin
+                ._Icon
+                    fill: $color-linkedin
+
+            &.-service--email
+                ._Icon
+                    fill: $color-email
+
+    ._ShareLink
+        &:hover
+            opacity: 0.7
+        &:active
+            opacity: 1
+        &:focus
+            outline-style   : dotted
+            outline-offset  : 0
+            outline-width   : 2px
+            outline-color   : $color-focus
+
+    &.-border
+        ._ShareLink
+            background-color    : white
+            border              : 1px solid $color-border
+            border-radius       : 100%
+            margin              : 10px
