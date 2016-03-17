@@ -99,6 +99,10 @@ module.exports = (project_directory, options={}) ->
                         _uploadDone()
                         return
 
-                    putFilesToS3 build_directory, files_to_deploy, project_config, ->
-                        deleteFilesFromS3 files_to_deploy, project_config, ->
+                    putFilesToS3 options, build_directory, files_to_deploy, project_config, ->
+                        if options.no_delete
                             _uploadDone()
+                        else
+                            deleteFilesFromS3 files_to_deploy, project_config, ->
+                                _uploadDone()
+
