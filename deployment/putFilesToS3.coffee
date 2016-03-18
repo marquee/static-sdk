@@ -23,7 +23,7 @@ DEFAULT_CACHE_CONTROLS =
     'ico'   : 'max-age=31536000' # one year
 
 
-module.exports = (build_directory, files_to_deploy, project_config, callback) ->
+module.exports = (options, build_directory, files_to_deploy, project_config, callback) ->
     if files_to_deploy.changed.length is 0
         callback()
         return
@@ -47,7 +47,9 @@ module.exports = (build_directory, files_to_deploy, project_config, callback) ->
     files_to_deploy.changed.sort (a,b) ->
         b.local.local_path.split('/').length - a.local.local_path.split('/').length
 
-    files_to_deploy.changed.forEach (f) ->
+    num_active_uploads = 0
+
+    uploadFile = (f, cb) ->
         rel_path = f.local.local_path.replace(build_directory + '/','')
 
         # Read the file synchronously. Async results in too many open files.
@@ -89,17 +91,41 @@ module.exports = (build_directory, files_to_deploy, project_config, callback) ->
             SDKError.log("Uploading #{ SDKError.colors.cyan(rel_path) }... #{ _file_size }")
             # Put the compressed page HTML at the target S3 key.
             s3.putObject s3_options, (err, data) ->
-                to_upload -= 1
                 if err?
-                    throw new SDKError('deploy.s3', err)
+                    _err = new SDKError('deploy.s3', err)
+                    if options.skip_upload_errors
+                        console.error(_err)
+                    else
+                        throw _err
                 else
                     SDKError.log("Saved #{ SDKError.colors.green(rel_path) }.")
 
-                if to_upload is 0
-                    _file_count = SDKError.colors.green("#{ files_to_deploy.changed.length } files, #{ total_uploaded } bytes")
-                    SDKError.log("Uploaded #{ _file_count } to #{ SDKError.colors.cyan(project_config.AWS_BUCKET) }")
-                    callback()
+                cb()
 
         if _ext in COMPRESSABLE
             s3_options.ContentEncoding = 'gzip'
         _upload(file_content)
+
+    BATCH_SIZE = options.batch_size or 5
+
+    i = -1
+    cycleUpload = ->
+        i += 1
+        f = files_to_deploy.changed[i]
+        if f
+            num_active_uploads += 1
+            process.nextTick ->
+                uploadFile f, ->
+                    num_active_uploads -= 1
+                    to_upload -= 1
+                    if to_upload is 0
+                        _file_count = SDKError.colors.green("#{ files_to_deploy.changed.length } files, #{ total_uploaded } bytes")
+                        SDKError.log("Uploaded #{ _file_count } to #{ SDKError.colors.cyan(project_config.AWS_BUCKET) }")
+                        callback()
+                    else
+                        while num_active_uploads < BATCH_SIZE and i < files_to_deploy.changed.length
+                            cycleUpload()
+
+    while num_active_uploads < BATCH_SIZE and i < files_to_deploy.changed.length
+        cycleUpload()
+

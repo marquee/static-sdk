@@ -171,6 +171,6 @@ getCurrentCommit project_directory, (commit_sha) ->
 
                     if for_deploy
                         files_to_deploy = walkSync(build_directory)
-                        putFilesToS3 build_directory, files_to_deploy, deploy_config, ->
+                        putFilesToS3 {}, build_directory, files_to_deploy, deploy_config, ->
                             console.log arguments
                             console.log 'DEPLOYED!'
