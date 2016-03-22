@@ -86,6 +86,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
         exportMetadata(file_path, options.metadata) if options.metadata
 
     emitFile.files_emitted = files_emitted
+    emitFile.files_emitted_indexed = files_emitted_indexed
 
     return emitFile
 

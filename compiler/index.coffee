@@ -111,9 +111,9 @@ module.exports = (project_directory, options, onCompile=null) ->
             clearTimeout(_done_timeout)
             _writeMetadata()
             # Check that the project has necessary files.
-            unless '404.html' in _emitFile.files_emitted
+            unless _emitFile.files_emitted_indexed['404.html'] or _emitFile.files_emitted_indexed['/404.html']
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
-            unless 'index.html' in _emitFile.files_emitted
+            unless _emitFile.files_emitted_indexed['index.html'] or _emitFile.files_emitted_indexed['/index.html']
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
             onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package, project_config)
 
