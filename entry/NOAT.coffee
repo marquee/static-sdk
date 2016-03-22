@@ -61,13 +61,10 @@ class NOAT
 
     _validateRange: (start, end) ->
         if start > end
-            console.error("start (#{ start }) must be <= end (#{ end })")
             return false
         if start < 0
-            console.error("start (#{ start }) must be >= 0")
             return false
         if end > @text.length
-            console.error("end (#{ end }) must be <= length of text (#{ @text.length })")
             return false
         return true
 

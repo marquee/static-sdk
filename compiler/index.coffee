@@ -111,10 +111,15 @@ module.exports = (project_directory, options, onCompile=null) ->
             clearTimeout(_done_timeout)
             _writeMetadata()
             # Check that the project has necessary files.
-            unless '404.html' in _emitFile.files_emitted
+            unless _emitFile.files_emitted_indexed['404.html'] or _emitFile.files_emitted_indexed['/404.html']
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
-            unless 'index.html' in _emitFile.files_emitted
+            unless _emitFile.files_emitted_indexed['index.html'] or _emitFile.files_emitted_indexed['/index.html']
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
+
+            num_indexed = Object.keys(_emitFile.files_emitted_indexed).length
+            num_emitted = _emitFile.files_emitted_indexed
+            if num_indexed isnt num_emitted
+                SDKError.warn('files', "#{ num_emitted - num_indexed } too many emits. Check for multiple emits of the same file.")
             onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package, project_config)
 
         compileAssets
@@ -173,6 +178,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         done            : _done
                         info            : build_info
                         includeAssets   : _makeIncludeAssets(asset_hash)
+                        PRIORITY        : options.priority
                 catch e
                     throw new SDKError('compiler', e)
 

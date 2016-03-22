@@ -57,7 +57,7 @@ module.exports = (project_directory, options={}) ->
                 deploy_timers.ms_minify = Date.now() - _minify_start
 
                 _changed_start = Date.now()
-                getChangedFiles build_directory, local_files, project_config, (files_to_deploy) ->
+                getChangedFiles options, build_directory, local_files, project_config, (files_to_deploy) ->
                     deploy_timers.ms_changed = Date.now() - _changed_start
 
                     file_count = SDKError.colors.grey("(#{ files_to_deploy.changed.length + files_to_deploy.deleted.length } files changed, #{ local_files.length } total)")

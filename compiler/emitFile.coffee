@@ -50,6 +50,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
         return file_path
 
     files_emitted = []
+    files_emitted_indexed = {}
 
     # The actual function given to the compiler for generating files.
     emitFile = (file_path, file_content, options={}) ->
@@ -77,10 +78,15 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
             type        : output_type
 
         files_emitted.push(output_path)
+        if files_emitted_indexed[output_path]
+            SDKError.warn("File emitted multiple times: #{ output_path }")
+        else
+            files_emitted_indexed[output_path] = true
 
         exportMetadata(file_path, options.metadata) if options.metadata
 
     emitFile.files_emitted = files_emitted
+    emitFile.files_emitted_indexed = files_emitted_indexed
 
     return emitFile
 

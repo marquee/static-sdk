@@ -24,7 +24,9 @@ parseCSS = (css_source) ->
             if value
                 query_data[selector] ?= {}
                 query_data[selector][type] ?= []
-                query_data[selector][type].push(number)
+                query_data[selector][type]._recorded ?= {}
+                query_data[selector][type].push(number) unless query_data[selector][type]._recorded[number]
+                query_data[selector][type]._recorded[number] = true
  
     processSelector = (selector_text) ->
  

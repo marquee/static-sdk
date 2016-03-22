@@ -50,7 +50,21 @@ describe 'Byline', ->
             byline, '_Names'
         )
         expect(names.getDOMNode().textContent).toEqual('First Last & Other Name')
-    
+
+    it 'renders byline text with two entities', ->
+        React = require 'react/addons'
+        Byline = require '../Byline.js'
+        { TestUtils } = React.addons
+
+        byline = TestUtils.renderIntoDocument(
+            <Byline byline={[ {name: 'First Last'}, {name: 'Other Name'} ]} />
+        )
+
+        names = TestUtils.findRenderedDOMComponentWithClass(
+            byline, '_Names'
+        )
+        expect(names.getDOMNode().textContent).toEqual('First Last & Other Name')
+
     it 'renders byline text with three names', ->
         React = require 'react/addons'
         Byline = require '../Byline.js'
