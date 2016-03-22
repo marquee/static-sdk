@@ -117,7 +117,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
 
             num_indexed = Object.keys(_emitFile.files_emitted_indexed).length
-            num_emitted = _emitFile.files_emitted_indexed.length
+            num_emitted = _emitFile.files_emitted.length
             if num_indexed isnt num_emitted
                 SDKError.warn('files', "#{ num_emitted - num_indexed } too many emits. Check for multiple emits of the same file.")
             onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package, project_config)
