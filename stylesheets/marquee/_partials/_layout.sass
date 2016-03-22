@@ -7,7 +7,7 @@
     @if $flush == false
         padding-left    : $gutter-mobile
         padding-right   : $gutter-mobile
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-left    : $gutter-desktop
             padding-right   : $gutter-desktop
 
@@ -18,7 +18,7 @@
     @if $flush == false
         padding-left    : $gutter-mobile
         padding-right   : $gutter-mobile
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-left    : $gutter-desktop
             padding-right   : $gutter-desktop
 
@@ -29,7 +29,7 @@
     @if $flush == false
         padding-left    : $gutter-mobile
         padding-right   : $gutter-mobile
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-left    : $gutter-desktop
             padding-right   : $gutter-desktop
 
@@ -40,7 +40,7 @@
     @if $flush == false
         padding-left    : $gutter-mobile
         padding-right   : $gutter-mobile
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-left    : $gutter-desktop
             padding-right   : $gutter-desktop
 
@@ -65,7 +65,7 @@
     @if $flush == false
         padding-left    : $gutter-mobile
         padding-right   : $gutter-mobile
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-left    : $gutter-desktop
             padding-right   : $gutter-desktop
 
@@ -82,11 +82,11 @@
 
     @if $padding
         padding-bottom: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-bottom: $large
     @else
         margin-bottom: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             margin-bottom: $large
 
 =gutter-top($multiplier: 1, $padding: true, $values: false)
@@ -101,11 +101,11 @@
 
     @if $padding
         padding-top: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-top: $large
     @else
         margin-top: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             margin-top: $large
 
 =gutter-right($multiplier: 1, $padding: true, $values: false)
@@ -120,11 +120,11 @@
 
     @if $padding
         padding-right: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-right: $large
     @else
         margin-right: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             margin-right: $large
 
 =gutter-left($multiplier: 1, $padding: true, $values: false)
@@ -139,11 +139,11 @@
 
     @if $padding
         padding-left: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             padding-left: $large
     @else
         margin-left: $small
-        +respond-to-gt-small
+        +viewport-width-gt-small
             margin-left: $large
 
 =gutter-all($multiplier: 1, $padding: true, $values: false)
