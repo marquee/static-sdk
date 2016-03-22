@@ -13,7 +13,7 @@ module.exports = React.createClass
         fill            : '#ffffff'
         logo            : true
         text            : 'Made with'
-        title           : 'Marquee: easier, faster, mor beautiful web publishing'
+        title           : 'Marquee: easier, faster, more beautiful web publishing'
         'aria-label'    : 'Made with Marquee'
         link            : 'http://marquee.by'
         utm:
