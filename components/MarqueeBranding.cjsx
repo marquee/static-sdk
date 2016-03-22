@@ -31,14 +31,14 @@ module.exports = React.createClass
         link = @props.link
         if @props.utm?.source
             params = ['source','medium','campaign','content'].map (p) =>
-                "utm_#{ p }=#{ @props[p] }"
+                "utm_#{ p }=#{ @props.utm[p] }"
             link += "?#{ params.join('&') }"
 
         <a
             id          = @props.id
             className   = cx
             aria-label  = @props['aria-label']
-            href        = @props.link
+            href        = link
             title       = @props.title
         >
             {
