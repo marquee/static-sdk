@@ -11,8 +11,8 @@ notFoundHandler = (req, res) ->
     res.writeHead(404)
     res.end('404 Not Found')
 
-returnFile = (target_file, req, res) ->
-    res.writeHead 200,
+returnFile = (target_file, req, res, code=200) ->
+    res.writeHead code,
         'Content-Type': mime.lookup(target_file)
     fs.createReadStream(target_file).pipe(res)
 
@@ -33,7 +33,11 @@ module.exports = (host, port, directory) ->
             returnFile(target_file, req, res)
         else
             util.log(SDKError.colors.yellow("[404] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
-            notFoundHandler(req, res)
+            not_found_file = path.join(directory, '404.html')
+            if fs.existsSync(not_found_file)
+                returnFile(not_found_file, req, res, 404)
+            else
+                notFoundHandler(req, res)
 
     http.createServer(_router).listen(port, host)
     server_url = "http://#{ host }:#{ port }"
