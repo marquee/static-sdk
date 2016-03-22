@@ -16,6 +16,7 @@ program
     .option('--batch-size <number>', 'Number of simultaneous uploads during deployments (default `5`)')
     .option('--no-delete', 'Skip deleting old remote files')
     .option('--skip-upload-errors', 'Only log errors on deploy upload instead of halting')
+    .option('--priority <number>', 'Set compilation priority level')
     .parse(process.argv);
 
 if (program.production) {
@@ -42,7 +43,8 @@ var _options = {
     deploy_stats: program.deployStats || null,
     fake_deploy: program.fakeDeploy || false,
     batch_size: program.batchSize || 5,
-    no_delete: program.noDelete || false,
+    no_delete: program.noDelete || (program.priority !== null && program.priority !== undefined) || false,
+    priority: program.priority || Infinity,
     skip_upload_errors: program.skipUploadErrors || false,
 }
 

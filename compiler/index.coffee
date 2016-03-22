@@ -173,6 +173,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         done            : _done
                         info            : build_info
                         includeAssets   : _makeIncludeAssets(asset_hash)
+                        PRIORITY        : options.priority
                 catch e
                     throw new SDKError('compiler', e)
 

@@ -37,7 +37,7 @@ getEtagFor = (file) ->
     return etag.digest('hex')
 
 
-module.exports = (build_directory, local_files, project_config, callback) ->
+module.exports = (options, build_directory, local_files, project_config, callback) ->
     SDKError.log(SDKError.colors.grey("Finding changed/deleted files..."))
 
     ignore_prefix_exp = (
@@ -80,7 +80,7 @@ module.exports = (build_directory, local_files, project_config, callback) ->
                 return
 
             remote_map[f.Key] = true
-            unless local_map[f.Key]?
+            unless local_map[f.Key]? or options.no_delete
                 deleted.push
                     local: null
                     remote: f
@@ -96,7 +96,7 @@ module.exports = (build_directory, local_files, project_config, callback) ->
                     remote: null
 
         unknown.forEach (f) ->
-            if getEtagFor(f) isnt JSON.parse(f.remote.ETag)
+            if f.local? and getEtagFor(f) isnt JSON.parse(f.remote.ETag)
                 changed.push(f)
             else
                 unchanged.push(f)
