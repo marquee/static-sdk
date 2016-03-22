@@ -2,21 +2,27 @@ React = require 'react'
 
 _joinFn = (names, options={}) ->
 
+    unless names?.length > 0
+        return ''
+
+    if typeof names is 'string'
+        return names
+
+    if names[0].name?
+        # The incoming names are entities
+        names = (n.name for n in names)
+    else
+        # Make a copy because we're about to mutate it in-place.
+        names = [names...]
+
     _join = options.join or ', '
     _and  = options.and or '&'
-
-    if names?.length > 0
-        unless typeof names is 'string' or names.length is 1
-            # Make a copy because we're about to mutate it in-place.
-            names = [names...]
-            _last = names[names.length - 1]
-            names[names.length - 1] = "#{ _and } #{ _last }"
-            if names.length > 2
-                names = names.join(_join)
-            else
-                names = names.join(' ')
+    _last = names[names.length - 1]
+    names[names.length - 1] = "#{ _and } #{ _last }"
+    if names.length > 2
+        names = names.join(_join)
     else
-        names = ''
+        names = names.join(' ')
     return names
 
 
