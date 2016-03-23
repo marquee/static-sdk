@@ -125,6 +125,9 @@ parseVideoURL = (_url) ->
             return "http://www.youtube.com/embed#{ parsed_url.pathname }?modestbranding=1"
         when 'vimeo.com'
             return "http://player.vimeo.com/video#{ parsed_url.pathname }"
+        when 'player.video.com'
+            return _url
         else
             console.error("Unknown video host: #{ parsed_url.hostname }")
+            return _url
     return
