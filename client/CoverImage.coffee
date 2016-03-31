@@ -36,10 +36,10 @@ gatherImages = ->
                         else
                             comparison_dimension = image_block.offsetHeight
                         comparison_dimension = comparison_dimension * px_ratio
-                        if comparison_dimension > 1330 and image_block.dataset.src_2560
+                        if comparison_dimension > 1280 and image_block.dataset.src_2560
                             src = image_block.dataset.src_2560
                             image_block.dataset.selected_size = '2560'
-                        else if comparison_dimension > 668
+                        else if comparison_dimension > 640
                             src = image_block.dataset.src_1280
                             image_block.dataset.selected_size = '1280'
                         else
