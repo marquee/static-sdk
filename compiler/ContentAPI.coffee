@@ -159,7 +159,12 @@ class Model
 
 class APIResults
     constructor: (array_of_results) ->
-        @_items = array_of_results
+        _now = new Date()
+        @_items = array_of_results.filter (item) ->
+            if item.scheduled_release_date
+                return new Date(item.scheduled_release_date) <= _now
+            else
+                return true
         @length = @_items.length
 
         @_items.forEach (item, i) =>
