@@ -79,24 +79,35 @@ module.exports = (options, build_directory, local_files, project_config, callbac
             if _isIgnorable(f.Key)
                 return
 
+            # Ignore files that don't exist locally when deleting of remote
+            # files is disabled.
+            if options.no_delete and not local_map[f.Key]
+                return
+
             remote_map[f.Key] = true
-            unless local_map[f.Key]? or options.no_delete
+            unless local_map[f.Key]?
+                # Files that don't exist locally and need to be deleted from
+                # the remote deployment.
                 deleted.push
                     local: null
                     remote: f
             else
+                # Files that exist locally and remotely and need to be checked
+                # for sameness.
                 unknown.push
                     local: local_map[f.Key]
                     remote: f
 
         for k,v of local_map
             unless remote_map[k]
+                # Files that exist locally but not remotely and definitely need
+                # to be uploaded.
                 changed.push
                     local: v
                     remote: null
 
         unknown.forEach (f) ->
-            if f.local? and getEtagFor(f) isnt JSON.parse(f.remote.ETag)
+            if getEtagFor(f) isnt JSON.parse(f.remote.ETag)
                 changed.push(f)
             else
                 unchanged.push(f)
