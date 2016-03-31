@@ -13,7 +13,7 @@ module.exports = React.createClass
         fill            : '#ffffff'
         logo            : true
         text            : 'Made with'
-        title           : 'Marquee: easier, faster, mor beautiful web publishing'
+        title           : 'Marquee: easier, faster, more beautiful web publishing'
         'aria-label'    : 'Made with Marquee'
         link            : 'http://marquee.by'
         utm:
@@ -31,14 +31,14 @@ module.exports = React.createClass
         link = @props.link
         if @props.utm?.source
             params = ['source','medium','campaign','content'].map (p) =>
-                "utm_#{ p }=#{ @props[p] }"
+                "utm_#{ p }=#{ @props.utm[p] }"
             link += "?#{ params.join('&') }"
 
         <a
             id          = @props.id
             className   = cx
             aria-label  = @props['aria-label']
-            href        = @props.link
+            href        = link
             title       = @props.title
         >
             {

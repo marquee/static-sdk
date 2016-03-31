@@ -6,6 +6,17 @@ TextBlock = require './TextBlock'
 
 module.exports = (content, options={}) ->
     result = content?.map (block) ->
+
+        if options.intercept?[block.type]
+            return React.createElement(
+                options.intercept[block.type],
+                {
+                    block: block
+                    key: block.id
+                    plain: options.plain
+                }
+            )
+
         switch block.type
             when 'text'
                 return <TextBlock block=block key=block.id plain=options.plain />
