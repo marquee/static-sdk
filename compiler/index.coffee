@@ -13,6 +13,10 @@ SDKError                = require './SDKError'
 getCurrentCommit        = require './getCurrentCommit'
 
 module.exports = (project_directory, options, onCompile=null) ->
+
+    if options.ignore_schedule
+        SDKError.warn('Ignoring release schedule!')
+
     # Ensure build directory exists and is empty.
     build_directory = path.join(project_directory, '.dist')
     if fs.existsSync(build_directory)
@@ -88,6 +92,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             project             : project_package
             project_directory   : project_directory
             use_cache           : options.use_cache
+            ignore_schedule     : options.ignore_schedule
 
         # Create the file handling functions for the project.
         _writeFile = require('./writeFile')(build_directory)
