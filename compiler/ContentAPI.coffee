@@ -158,8 +158,13 @@ class Model
 
 
 class APIResults
-    constructor: (array_of_results) ->
-        @_items = array_of_results
+    constructor: (array_of_results, options={}) ->
+        _now = new Date()
+        @_items = array_of_results.filter (item) ->
+            if item.scheduled_release_date and not options.ignore_schedule
+                return new Date(item.scheduled_release_date) <= _now
+            else
+                return true
         @length = @_items.length
 
         @_items.forEach (item, i) =>
@@ -194,7 +199,7 @@ class APIResults
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
-    constructor: ({ token, host, project, use_cache, project_directory }) ->
+    constructor: ({ token, host, project, use_cache, project_directory, ignore_schedule }) ->
         # The actual token permissions are not determined by the prefix, but
         # we can assume it reflects the permissions defined in the database.
         unless token.substring(0,2) is 'r0'
@@ -203,6 +208,7 @@ class ContentAPI
         @_token = token
         @_host = host
         @_project_directory = project_directory
+        @_ignore_schedule = ignore_schedule
         if use_cache
             @_setUpCache()
 
@@ -319,7 +325,7 @@ class ContentAPI
         next_url = _url
         _makeRequest = =>
             unless next_url
-                _results = new APIResults(results)
+                _results = new APIResults(results, ignore_schedule: @_ignore_schedule)
 
                 deferred_result.resolve(_results)
                 cb?(_results)
@@ -354,7 +360,7 @@ class ContentAPI
         num_last_batch = -1
         _makeRequest = =>
             if num_last_batch is 0
-                _results = new APIResults(results)
+                _results = new APIResults(results, ignore_schedule: @_ignore_schedule)
 
                 deferred_result.resolve(_results)
                 cb?(_results)
@@ -433,4 +439,7 @@ class ContentAPI
     LOCATION    : LOCATION
     TOPIC       : TOPIC
 
-module.exports = ContentAPI
+module.exports              = ContentAPI
+module.exports.CDNImage     = CDNImage
+module.exports.Model        = Model
+module.exports.APIResults   = APIResults

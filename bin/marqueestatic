@@ -17,6 +17,7 @@ program
     .option('--no-delete', 'Skip deleting old remote files')
     .option('--skip-upload-errors', 'Only log errors on deploy upload instead of halting')
     .option('--priority <number>', 'Set compilation priority level')
+    .option('--ignore-schedule', 'Ignore schedule on releases (will build all releases)')
     .parse(process.argv);
 
 if (program.production) {
@@ -46,6 +47,7 @@ var _options = {
     no_delete: program.noDelete || (program.priority !== null && program.priority !== undefined) || false,
     priority: program.priority || Infinity,
     skip_upload_errors: program.skipUploadErrors || false,
+    ignore_schedule: program.ignoreSchedule || false,
 }
 
 switch (_command) {
