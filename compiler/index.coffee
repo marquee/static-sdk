@@ -114,6 +114,21 @@ module.exports = (project_directory, options, onCompile=null) ->
         _done = ->
             SDKError.clearPrefix()
             clearTimeout(_done_timeout)
+
+            unless options.skip_build_info
+                _info_to_emit =
+                    date            : build_info.date
+                    commit          : build_info.commit
+                    assets          : build_info.asset_hash
+                    publication     : project_config.PUBLICATION_SHORT_NAME
+                    env             : process.env.NODE_ENV
+                    configuration   : options.configuration
+                    priority        : if options.priority is Infinity then null else options.priority
+
+                _emitFile('/_build_info/last.json', _info_to_emit)
+                _emitFile("/_build_info/#{ if options.priority is Infinity then 'full' else options.priority }.json", _info_to_emit)
+
+
             _writeMetadata()
             # Check that the project has necessary files.
             unless _emitFile.files_emitted_indexed['404.html'] or _emitFile.files_emitted_indexed['/404.html']
@@ -144,7 +159,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                     _prefix = ''
                 if asset_hash
                     asset_dest_directory = path.join(asset_dest_directory, asset_hash)
-                global.build_info =
+                build_info =
                     project_directory       : project_directory
                     commit                  : commit_sha
                     date                    : new Date()
@@ -152,6 +167,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                     build_directory         : build_directory
                     asset_dest_directory    : asset_dest_directory
                     asset_cache_directory   : path.join(build_directory, '.asset-cache')
+                global.build_info = build_info
                 
                 if project_config.FULLY_QUALIFY_ASSET_URL
                     _prefix = "//#{ project_config.HOST }#{ _prefix }"
