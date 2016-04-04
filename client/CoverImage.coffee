@@ -31,23 +31,37 @@ gatherImages = ->
 
                     if visibilityCheck(image_block)
                         image_block.dataset.is_loading = true
-                        if image_block.offsetWidth / image_block.offsetHeight > 1
+
+                        sizes = [640, 1280]
+                        if image_block.dataset.src_2560
+                            sizes.push(2560)
+                        image_ar = parseFloat(image_block.dataset.aspect_ratio) or 1
+                        sizes = sizes.map (w) -> [w, w / image_ar]
+
+
+                        if image_block.offsetWidth / image_block.offsetHeight > image_ar
                             comparison_dimension = image_block.offsetWidth
+                            comparison_size = 0
                         else
                             comparison_dimension = image_block.offsetHeight
+                            comparison_size = 1
                         comparison_dimension = comparison_dimension * px_ratio
-                        if comparison_dimension > 1280 and image_block.dataset.src_2560
-                            src = image_block.dataset.src_2560
-                            image_block.dataset.selected_size = '2560'
-                        else if comparison_dimension > 640
-                            src = image_block.dataset.src_1280
-                            image_block.dataset.selected_size = '1280'
-                        else
-                            src = image_block.dataset.src_640
-                            image_block.dataset.selected_size = '640'
+
+                        for size in sizes
+                            if size[comparison_size] > comparison_dimension
+                                selected_size = size[0]
+                                break
+
+                        src = image_block.dataset["src_#{ selected_size }"]
+                        image_block.dataset.selected_size = selected_size
+
                         console.info("CoverImage: loading #{ src }") if window.DEBUG
                         preloader_img = document.createElement('img')
                         preloader_img.src = src
+                        preloader_img.onerror = (err) ->
+                            image_block.dataset.is_loading = false
+                            image_block.dataset.had_error = true
+                            console.error(err)
                         preloader_img.onload = ->
                             image_block.querySelector('._Image').style.backgroundImage = "url('#{ src }')"
                             image_block.dataset.loaded = true
