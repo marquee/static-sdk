@@ -199,7 +199,7 @@ class APIResults
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
-    constructor: ({ token, host, project, use_cache, project_directory, ignore_schedule }) ->
+    constructor: ({ token, host, project, use_cache, project_directory, ignore_schedule, api_page_size }) ->
         # The actual token permissions are not determined by the prefix, but
         # we can assume it reflects the permissions defined in the database.
         unless token.substring(0,2) is 'r0'
@@ -209,6 +209,7 @@ class ContentAPI
         @_host = host
         @_project_directory = project_directory
         @_ignore_schedule = ignore_schedule
+        @_api_page_size = api_page_size
         if use_cache
             @_setUpCache()
 
@@ -379,6 +380,7 @@ class ContentAPI
     entries: (cb) ->
         @filterReleases
             type: ENTRY
+            page_size: @_api_page_size
         , (result) ->
             SDKError.log("Got #{ result.length } entries from API.")
             cb?(result)
@@ -386,6 +388,7 @@ class ContentAPI
     packages: (cb) ->
         @filterReleases
             type: PACKAGE
+            page_size: @_api_page_size
         , (result) ->
             SDKError.log("Got #{ result.length } packages from API.")
             cb?(result)
@@ -410,6 +413,7 @@ class ContentAPI
     people: (cb) ->
         @filterReleases
             type: PERSON
+            page_size: @_api_page_size
         , (result) ->
             SDKError.log("Got #{ result.length } people from API.")
             cb?(result)
@@ -417,6 +421,7 @@ class ContentAPI
     locations: (cb) ->
         @filterReleases
             type: LOCATION
+            page_size: @_api_page_size
         , (result) ->
             SDKError.log("Got #{ result.length } locations from API.")
             cb?(result)
@@ -424,6 +429,7 @@ class ContentAPI
     topics: (cb) ->
         @filterReleases
             type: TOPIC
+            page_size: @_api_page_size
         , (result) ->
             SDKError.log("Got #{ result.length } topics from API.")
             cb?(result)
