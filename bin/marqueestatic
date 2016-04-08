@@ -19,6 +19,7 @@ program
     .option('--priority <number>', 'Set compilation priority level')
     .option('--ignore-schedule', 'Ignore schedule on releases (will build all releases)')
     .option('--skip-build-info', 'Do not emit build info to /_build_info/')
+    .option('--api-page-size <number>', 'Page size to use when fetching from the API (default `100`)')
     .parse(process.argv);
 
 if (program.production) {
@@ -50,6 +51,7 @@ var _options = {
     skip_upload_errors: program.skipUploadErrors || false,
     ignore_schedule: program.ignoreSchedule || false,
     skip_build_info: program.skipBuildInfo || false,
+    api_page_size: program.apiPageSize || 100,
 }
 
 switch (_command) {

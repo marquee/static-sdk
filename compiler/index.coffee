@@ -93,6 +93,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             project_directory   : project_directory
             use_cache           : options.use_cache
             ignore_schedule     : options.ignore_schedule
+            api_page_size       : options.api_page_size
 
         # Create the file handling functions for the project.
         _writeFile = require('./writeFile')(build_directory)
