@@ -22,6 +22,7 @@ _render = (props) =>
                 rel     = 'stylesheet'
                 type    = 'text/css'
                 href    = full_path
+                media   = props.media
             />
         else
             console.warn("Asset got unknown asset type (#{ _ext })")
@@ -66,6 +67,9 @@ module.exports = React.createClass
         path    : React.PropTypes.string.isRequired
         async   : React.PropTypes.bool
         inline  : React.PropTypes.bool
+        media   : React.PropTypes.string
+    getDefaultPropts: ->
+        media   : 'screen'
     render: ->
         if @props.inline
             return _renderInline(@props)
