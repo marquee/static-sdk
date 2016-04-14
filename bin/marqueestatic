@@ -20,6 +20,8 @@ program
     .option('--ignore-schedule', 'Ignore schedule on releases (will build all releases)')
     .option('--skip-build-info', 'Do not emit build info to /_build_info/')
     .option('--api-page-size <number>', 'Page size to use when fetching from the API (default `100`)')
+    .option('--smart-cache', 'Use modified_date to only fetch content modified since last build')
+    .option('--stale-after <number>', 'Consider smart-cache stale after n hours (default `1`)')
     .parse(process.argv);
 
 if (program.production) {
@@ -52,6 +54,8 @@ var _options = {
     ignore_schedule: program.ignoreSchedule || false,
     skip_build_info: program.skipBuildInfo || false,
     api_page_size: program.apiPageSize || 100,
+    smart_cache: program.smartCache || false,
+    stale_after: program.staleAfter || 1
 }
 
 switch (_command) {
