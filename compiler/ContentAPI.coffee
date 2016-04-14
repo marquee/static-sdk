@@ -199,7 +199,7 @@ class APIResults
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
-    constructor: ({ token, host, project, use_cache, project_directory, ignore_schedule, api_page_size }) ->
+    constructor: ({ token, host, project, use_cache, project_directory, ignore_schedule, api_page_size, smart_cache, stale_after }) ->
         # The actual token permissions are not determined by the prefix, but
         # we can assume it reflects the permissions defined in the database.
         unless token.substring(0,2) is 'r0'
@@ -210,8 +210,15 @@ class ContentAPI
         @_project_directory = project_directory
         @_ignore_schedule = ignore_schedule
         @_api_page_size = api_page_size
+
+        @_smart_cache = smart_cache
+        @_stale_after = stale_after
+
         if use_cache
             @_setUpCache()
+
+        if smart_cache
+            @_setUpSmartCache()
 
         # If being used within the context of a publication, assemble a User
         # Agent string that includes the publication information. Otherwise,
@@ -306,6 +313,12 @@ class ContentAPI
             SDKError.log(SDKError.colors.grey('No API cache. Creating new cache...'))
             fs.mkdirSync(@_CACHE_DIRECTORY)
 
+    _setUpSmartCache: ->
+        @_SMART_CACHE_DIRECTORY = path.join(@_project_directory, '.smart-cache')
+        unless fs.existsSync(@_SMART_CACHE_DIRECTORY)
+            SDKError.log(SDKError.colors.grey('No API smart cache. Creating new smart cache...'))
+            fs.mkdirSync(@_SMART_CACHE_DIRECTORY)
+
     _setCacheItem: (key, value) ->
         if @_CACHE_DIRECTORY?
             cache_file = @_nameCacheFile(key)
@@ -313,7 +326,83 @@ class ContentAPI
             fs.writeFileSync(cache_file, value)
             SDKError.log(SDKError.colors.grey("Updated API cache file (#{ value.length } bytes)."))
 
+
+    _getSmartCacheItems: (type) ->
+        cache_file = path.join(@_SMART_CACHE_DIRECTORY, "#{ type }.json")
+        if fs.existsSync(cache_file)
+            cache_data = JSON.parse(fs.readFileSync(cache_file))
+            if cache_data?
+                { data, date } = cache_data
+                return [
+                    data.map (item) -> new Model(item)
+                    new Date(date)
+                ]
+        return [[], null]
+
+    _setSmartCacheItems: (type, items, date) ->
+        cache_file = path.join(@_SMART_CACHE_DIRECTORY, "#{ type }.json")
+        fs.writeFile cache_file, JSON.stringify(data: items, date: date), (err) ->
+            SDKError.log("smart cache, #{ type }: #{ items.length } items saved to cache")
+
+    _filterReleasesWithSmartCache: (query, cb) ->
+        _now = new Date()
+        deferred_result = W.defer()
+
+        [cached_items, last_fetched_at] = @_getSmartCacheItems(query.type)
+
+        SDKError.log("smart cache, #{ query.type }: #{ cached_items.length } cached items")
+
+        # Other types don't have the `type` property, so this needs to be
+        # removed from the query for the filtering to work correctly.
+        _url = ENDPOINTS[query.type]
+        unless query.type in [ENTRY, PACKAGE, PERSON, TOPIC, LOCATION]
+            delete query.type
+
+        results_set = {}
+
+        max_modified_date = null
+        cached_items.forEach (item) ->
+            if (item.modified_date and item.modified_date > max_modified_date) or not max_modified_date
+                max_modified_date = item.modified_date
+            results_set[item.id] = item
+
+        SDKError.log("smart cache, #{ query.type }: max modified_date #{ max_modified_date }")
+
+        if max_modified_date
+            if _now - last_fetched_at < (@_stale_after * 1000 * 60 * 60) or not last_fetched_at
+                query.modified_date__gte = max_modified_date.toISOString().replace(/Z$/,'')
+            else
+                cached_items = []
+                results_set = {}
+
+        results = []
+        next_url = _url
+        _makeRequest = =>
+            unless next_url
+                _num_new = results.length
+                results_set[item.id] = item for item in results
+                results = (v for k,v of results_set)
+                SDKError.log("smart cache, #{ query.type }: #{ _num_new } modified, #{ results.length } total")
+                @_setSmartCacheItems(query.type, results, _now)
+                _results = new APIResults(results, ignore_schedule: @_ignore_schedule)
+                deferred_result.resolve(_results)
+                cb?(_results)
+            else
+                @_sendRequest
+                    url         : next_url
+                    query       : query
+                    callback    : (_results, _next_url) ->
+                        next_url = _next_url
+                        results.push(_results...)
+                        _makeRequest()
+        _makeRequest()
+        return deferred_result.promise
+
     filterReleases: (query, cb) ->
+        if @_smart_cache
+            return @_filterReleasesWithSmartCache(query, cb)
+
+
         deferred_result = W.defer()
 
         # Other types don't have the `type` property, so this needs to be
