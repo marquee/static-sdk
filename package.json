@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "autoprefixer": "^6.0.2",
-    "aws-sdk": "^2.0.21",
+    "aws-sdk": "^2.3.3",
     "brfs": "^1.4.1",
     "browserify": "^11.0.1",
-    "coffee-react": "^4.0.0",
-    "coffee-react-transform": "^3.2.0",
+    "coffee-react": "^5.0.0",
+    "coffee-react-transform": "^4.0.0",
     "coffee-reactify": "^4.0.0",
     "coffee-script": "^1.9.3",
     "colors": "^1.0.3",
@@ -35,12 +35,13 @@
     "html": "0.0.7",
     "mime": "^1.2.11",
     "moment": "^2.8.3",
-    "node-sass": "^3.3.2",
+    "node-sass": "^3.4.2",
     "node-watch": "^0.3.4",
     "parse-link-header": "^0.2.0",
     "postcss": "5.0.4",
     "prompt": "^0.2.14",
-    "react": "^0.13.3",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1",
     "request": "^2.45.0",
     "shiny": "^1.0.0-rc.1",
     "sqwish": "^0.2.2",
@@ -48,9 +49,13 @@
     "uglify-js": "^2.4.15",
     "when": "^3.6.4"
   },
+  "peerDependencies": {
+    "react": "^15.0.1"
+  },
   "devDependencies": {
     "marked": "^0.3.2",
-    "jest-cli": "^0.5.2"
+    "jest-cli": "^0.5.2",
+    "react-addons-test-utils": "^15.0.1"
   },
   "jest": {
     "testFileExtensions": [

@@ -1,4 +1,5 @@
-# React = require 'react'
+React = require 'react'
+ReactDOMServer = require 'react-dom/server'
 
 SDKError    = require './SDKError'
 colors      = SDKError.colors
@@ -15,8 +16,6 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
     # point. (For some reason, different copies of React can't validate each
     # other's components?)
     project_react_path = path.join(project_directory, 'node_modules', 'react')
-    if fs.existsSync(path.join(project_react_path, 'package.json'))
-        React = require(project_react_path)
 
     _processContent = (file_content, options={}) ->
         switch typeof file_content
@@ -24,8 +23,8 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
                 return [null, file_content]
 
             when 'object'
-                if React?.isValidElement(file_content)
-                    output_content = React.renderToStaticMarkup(file_content)
+                if React.isValidElement(file_content)
+                    output_content = ReactDOMServer.renderToStaticMarkup(file_content)
                     output_content = "<!doctype html>#{ output_content }" unless options.fragment
                     return ['text/html', output_content]
 
