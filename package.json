@@ -35,7 +35,7 @@
     "html": "0.0.7",
     "mime": "^1.2.11",
     "moment": "^2.8.3",
-    "node-sass": "^3.3.2",
+    "node-sass": "^3.7.0",
     "node-watch": "^0.3.4",
     "parse-link-header": "^0.2.0",
     "postcss": "5.0.4",

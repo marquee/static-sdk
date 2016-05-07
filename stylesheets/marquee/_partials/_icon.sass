@@ -13,10 +13,10 @@ $icon-set: false !default
 //
 @mixin icon-selector($after: false)
     @if $after
-        &:after
+        &::after
             @content
     @else
-        &:before
+        &::before
             @content
 
 
@@ -45,9 +45,9 @@ $icon-set: false !default
 //             color: gray
 //
 @mixin icon($set: $icon-set, $name: false, $code_only: false, $after: false)
-    @if not $name
-        $name: $set
-        $set: $icon-set
+    $name: if($name, $name, $set)
+    $set: if($name, $set, $icon-set)
+
     @if $set
         $icon_code: false
         @each $icon in nth($set,2)
@@ -69,9 +69,8 @@ $icon-set: false !default
 //
 // Returns the string unicode character code.
 @function icon-value($set: $icon-set, $name: false)
-    @if not $name
-        $name: $set
-        $set: $icon-set
+    $name: if($name, $name, $set)
+    $set: if($name, $set, $icon-set)
     $icon_code: false
     @each $icon in nth($set,2)
         @if nth($icon, 1) == $name
