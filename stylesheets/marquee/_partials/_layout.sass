@@ -70,13 +70,9 @@
             padding-right   : $gutter-desktop
 
 
-=gutter-bottom($multiplier: 1, $padding: true, $values: false)
-    @if $values
-        $small: nth($values, 1)
-        $large: nth($values, 2)
-    @else
-        $small: $gutter-mobile
-        $large: $gutter-desktop
+=gutter-bottom($multiplier: 1, $padding: true, $values: ($gutter-mobile, $gutter-desktop))
+    $small: nth($values,1)
+    $large: nth($values,2)
     $small: $small * $multiplier
     $large: $large * $multiplier
 
@@ -89,13 +85,9 @@
         +viewport-width-gt-small
             margin-bottom: $large
 
-=gutter-top($multiplier: 1, $padding: true, $values: false)
-    @if $values
-        $small: nth($values, 1)
-        $large: nth($values, 2)
-    @else
-        $small: $gutter-mobile
-        $large: $gutter-desktop
+=gutter-top($multiplier: 1, $padding: true, $values: ($gutter-mobile, $gutter-desktop))
+    $small: nth($values,1)
+    $large: nth($values,2)
     $small: $small * $multiplier
     $large: $large * $multiplier
 
@@ -108,13 +100,9 @@
         +viewport-width-gt-small
             margin-top: $large
 
-=gutter-right($multiplier: 1, $padding: true, $values: false)
-    @if $values
-        $small: nth($values, 1)
-        $large: nth($values, 2)
-    @else
-        $small: $gutter-mobile
-        $large: $gutter-desktop
+=gutter-right($multiplier: 1, $padding: true, $values: ($gutter-mobile, $gutter-desktop))
+    $small: nth($values,1)
+    $large: nth($values,2)
     $small: $small * $multiplier
     $large: $large * $multiplier
 
@@ -127,13 +115,9 @@
         +viewport-width-gt-small
             margin-right: $large
 
-=gutter-left($multiplier: 1, $padding: true, $values: false)
-    @if $values
-        $small: nth($values, 1)
-        $large: nth($values, 2)
-    @else
-        $small: $gutter-mobile
-        $large: $gutter-desktop
+=gutter-left($multiplier: 1, $padding: true, $values: ($gutter-mobile, $gutter-desktop))
+    $small: nth($values,1)
+    $large: nth($values,2)
     $small: $small * $multiplier
     $large: $large * $multiplier
 
@@ -146,7 +130,7 @@
         +viewport-width-gt-small
             margin-left: $large
 
-=gutter-all($multiplier: 1, $padding: true, $values: false)
+=gutter-all($multiplier: 1, $padding: true, $values: ($gutter-mobile, $gutter-desktop))
     +gutter-top($multiplier, $padding, $values)
     +gutter-right($multiplier, $padding, $values)
     +gutter-bottom($multiplier, $padding, $values)

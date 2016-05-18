@@ -1,6 +1,6 @@
 {
   "name": "marquee-static-sdk",
-  "version": "0.7.0-alpha.1",
+  "version": "0.7.0-alpha.2",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
     "prepublish": "npm test && npm run clearbuild && npm run build",
@@ -36,6 +36,7 @@
     "mime": "^1.2.11",
     "moment": "^2.8.3",
     "node-sass": "^3.4.2",
+    "node-sass": "^3.7.0",
     "node-watch": "^0.3.4",
     "parse-link-header": "^0.2.0",
     "postcss": "5.0.4",
