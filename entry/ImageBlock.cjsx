@@ -25,6 +25,9 @@ module.exports = React.createClass
             # present, but is optional.
             return null
 
+        credit = @props.block.credit
+        caption = @props.block.caption
+
         if @props.plain
             return <figure>
                 <img src=src_640 />
@@ -48,8 +51,6 @@ module.exports = React.createClass
 
         aspect_ratio = @props.block.original?.width / (@props.block.original?.height or 1)
 
-        credit = @props.block.credit
-        caption = @props.block.caption
         unless caption
             if @props.block.annotations
                 for anno in @props.block.annotations
