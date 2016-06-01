@@ -107,6 +107,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             exportMetadata      : _exportMetadata
         )
         _emitRedirect = require('./emitRedirect')(_emitFile)
+        _emitRSS = require('./emitRSS')(_emitFile)
 
         # Set a timeout for the compiler.
         TIMEOUT = 30 * 60 # 30 minutes
@@ -196,6 +197,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         api             : api
                         emitFile        : _emitFile
                         emitRedirect    : _emitRedirect
+                        emitRSS         : _emitRSS
                         config          : project_config
                         project         : project_package
                         payload         : options.payload
