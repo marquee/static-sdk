@@ -32,6 +32,7 @@ property. They also need an entrypoint specified, under `"main"`.
 * `SITE_TWITTER_SCREEN_NAME` - the Twitter `screen_name` for the publication, used for Twitter Cards
 * `auto_assets` - set to `false` to disable automatic asset compilation
 
+
 ### Multiple Configurations
 
 A project configuration MAY have a `configurations` option which defines
