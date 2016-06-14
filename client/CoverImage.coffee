@@ -48,7 +48,7 @@ gatherImages = ->
                         comparison_dimension = comparison_dimension * px_ratio
 
                         for size in sizes
-                            if size[comparison_size] > comparison_dimension
+                            if size[comparison_size] > comparison_dimension or size is sizes[sizes.length - 1]
                                 selected_size = size[0]
                                 break
 
