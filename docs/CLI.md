@@ -74,9 +74,82 @@ Set the port for the development server. Defaults to `5000`: `--port 8080`.
 ### `--use-cache`
 
 Cache Content API responses to disk for quicker rebuilds during development.
-To reset this, simply delete `.cache.json` from the project folder.
+To reset this, simply delete the `.api-cache` directory from the project folder.
 
 
 ### `--verbose`
 
 Emits detailed information about each step of the build process.
+
+
+### `--deploy-stats <file>`
+
+Write JSON-formatted stats about the deploy to the specified file.
+
+
+### `--fake-deploy`
+
+Perform a dry run of the deploy, doing all the compilation and minification in
+production mode, but skipping the actual modification of remote files.
+
+
+### `--batch-size <number:5>`
+
+The number of simultaneous uploads during a deploy.
+
+
+### `--no-delete`
+
+Skip deleting old remote files. Necessary for partial deploys.
+
+
+### `--skip-upload-errors`
+
+Only log upload errors during deploy instead of failing completely.
+
+
+### `--priority <number>`
+
+Set the priority level for the deploy. If set, forces `--no-delete` true.
+
+See [PRIORITY](./compiler/#PRIORITY) for more information.
+
+
+### `--ignore-schedule`
+
+Ignore any scheduling information on releases.
+
+
+### `--skip-build-info`
+
+Do not emit build records to `/_build_info/`. By default, the SDK records
+(unsensitive) information about the latest builds to `/_build_info/last.json`
+and `/_build_info/<priority>.json` which is deployed.
+
+
+### `--api-page-size <number:100>`
+
+The `?page` parameter used when fetching from the API. This should be adjusted
+depending on the typical size of content. Smaller average entry lengths can
+use a larger page number, and vice versa.
+
+
+### `--smart-cache`
+
+Use the `modified_date` property to only fetch content that has changed since
+the last deploy (from the instance of the cache).
+
+To reset, delete the `.smart-cache` folder.
+
+Note: unlike `--use-cache`, this cache does not segregate content based on
+endpoint and token. Be careful when using locally and deploying to production!
+
+
+### `--stale-after <number:1>`
+
+Consider the smart-cache content stale after `n` hours.
+
+
+
+
+

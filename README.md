@@ -30,19 +30,18 @@ _Note:_ the SDK has not been tested on Windows and very likely will not work pro
 
     ```sh
     $ node --version
-    v0.10.31
+    v4.2.2
     $ git --version
     git version 2.3.1
     ```
 
-    The Static SDK requires at least node `v0.10.x`. If you get a `command not found` error for node, go to [nodejs.org](https://nodejs.org) to download and install node. Generally any version of git should work. If you do not have git, get it [here](http://git-scm.com/).
+    The Static SDK requires at least node `v4.x.x`. If you get a `command not found` error for node, go to [nodejs.org](https://nodejs.org) to download and install node. Generally any version of git should work. If you do not have git, get it [here](http://git-scm.com/).
 
 2.  Create a new directory for your publication and extract the latest release of the sample project:
 
     ```sh
     $ mkdir <project name> && cd <project name>
-    $ curl -L https://github.com/marquee/static-sdk-sample/tarball/0.1.0 > sdk-sample.tar.gz
-    $ tar -zxf sdk-sample.tar.gz -C . --strip-components 1
+    $ curl -L https://github.com/marquee/frontend-boilerplate/tarball/master | tar -zx -C . --strip-components 1
     ```
 
 3.  Start the development server with the following command:
