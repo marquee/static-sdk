@@ -89,7 +89,8 @@ Includes a link to the favicon, setting the correct type. Defaults to
 
 ### Fragment
 
-Wrapper for creating HTML fragments.
+Wrapper for creating HTML fragments. These SHOULD be emitted using the
+`fragment: true` option on `emitFile`.
 
 
 ### GoogleFonts
@@ -168,17 +169,24 @@ Category subcomponent.
 ```
 
 
-### Cover
+### CoverImage
 
-Cover component. Can be made a link.
+CoverImage component for cover images. Can be made a link.
 
 ```cjsx
-<Cover image=entry.cover_image />
+<CoverImage image=entry.cover_image />
 ```
 
 ```cjsx
-<Cover image=entry.cover_image link=entry.link />
+<CoverImage image=entry.cover_image link=entry.link />
 ```
+
+The CoverImage requires 'marquee-static-sdk/client/CoverImage' to be loaded
+in the client modules, which selects the correct image resolution based on
+available size and screen resolution, as well as image visibility. Or, the
+`<CoverImage>` can be used directly in a live React app, and will perform the
+necessary checks and image selection.
+
 
 
 
