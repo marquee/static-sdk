@@ -11,6 +11,10 @@ for_deploy = '--production' in process.argv
 
 source_directory = __dirname
 build_directory = __dirname
+
+project_directory = path.join(__dirname, '..')
+asset_source_dir = asset_cache_dir = asset_dest_dir = path.join(__dirname, '_assets')
+
 if for_deploy
     build_directory = path.join(build_directory, '.build')
     if fs.existsSync(build_directory)
@@ -20,11 +24,10 @@ if for_deploy
     unless fs.existsSync(deploy_config_path)
         throw new Error('You need a .env.json with the necessary config.')
     deploy_config = JSON.parse(fs.readFileSync(deploy_config_path).toString())
-    global.ASSET_URL = '/assets/'
+    global.ASSET_URL = '/_assets/'
 else
     global.ASSET_URL = './_assets/'
-project_directory = path.join(__dirname, '..')
-asset_source_dir = asset_cache_dir = asset_dest_dir = path.join(__dirname, '_assets')
+
 
 _writeFile = require('../compiler/writeFile')(build_directory)
 _emitFile = require('../compiler/emitFile')(
@@ -189,61 +192,55 @@ getCurrentCommit project_directory, (commit_sha) ->
         asset               : path.join(asset_source_dir, 'style.sass')
         project_directory   : project_directory
         callback: ->
-            processAsset
-                asset_source_dir    : asset_source_dir
-                asset_cache_dir     : asset_cache_dir
-                asset_dest_dir      : asset_dest_dir
-                asset               : path.join(asset_source_dir, 'script.coffee')
-                project_directory   : project_directory
-                callback: ->
-                    global.build_info =
-                        project_directory       : project_directory
-                        commit                  : commit_sha
-                        date                    : new Date()
-                        build_directory         : build_directory
-                        asset_cache_directory   : asset_cache_dir
 
-                    doc_files = fs.readdirSync(source_directory).filter (f) ->
-                        f.split('.').pop() is 'md' and f isnt 'index.md'
-                    doc_files.unshift('index.md')
-                    doc_files.forEach (f) ->
-                        title = f.replace(/\.md$/, '')
-                        slug = slugify(title)
-                        if for_deploy and f isnt 'index.md'
-                            output_name = slug
-                        else
-                            output_name = "#{ slug }.html"
+            global.build_info =
+                project_directory       : project_directory
+                commit                  : commit_sha
+                date                    : new Date()
+                build_directory         : build_directory
+                asset_cache_directory   : asset_cache_dir
 
-                        if f is 'index.md'
-                            title = "Marquee Static SDK, v#{ pkg.version }"
+            doc_files = fs.readdirSync(source_directory).filter (f) ->
+                f.split('.').pop() is 'md' and f isnt 'index.md'
+            doc_files.unshift('index.md')
+            doc_files.forEach (f) ->
+                title = f.replace(/\.md$/, '')
+                slug = slugify(title)
+                if for_deploy and f isnt 'index.md'
+                    output_name = slug
+                else
+                    output_name = "#{ slug }.html"
 
-                        if for_deploy and deploy_config.PREFIX
-                            output_name = path.join(deploy_config.PREFIX, output_name)
-                        _emitFile(
-                            output_name,
-                            <Base title=title>
-                                <div className='_Nav__'>
-                                    <Nav files=doc_files current=f />
-                                </div>
-                                <div className='_Content__'>
-                                    <MarkdownPage file={path.join(source_directory, f)} />
-                                </div>
-                            </Base>
-                        )
+                if f is 'index.md'
+                    title = "Marquee Static SDK, v#{ pkg.version }"
 
-                    if for_deploy
-                        s3 = new AWS.S3
-                            accessKeyId     : deploy_config.AWS_ACCESS_KEY_ID
-                            secretAccessKey : deploy_config.AWS_SECRET_ACCESS_KEY
+                if for_deploy and deploy_config.PREFIX
+                    output_name = path.join(deploy_config.PREFIX, output_name)
+                _emitFile(
+                    output_name,
+                    <Base title=title>
+                        <div className='_Nav__'>
+                            <Nav files=doc_files current=f />
+                        </div>
+                        <div className='_Content__'>
+                            <MarkdownPage file={path.join(source_directory, f)} />
+                        </div>
+                    </Base>
+                )
 
-                        walkSync(build_directory).forEach (file) ->
-                            s3_options =
-                                Bucket          : deploy_config.AWS_BUCKET
-                                Key             : file.replace(build_directory + '/', '')
-                                ACL             : 'public-read'
-                                ContentType     : mime.lookup(file)
-                                StorageClass    : 'REDUCED_REDUNDANCY'
-                                Body            : fs.readFileSync(file)
-                            console.log '\tUploading', s3_options.Key
-                            s3.putObject s3_options, (err, data) ->
-                                throw err if err
+            if for_deploy
+                s3 = new AWS.S3
+                    accessKeyId     : deploy_config.AWS_ACCESS_KEY_ID
+                    secretAccessKey : deploy_config.AWS_SECRET_ACCESS_KEY
+
+                walkSync(build_directory).forEach (file) ->
+                    s3_options =
+                        Bucket          : deploy_config.AWS_BUCKET
+                        Key             : file.replace(build_directory + '/', '')
+                        ACL             : 'public-read'
+                        ContentType     : mime.lookup(file)
+                        StorageClass    : 'REDUCED_REDUNDANCY'
+                        Body            : fs.readFileSync(file)
+                    console.log '\tUploading', s3_options.Key
+                    s3.putObject s3_options, (err, data) ->
+                        throw err if err
