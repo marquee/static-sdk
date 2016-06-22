@@ -5,7 +5,8 @@ fs = require 'fs-extra'
 marked = require 'marked'
 
 pkg = require '../package.json'
-
+AWS     = require 'aws-sdk'
+mime = require 'mime'
 for_deploy = '--production' in process.argv
 
 source_directory = __dirname
@@ -116,7 +117,7 @@ Nav = React.createClass
             return <a className="_Link #{ _current }" href=link key=_slug>{_title}</a>
         <nav className='Nav'>
             {nav_links}
-            <MarqueeBranding campaign='docs' logo_only=true />
+            <MarqueeBranding campaign='docs' text=false />
         </nav>
 
 getCurrentCommit project_directory, (commit_sha) ->
@@ -170,7 +171,18 @@ getCurrentCommit project_directory, (commit_sha) ->
                         )
 
                     if for_deploy
-                        files_to_deploy = walkSync(build_directory)
-                        putFilesToS3 {}, build_directory, files_to_deploy, deploy_config, ->
-                            console.log arguments
-                            console.log 'DEPLOYED!'
+                        s3 = new AWS.S3
+                            accessKeyId     : deploy_config.AWS_ACCESS_KEY_ID
+                            secretAccessKey : deploy_config.AWS_SECRET_ACCESS_KEY
+
+                        walkSync(build_directory).forEach (file) ->
+                            s3_options =
+                                Bucket          : deploy_config.AWS_BUCKET
+                                Key             : file.replace(build_directory + '/', '')
+                                ACL             : 'public-read'
+                                ContentType     : mime.lookup(file)
+                                StorageClass    : 'REDUCED_REDUNDANCY'
+                                Body            : fs.readFileSync(file)
+                            console.log '\tUploading', s3_options.Key
+                            s3.putObject s3_options, (err, data) ->
+                                throw err if err
