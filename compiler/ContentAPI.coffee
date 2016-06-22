@@ -1,13 +1,5 @@
-ENTRY       = 'container'
-PACKAGE     = 'package'
-POST        = 'post'
-CHANNEL     = 'channel'
-IMAGE       = 'image'
-TEXT        = 'text'
-EMBED       = 'embed'
-TOPIC       = 'topic'
-LOCATION    = 'location'
-PERSON      = 'person'
+{ ENTRY, PACKAGE, POST, CHANNEL, IMAGE, TEXT, EMBED,
+TOPIC, LOCATION, PERSON } = require './CONSTANTS'
 
 ENDPOINTS =
     container   : 'releases/'
