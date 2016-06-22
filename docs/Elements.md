@@ -202,6 +202,27 @@ formatting.
 <DateTime date=entry.display_date format='MM/DD/YYYY' />
 ```
 
+The `DateTime` supports a label prop to be included next to the date string. It
+also supports moment’s relative formatting.
+
+```cjsx
+<DateTime date=entry.display_date relative=true />
+```
+
+The relative prop can be set to only apply if the value is within a certain
+number of days or hours. When outside the range, the given format (or default)
+is used.
+
+```cjsx
+<DateTime date=entry.display_date relative={days: 7} format='YYYY M D' />
+```
+
+```cjsx
+<DateTime date=entry.display_date relative={hours: 2} />
+```
+
+The `title` attribute of the element includes the date value, and will be
+formatted according to the specified `title_format`.
 
 ### Info
 
