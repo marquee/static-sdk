@@ -38,6 +38,13 @@ more advanced capabilities.
 The SDK is command-line based, and includes a [CLI](../cli/) for building,
 development, and deployment.
 
+## Getting started
+
+The [boilerplate project](https://github.com/marquee/frontend-boilerplate) is
+a good starting point for projects that use this SDK.
+
+
+---
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
