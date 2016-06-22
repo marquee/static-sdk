@@ -181,13 +181,13 @@ module.exports = (project_directory, options, onCompile=null) ->
                 else
                     global.ASSET_URL = "#{ _prefix }/assets/"
 
-                _makeIncludeAssets = (asset_hash) ->
-                    return (args...) ->
-                        compileAssets.includeAssets
-                            project_directory   : project_directory
-                            build_directory     : build_directory
-                            asset_hash          : asset_hash
-                            assets              : args
+                
+                _emitAssets = (args...) ->
+                    compileAssets.includeAssets
+                        project_directory   : project_directory
+                        build_directory     : build_directory
+                        asset_hash          : asset_hash
+                        assets              : args
 
                 # Finally, invoke the compiler.
                 SDKError.alwaysLog("Invoking compiler from #{ SDKError.colors.green(project_package.main) }")
@@ -198,12 +198,15 @@ module.exports = (project_directory, options, onCompile=null) ->
                         emitFile        : _emitFile
                         emitRedirect    : _emitRedirect
                         emitRSS         : _emitRSS
+                        emitAssets      : _emitAssets
                         config          : project_config
                         project         : project_package
                         payload         : options.payload
                         done            : _done
                         info            : build_info
-                        includeAssets   : _makeIncludeAssets(asset_hash)
+                        includeAssets   : (args...) ->
+                            console.warn('`includeAssets` is deprecated. Used `emitAssets`.')
+                            _emitAssets(args...)
                         PRIORITY        : options.priority
                 catch e
                     throw new SDKError('compiler', e)
