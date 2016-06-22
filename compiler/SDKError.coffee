@@ -21,7 +21,7 @@ MAIN = 'http://developer.marquee.by/marquee-static-sdk/'
 
 
 DOCS =
-    main                    : ''
+    main                    : 'compiler/#main'
     configuration           : 'configuration/'
     'configuration.deploy'  : 'configuration/#deployment'
     tokens                  : 'configuration/#tokens'
@@ -32,7 +32,7 @@ DOCS =
     assets                  : 'assets/'
     'assets.emitAssets'     : 'assets/#-emitassets-'
     compiler                : 'compiler/'
-    'deploy.repo'           : ''
+    'deploy.repo'           : 'compiler/#uncommitted-changes-detected-but-no-changes-apparent'
     api:
         201: 'api/#201-created'
         204: 'api/#204-no-content'

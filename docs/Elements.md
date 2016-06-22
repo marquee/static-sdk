@@ -32,7 +32,7 @@ for different analytics services.
 
 For including JavaScript and CSS, either by reference or inline.
 
-See [Assets](./assets/) for details about the asset workflow.
+See [Assets](../assets/) for details about the asset workflow.
 
 
 ### BareBase
@@ -67,7 +67,7 @@ Includes some metadata about the project at build time, including:
 
 The metadata will be available under `window.Marquee.build_info`.
 
-This info is useful for including in a [Tracker](./analytics/) to group events
+This info is useful for including in a [Tracker](../analytics/) to group events
 by site version. If the build was done while the git tree was dirty, the sha
 will have a `-dirty` suffix.
 
@@ -78,7 +78,7 @@ Enables using element queries in the styles. Parses the stylesheets for
 element query selectors, and includes the JavaScript necessary to activate
 them in the client.
 
-See [ElementQuery](./element-queries/) for details.
+See [ElementQuery](../element-queries/) for details.
 
 
 ### Favicon

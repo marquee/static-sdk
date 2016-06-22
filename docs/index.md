@@ -35,7 +35,7 @@ handling, and the output is not tied to a specific host. Also, it is possible
 to use the SDK with pure JavaScript and CSS, but this sacrifices some of the
 more advanced capabilities.
 
-The SDK is command-line based, and includes a [CLI](./cli/) for building,
+The SDK is command-line based, and includes a [CLI](../cli/) for building,
 development, and deployment.
 
 
