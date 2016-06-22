@@ -15,7 +15,7 @@ updatePackageJSON = (package_json_path, config) ->
     pkg.marquee.CONTENT_API_HOST    = 'api.marquee.by'
     pkg.scripts.build               = 'npm install && ./node_modules/.bin/marqueestatic build --verbose'
     pkg.scripts.develop             = 'npm install && ./node_modules/.bin/marqueestatic develop --verbose --use-cache'
-    pkg.scripts.deploy              = 'npm install && ./node_modules/.bin/marqueestatic deploy --verbose'
+    pkg.scripts.deploy              = 'git push origin master'
 
     fs.writeFileSync(package_json_path, JSON.stringify(pkg, null, 2))
 
