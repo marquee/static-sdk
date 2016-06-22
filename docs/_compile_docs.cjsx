@@ -76,21 +76,82 @@ Base = React.createClass
 
                 <GoogleAnalytics id=google_analytics_id />
                 <BuildInfo />
-                <Asset path='script.coffee' />
             </body>
         </html>
+
+
+# http://tools.ietf.org/html/rfc2119
+RFC2119_KEYWORD_DEFINITIONS =
+    MUST: """
+        The definition is an absolute requirement of the specification.
+    """
+    MUST_NOT: """
+        The definition is an absolute prohibition of the specification.
+    """
+    SHOULD: """
+        There may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course.
+    """
+    SHOULD_NOT: """
+        There may exist valid reasons in particular circumstances when the particular behavior is acceptable or even useful, but the full implications should be understood and the case carefully weighed before implementing any behavior described with this label.
+    """
+    MAY: """
+        The item is truly optional.  One vendor may choose to include the item because a particular marketplace requires it or because the vendor feels that it enhances the product while another vendor may omit the same item. An implementation which does not include a particular option MUST be prepared to interoperate with another implementation which does include the option, though perhaps with reduced functionality. In the same vein an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides.)
+    """
+
+RFC2119_KEYWORDS =
+    'MUST':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.MUST
+        regex       : new RegExp('MUST(?! NOT)', 'g')
+    'REQUIRED':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.MUST
+        regex       : new RegExp('REQUIRED', 'g')
+    'SHALL':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.MUST
+        regex       : new RegExp('SHALL(?! NOT)', 'g')
+    'MUST NOT':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.MUST_NOT
+        regex       : new RegExp('MUST NOT', 'g')
+    'SHALL NOT':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.MUST_NOT
+        regex       : new RegExp('SHALL NOT', 'g')
+    'SHOULD':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.SHOULD
+        regex       : new RegExp('SHOULD(?! NOT)', 'g')
+    'RECOMMENDED':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.SHOULD
+        regex       : new RegExp('RECOMMENDED', 'g')
+    'SHOULD NOT':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.SHOULD_NOT
+        regex       : new RegExp('SHOULD NOT', 'g')
+    'MAY':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.MAY
+        regex       : new RegExp('MAY', 'g')
+    'OPTIONAL':
+        definition  : RFC2119_KEYWORD_DEFINITIONS.MAY
+        regex       : new RegExp('OPTIONAL', 'g')
+
+SpecKeyword = React.createClass
+    render: ->
+        <em
+            className   = 'SpecKeyword'
+            data-word   = @props.word
+            title       = RFC2119_KEYWORDS[@props.word].definition
+            style       = { cursor: 'help' }
+        >{ @props.word }</em>
+
+ReactDOMServer = require 'react-dom/server'
 
 MarkdownPage = React.createClass
     render: ->
         output_content = fs.readFileSync(@props.file).toString()
 
-        # http://tools.ietf.org/html/rfc2119
-        KEYWORDS = ['MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', 'OPTIONAL']
-        KEYWORDS.forEach (word) ->
-            exp = new RegExp(word,'g')
-            output_content = output_content.replace(exp, """
-                <em class="SpecKeyword" data-word="#{ word }">#{ word }</em>
-            """.trim())
+        for word, spec of RFC2119_KEYWORDS
+            output_content = output_content.replace(
+                spec.regex,
+                ReactDOMServer.renderToStaticMarkup(
+                    <SpecKeyword word=word />
+                )
+            )
         output_content = marked(output_content)
         <div className='Page__' dangerouslySetInnerHTML={ __html: output_content } />
 
