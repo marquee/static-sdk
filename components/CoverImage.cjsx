@@ -120,9 +120,14 @@ module.exports = React.createClass
                 'data-src_2560'         : src_2560
                 'data-aspect_ratio'     : aspect_ratio?.toFixed(3)
             )
+            style.overflow = 'hidden'
         
         contents = <div className='_Image' style=style>
             { @props.children }
+            {
+                if @props.noscript and not @state.__live
+                    <img src=main_image_url style={ width: '100%' } />
+            }
         </div>
 
         if @props.link
