@@ -257,5 +257,48 @@ Can be made a link.
 ```
 
 
+## Layouts
+
+### CardGrid
+
+A grid that has one, two, or three columns. Requires importing the styles from
+`marquee/layouts` (or `marquee/classes`). Also requires using
+[ElementQuery](../element-queries/).
+
+```cjsx
+<CardGrid columns=2>
+    { items }
+</CardGrid>
+```
+
+If `vary` is set, the number of columns will adjust as space allows, up to the
+`columns` set.
+
+```cjsx
+<CardGrid columns=3 vary=true>
+    { items }
+</CardGrid>
+```
+
+`double_first=true` will make the first cell the width of two columns, useful
+for featured cards.
+
+```cjsx
+<CardGrid columns=2>
+    { items }
+</CardGrid>
+```
+
+By default, the `CardGrid` responds to its own width using element query. It
+can also respond to the viewport using `respond_to_viewport=true`.
+
+```cjsx
+<CardGrid columns=3 respond_to_viewport=true>
+    { items }
+</CardGrid>
+```
+
+
+
 
 [momentjs]: http://momentjs.com/docs/#/displaying/
