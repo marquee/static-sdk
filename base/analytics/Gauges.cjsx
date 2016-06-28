@@ -9,15 +9,12 @@ module.exports = React.createClass
 
     render: ->
         return null unless @props.id
-        _rawScript """
-            (function() {
-                window._gauges = window._gauges || [];
-                var t   = document.createElement('script');
-                t.async = true;
-                t.id    = 'gauges-tracker';
-                t.setAttribute('data-site-id', '#{ @props.id }');
-                t.src = '//secure.gaug.es/track.js';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(t, s);
-            })();
-        """
+
+        <script
+            id              = 'gauges-tracker'
+            type            = 'text/javascript'
+            data-site-id    = @props.id
+            data-track-path = 'https://track.gaug.es/track.gif'
+            src             = 'https://d36ee2fcip1434.cloudfront.net/track.js'
+            async           = true
+        />
