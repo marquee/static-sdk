@@ -42,7 +42,7 @@ getCurrentCommit = require '../compiler/getCurrentCommit'
 putFilesToS3 = require '../deployment/putFilesToS3'
 walkSync = require '../compiler/walkSync'
 
-{ GoogleAnalytics, ChartbeatStart } = require '../base/analytics'
+{ Gauges } = require '../base/analytics'
 { BuildInfo, makeMetaTags, Asset, Favicon, GoogleFonts } = require '../base'
 
 console.log 'Compiling docs in', build_directory, for_deploy
@@ -54,7 +54,6 @@ MarqueeBranding = require '../components/MarqueeBranding'
 
 Base = React.createClass
     render: ->
-        google_analytics_id = null
         <html>
             <head>
                 <title>{ if @props.title then "#{ @props.title } - " else null }Marquee Static SDK</title>
@@ -77,7 +76,7 @@ Base = React.createClass
 
                 {@props.extra_body}
 
-                <GoogleAnalytics id=google_analytics_id />
+                <Gauges id=deploy_config.GAUGES_ID />
                 <BuildInfo />
             </body>
         </html>
