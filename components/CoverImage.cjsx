@@ -1,17 +1,60 @@
-React = require 'react'
+React           = require 'react'
+{ Classes }     = require 'shiny'
 
-{ Classes } = require 'shiny'
+selectImageSize = (width, height, px_ratio) ->
+    if width / height > 1
+        comparison_dimension = width
+    else
+        comparison_dimension = height
+
+    comparison_dimension = comparison_dimension * px_ratio
+
+    if comparison_dimension > 1330
+        return '2560'
+    else if comparison_dimension > 668
+        return '1280'
+    else
+        return '640'
+
 
 module.exports = React.createClass
     displayName: 'CoverImage'
+
     propTypes:
-        align: React.PropTypes.oneOf(['center','top','right','bottom','left'])
+        align       : React.PropTypes.oneOf(['center','top','right','bottom','left'])
+        image       : React.PropTypes.oneOfType([
+            React.PropTypes.object
+            React.PropTypes.string
+        ])
+        intrinsic   : React.PropTypes.bool
+        noscript    : React.PropTypes.bool
+
     getDefaultProps: -> {
-        align: 'center'
-        size: null
-        noscript: true
-        intrinsic: true
+        align       : 'center'
+        intrinsic   : true
+        noscript    : true
     }
+
+    getInitialState: -> {
+        __live: false
+    }
+
+    componentDidMount: ->
+        console.log 'CoverImage::componentDidMount'
+        @setState(__live: true)
+        window.addEventListener('resize', @_updateSize)
+        @_updateSize()
+
+    componentWillUnmount: ->
+        window.removeEventListener('resize', @_updateSize)
+
+    _updateSize: ->
+        if @isMounted()
+            _el = React.findDOMNode(@refs.el)
+            @setState
+                width   : _el.offsetWidth
+                height  : _el.offsetHeight
+
     render: ->
         cx = new Classes('CoverImage', @props.className)
 
@@ -39,7 +82,7 @@ module.exports = React.createClass
         x = _x unless x?
         y = _y unless y?
 
-        bg_position = "#{ x * 100 }% #{ y * 100}%"
+        bg_position = "#{ (x * 100).toFixed(0) }% #{ (y * 100).toFixed(0) }%"
 
         if image?.content?
             src_2560        = image.content['2560']?.url or undefined
@@ -57,21 +100,35 @@ module.exports = React.createClass
         cx.add('intrinsic', @props.intrinsic)
 
         props =
+            ref                     : 'el'
             className               : cx
             href                    : @props.link
             'data-is_empty'         : not main_image_url
-            'data-src_640'          : src_640
-            'data-src_1280'         : src_1280
-            'data-src_2560'         : src_2560
-            'data-aspect_ratio'     : aspect_ratio?.toFixed(3)
 
-        contents = [@props.children]
-        if @props.noscript and main_image_url
-            contents.unshift <noscript>
-                    <img src=main_image_url />
-                </noscript>
+        style =
+            backgroundPosition: bg_position
 
-        contents = <div className='_Image' style={backgroundPosition: bg_position}>{contents}</div>
+        if @state.__live and image
+            _size = selectImageSize(
+                @state.width, @state.height, window?.devicePixelAspectRatio or 1
+            )
+            style.backgroundImage   = "url('#{ image.content[_size]?.url }')"
+        else
+            props[k] = v for k,v of (
+                'data-src_640'          : src_640
+                'data-src_1280'         : src_1280
+                'data-src_2560'         : src_2560
+                'data-aspect_ratio'     : aspect_ratio?.toFixed(3)
+            )
+            style.overflow = 'hidden'
+        
+        contents = <div className='_Image' style=style>
+            { @props.children }
+            {
+                if @props.noscript and not @state.__live
+                    <img src=main_image_url style={ width: '100%' } />
+            }
+        </div>
 
         if @props.link
             cx.set('link')

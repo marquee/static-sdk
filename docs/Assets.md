@@ -34,7 +34,7 @@ subsequent pages will load much more quickly as the common assets are cached.
 Script modules are activated as necessary on each page using the
 `client_modules` system.
 
-See [Client Modules](./client-modules/) for more information about activating
+See [Client Modules](../client-modules/) for more information about activating
 modules and passing per-page arguments.
 
 
@@ -59,7 +59,7 @@ This will compile the specified file, using browserify, and inline the bundle
 into the page (minified with `--production` or a deploy). Inlining is useful
 for critical styles, or scripts that adjust the layout and should be executed
 immediately. A common use for this is element queries, for which the SDK
-provides a [specialized component](./element-queries/).
+provides a [specialized component](../element-queries/).
 
 
 

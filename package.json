@@ -1,11 +1,11 @@
 {
   "name": "marquee-static-sdk",
-  "version": "0.7.0-alpha.4",
+  "version": "0.7.0-alpha.5",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
     "prepublish": "npm test && npm run clearbuild && npm run build",
-    "postpublish": "npm run clearbuild",
-    "build": "npm run build:source && npm run build:docs",
+    "postpublish": "npm run clearbuild && deploy:docs",
+    "build": "npm run build:source",
     "build:docs": "./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx",
     "build:source": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./ && rm ./docs/_compile_docs.js",
     "deploy:docs": "npm run build:source && ./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx --production",

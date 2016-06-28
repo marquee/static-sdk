@@ -47,7 +47,7 @@ starts a simple server for local serving of the compiler output.
 
 ### `--configuration`
 
-Specify a [configuration](./configuration/) to use.
+Specify a [configuration](../configuration/) to use.
 
 `--configuration <name>` or `-c <name>`
 
@@ -112,7 +112,7 @@ Only log upload errors during deploy instead of failing completely.
 
 Set the priority level for the deploy. If set, forces `--no-delete` true.
 
-See [PRIORITY](./compiler/#PRIORITY) for more information.
+See [PRIORITY](../compiler/#PRIORITY) for more information.
 
 
 ### `--ignore-schedule`

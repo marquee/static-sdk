@@ -38,7 +38,7 @@ module.exports = React.createClass
                 if @props.relative.days
                     cutoff = @props.relative.days * 1000 * 60 * 60 * 24
                 else if @props.relative.hours
-                    cutoff = @props.relative.days * 1000 * 60 * 60
+                    cutoff = @props.relative.hours * 1000 * 60 * 60
                 else if @props.relative is true
                     cutoff = Infinity
                 else

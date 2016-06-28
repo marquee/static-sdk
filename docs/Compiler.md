@@ -60,7 +60,7 @@ api.entries (entries) ->
 The `config` object contains the active configuration for the current build,
 including environment, key information, and other project-specific properties.
 It is based on, but may vary slightly from, the `marquee` property in the
-project’s `package.json` file. See [Configuration](./configuration/) for more
+project’s `package.json` file. See [Configuration](../configuration/) for more
 information about how this works.
 
 

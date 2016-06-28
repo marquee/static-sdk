@@ -35,9 +35,16 @@ handling, and the output is not tied to a specific host. Also, it is possible
 to use the SDK with pure JavaScript and CSS, but this sacrifices some of the
 more advanced capabilities.
 
-The SDK is command-line based, and includes a [CLI](./cli/) for building,
+The SDK is command-line based, and includes a [CLI](../cli/) for building,
 development, and deployment.
 
+## Getting started
+
+The [boilerplate project](https://github.com/marquee/frontend-boilerplate) is
+a good starting point for projects that use this SDK.
+
+
+---
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be

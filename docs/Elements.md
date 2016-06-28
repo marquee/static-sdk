@@ -32,7 +32,7 @@ for different analytics services.
 
 For including JavaScript and CSS, either by reference or inline.
 
-See [Assets](./assets/) for details about the asset workflow.
+See [Assets](../assets/) for details about the asset workflow.
 
 
 ### BareBase
@@ -67,7 +67,7 @@ Includes some metadata about the project at build time, including:
 
 The metadata will be available under `window.Marquee.build_info`.
 
-This info is useful for including in a [Tracker](./analytics/) to group events
+This info is useful for including in a [Tracker](../analytics/) to group events
 by site version. If the build was done while the git tree was dirty, the sha
 will have a `-dirty` suffix.
 
@@ -78,7 +78,7 @@ Enables using element queries in the styles. Parses the stylesheets for
 element query selectors, and includes the JavaScript necessary to activate
 them in the client.
 
-See [ElementQuery](./element-queries/) for details.
+See [ElementQuery](../element-queries/) for details.
 
 
 ### Favicon
@@ -89,7 +89,8 @@ Includes a link to the favicon, setting the correct type. Defaults to
 
 ### Fragment
 
-Wrapper for creating HTML fragments.
+Wrapper for creating HTML fragments. These SHOULD be emitted using the
+`fragment: true` option on `emitFile`.
 
 
 ### GoogleFonts
@@ -168,17 +169,24 @@ Category subcomponent.
 ```
 
 
-### Cover
+### CoverImage
 
-Cover component. Can be made a link.
+CoverImage component for cover images. Can be made a link.
 
 ```cjsx
-<Cover image=entry.cover_image />
+<CoverImage image=entry.cover_image />
 ```
 
 ```cjsx
-<Cover image=entry.cover_image link=entry.link />
+<CoverImage image=entry.cover_image link=entry.link />
 ```
+
+The CoverImage requires 'marquee-static-sdk/client/CoverImage' to be loaded
+in the client modules, which selects the correct image resolution based on
+available size and screen resolution, as well as image visibility. Or, the
+`<CoverImage>` can be used directly in a live React app, and will perform the
+necessary checks and image selection.
+
 
 
 
@@ -194,6 +202,27 @@ formatting.
 <DateTime date=entry.display_date format='MM/DD/YYYY' />
 ```
 
+The `DateTime` supports a label prop to be included next to the date string. It
+also supports moment’s relative formatting.
+
+```cjsx
+<DateTime date=entry.display_date relative=true />
+```
+
+The relative prop can be set to only apply if the value is within a certain
+number of days or hours. When outside the range, the given format (or default)
+is used.
+
+```cjsx
+<DateTime date=entry.display_date relative={days: 7} format='YYYY M D' />
+```
+
+```cjsx
+<DateTime date=entry.display_date relative={hours: 2} />
+```
+
+The `title` attribute of the element includes the date value, and will be
+formatted according to the specified `title_format`.
 
 ### Info
 
@@ -226,6 +255,49 @@ Can be made a link.
 ```cjsx
 <Title title=entry.title level=2 link=entry.link />
 ```
+
+
+## Layouts
+
+### CardGrid
+
+A grid that has one, two, or three columns. Requires importing the styles from
+`marquee/layouts` (or `marquee/classes`). Also requires using
+[ElementQuery](../element-queries/).
+
+```cjsx
+<CardGrid columns=2>
+    { items }
+</CardGrid>
+```
+
+If `vary` is set, the number of columns will adjust as space allows, up to the
+`columns` set.
+
+```cjsx
+<CardGrid columns=3 vary=true>
+    { items }
+</CardGrid>
+```
+
+`double_first=true` will make the first cell the width of two columns, useful
+for featured cards.
+
+```cjsx
+<CardGrid columns=2>
+    { items }
+</CardGrid>
+```
+
+By default, the `CardGrid` responds to its own width using element query. It
+can also respond to the viewport using `respond_to_viewport=true`.
+
+```cjsx
+<CardGrid columns=3 respond_to_viewport=true>
+    { items }
+</CardGrid>
+```
+
 
 
 

@@ -20,7 +20,7 @@ should never be initiated.
 ### 401 UNAUTHORIZED
 
 An access token was not included in the request, perhaps because it is not
-set in the `package.json`. See [configuration/tokens](./configuration/#tokens).
+set in the `package.json`. See [configuration/tokens](../configuration/#tokens).
 
 All requests to the Marquee Content API MUST be authenticated. API tokens MUST
 be specified using either the `Authorization` header or a `?token` parameter:
