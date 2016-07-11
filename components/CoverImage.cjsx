@@ -126,7 +126,9 @@ module.exports = React.createClass
             { @props.children }
             {
                 if @props.noscript and not @state.__live
-                    <img src=main_image_url style={ width: '100%' } />
+                    <noscript>
+                        <img src=main_image_url style={ width: '100%' } />
+                    </noscript>
             }
         </div>
 
