@@ -1,6 +1,6 @@
 {
   "name": "marquee-static-sdk",
-  "version": "0.7.0-alpha.6",
+  "version": "0.7.0-alpha.7",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
     "prepublish": "npm test && npm run clearbuild && npm run build",
@@ -53,7 +53,7 @@
     "when": "^3.6.4"
   },
   "peerDependencies": {
-    "react": "^15.0.1"
+    "react": "^15.2.1"
   },
   "devDependencies": {
     "marked": "^0.3.2",
