@@ -1,4 +1,5 @@
 React           = require 'react'
+ReactDOM        = require 'react-dom'
 { Classes }     = require 'shiny'
 
 selectImageSize = (width, height, px_ratio) ->
@@ -50,7 +51,7 @@ module.exports = React.createClass
 
     _updateSize: ->
         if @isMounted()
-            _el = React.findDOMNode(@refs.el)
+            _el = ReactDOM.findDOMNode(@refs.el)
             @setState
                 width   : _el.offsetWidth
                 height  : _el.offsetHeight
