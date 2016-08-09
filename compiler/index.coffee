@@ -193,7 +193,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                 SDKError.alwaysLog("Invoking compiler from #{ SDKError.colors.green(project_package.main) }")
                 SDKError.setPrefix(SDKError.colors.grey('* compiler: '))
                 try
-                    buildFn
+                    result_promise = buildFn
                         api             : api
                         emitFile        : _emitFile
                         emitRedirect    : _emitRedirect
@@ -208,7 +208,14 @@ module.exports = (project_directory, options, onCompile=null) ->
                             console.warn('`includeAssets` is deprecated. Used `emitAssets`.')
                             _emitAssets(args...)
                         PRIORITY        : options.priority
+                    # If the buildFn correctly returns a promise, use that
+                    # instead of the surrounding try/catch to guard
+                    # against errors.
+                    result_promise?.catch? (e) ->
+                        clearTimeout(_done_timeout)
+                        throw new SDKError('compiler', e)
                 catch e
+                    clearTimeout(_done_timeout)
                     throw new SDKError('compiler', e)
 
     return build_directory
