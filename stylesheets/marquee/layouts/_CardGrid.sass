@@ -32,7 +32,8 @@
             margin-bottom: $_gutter
 
     &.-columns--2,
-    &.-columns--3.-vary
+    &.-columns--3.-vary,
+    &.-columns--4.-vary
         +_width-gt-extra_small
             ._GridItem__
                 display         : inline-block
@@ -118,3 +119,83 @@
                     &:first-child
                         width: 66.6666%
                         padding-left: 0
+
+    &.-columns--4:not(.-vary)
+        +_width-gt-extra_small
+            ._GridItem__
+                display         : inline-block
+                vertical-align  : top
+                width           : 25%
+                &:nth-child(4n + 1)
+                    padding-right   : $_gutter * 2/4
+                    padding-left    : 0
+                &:nth-child(4n + 2),
+                &:nth-child(4n + 3)
+                    padding-right   : $_gutter * 2/4
+                    padding-left    : $_gutter * 2/4
+                &:nth-child(4n + 4)
+                    padding-left    : $_gutter * 2/4
+                    padding-right   : 0
+
+            &.-double_first
+                ._GridItem__
+                    &:nth-child(4n + 4)
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : 0
+                    &:nth-child(4n + 1),
+                    &:nth-child(4n + 2)
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : $_gutter * 2/4
+                    &:nth-child(4n + 3)
+                        padding-left    : $_gutter * 2/4
+                        padding-right   : 0
+                    &:nth-child(1)
+                        width: 50%
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : 0
+                    &:nth-child(2)
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : $_gutter * 2/4
+                    &:nth-child(3)
+                        padding-left    : $_gutter * 2/4
+                        padding-right   : 0
+
+    &.-columns--4.-vary
+        +_width-gt-small
+            ._GridItem__
+                display         : inline-block
+                vertical-align  : top
+                width           : 25%
+                &:nth-child(4n + 1)
+                    padding-right   : $_gutter * 2/4
+                    padding-left    : 0
+                &:nth-child(4n + 2),
+                &:nth-child(4n + 3)
+                    padding-right   : $_gutter * 2/4
+                    padding-left    : $_gutter * 2/4
+                &:nth-child(4n + 4)
+                    padding-left    : $_gutter * 2/4
+                    padding-right   : 0
+
+            &.-double_first
+                ._GridItem__
+                    &:nth-child(4n + 4)
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : 0
+                    &:nth-child(4n + 1),
+                    &:nth-child(4n + 2)
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : $_gutter * 2/4
+                    &:nth-child(4n + 3)
+                        padding-left    : $_gutter * 2/4
+                        padding-right   : 0
+                    &:nth-child(1)
+                        width: 50%
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : 0
+                    &:nth-child(2)
+                        padding-right   : $_gutter * 2/4
+                        padding-left    : $_gutter * 2/4
+                    &:nth-child(3)
+                        padding-left    : $_gutter * 2/4
+                        padding-right   : 0
