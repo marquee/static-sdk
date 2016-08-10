@@ -7,7 +7,7 @@ module.exports = React.createClass
 
     propTypes:
         columns: React.PropTypes.oneOf([
-                1,2,3
+                1,2,3,4
             ]).isRequired
         double_first        : React.PropTypes.bool
         id                  : React.PropTypes.string
