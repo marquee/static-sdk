@@ -47,7 +47,7 @@ module.exports = React.createClass
         text = @props.text
         text = "&text=#{ text }" if text
 
-        font_url = "#{ protocol }://fonts.googleapis.com/css?family=#{ fonts.join('|') }#{ text }"
+        font_url = "#{ @props.protocol }://fonts.googleapis.com/css?family=#{ fonts.join('|') }#{ text }"
 
         if @props.defer
             return <DeferredStylesheet href=font_url />
