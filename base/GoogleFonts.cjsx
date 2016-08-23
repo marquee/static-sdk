@@ -31,12 +31,13 @@ module.exports = React.createClass
 
     propTypes:
         fonts   : React.PropTypes.objectOf(React.PropTypes.array).isRequired
+        protocol: React.PropTypes.oneOf(['http', 'https']).isRequired
         text    : React.PropTypes.string
         defer   : React.PropTypes.bool
-
     getDefaultProps: -> {
         defer: false
         text: ''
+        protocol: 'http'
     }
 
     render: ->
@@ -46,7 +47,7 @@ module.exports = React.createClass
         text = @props.text
         text = "&text=#{ text }" if text
 
-        font_url = "http://fonts.googleapis.com/css?family=#{ fonts.join('|') }#{ text }"
+        font_url = "#{ protocol }://fonts.googleapis.com/css?family=#{ fonts.join('|') }#{ text }"
 
         if @props.defer
             return <DeferredStylesheet href=font_url />
