@@ -146,6 +146,18 @@ changed using the `join=', '` prop.
 <Byline byline={['Author Name', 'Other Author', 'Third Collaborator']} />
 ```
 
+The names can also be entities with a `name` property, and the component will
+join accordingly.
+
+#### `Byline.join`
+
+Byline exposes the join function it uses to create the final string, for cases
+where the component itself is not usable. It takes the same options.
+
+```javascript
+byline_string = Byline.join(['Author Name', 'Other Author'], { join: 'and' });
+```
+
 
 ### Card
 
