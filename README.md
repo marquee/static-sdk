@@ -53,3 +53,13 @@ _Note:_ the SDK has not been tested on Windows and very likely will not work pro
     Details about the process will scroll down the screen, but when it’s done, you can simply visit [localhost:5000](http://localhost:5000) to view the new project in a browser. It should look something like [this](http://sample-project.marquee.pub/). [View source](view-source:http://localhost:5000/) or poke around in the generated `.dist/` folder of the project to see what the compiler generates.
 
 3.  … make changes, etc
+
+4.  Commit changes to the `develop` branch.
+
+5.  When ready to cut a release
+
+    1. Increment the version number in `package.json` in its own commit, with the comment matching the new version number, eg: `v0.7.2-alpha.3` (you can see the structure of the workflow in the git history)
+    2. Merge `develop` into `master` using `--no-ff`: `git merge --no-ff develop`
+    3. Create a tag at this merge commit with the version number
+    4. Push `develop`, `master`, `--tags`
+    5. Run `npm publish` (requires a `env.json` in the Dropbox for deploying docs)
