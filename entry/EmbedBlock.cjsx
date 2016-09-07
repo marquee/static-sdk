@@ -74,7 +74,9 @@ module.exports = React.createClass
                             allowFullScreen
                         />
             else
-                embed = <div id=embed_id data-inner_html=@props.block.content />
+                embed = <div id=embed_id dangerouslySetInnerHTML={
+                    __html: @props.block.content
+                } />
 
         <figure
             id          = @props.block.id
@@ -83,20 +85,19 @@ module.exports = React.createClass
             <div className='_Content'>
                 <div className='_EmbedWrapper'>
                     {embed}
-                    <script dangerouslySetInnerHTML={__html: UglifyJS.minify("""
-                        (function(window){
-                            window.addEventListener('load', function(){
-                                var target = document.getElementById('#{ embed_id }');
-                                if (target) {
-                                    if (target.dataset.frame_src) {
-                                        target.setAttribute('src', target.dataset.frame_src);
-                                    } else if (target.dataset.inner_html) {
-                                        target.innerHTML = target.dataset.inner_html;
-                                    }
-                                }
-                            });
-                        })(window);
-                    """, fromString: true).code} />
+                    {
+                        if embed_video_url
+                            <script dangerouslySetInnerHTML={__html: UglifyJS.minify("""
+                                (function(window){
+                                    window.addEventListener('load', function(){
+                                        var target = document.getElementById('#{ embed_id }');
+                                        if (target) {
+                                            target.setAttribute('src', target.dataset.frame_src);
+                                        }
+                                    });
+                                })(window);
+                            """, fromString: true).code} />
+                    }
                 </div>
                 {
                     if caption or credit
