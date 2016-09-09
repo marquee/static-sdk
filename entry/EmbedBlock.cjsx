@@ -119,11 +119,11 @@ parseVideoURL = (_url) ->
 
     switch parsed_url.hostname.replace('www.','')
         when 'youtube.com'
-            return "http://www.youtube.com/embed/#{ parsed_url.query.v }?modestbranding=1"
+            return "//www.youtube.com/embed/#{ parsed_url.query.v }?modestbranding=1"
         when 'youtu.be'
-            return "http://www.youtube.com/embed#{ parsed_url.pathname }?modestbranding=1"
+            return "//www.youtube.com/embed#{ parsed_url.pathname }?modestbranding=1"
         when 'vimeo.com'
-            return "http://player.vimeo.com/video#{ parsed_url.pathname }"
+            return "//player.vimeo.com/video#{ parsed_url.pathname }"
         when 'player.vimeo.com'
             return _url
         else
