@@ -22,5 +22,5 @@ describe 'EmbedBlock', ->
             ).toEqual('//player.vimeo.com/video/168590856')
 
             expect(
-                parseVideoURL('http://player.vimeo.com/video/168590856')
-            ).toEqual('//player.vimeo.com/video/168590856')
+                parseVideoURL('https://player.vimeo.com/video/168590856')
+            ).toEqual('https://player.vimeo.com/video/168590856')
