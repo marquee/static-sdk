@@ -135,7 +135,7 @@ module.exports = React.createClass
 
         if @props.link
             cx.set('link')
-            return <a {...props}>{contents}</a>
+            tag = 'a'
         else
-            return <div {...props}>{contents}</div>
-
+            tag = 'div'
+        return React.createElement(tag, props, contents)
