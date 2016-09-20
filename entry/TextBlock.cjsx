@@ -50,7 +50,9 @@ module.exports = React.createClass
                 unless anno.url
                     return
                 attrs.href = anno.url
-                unless @props.plain
+                # global.config.HOST is used server-side, window.location.hostname is used client-side.
+                _hostname = global?.config?.HOST or window?.location.hostname
+                if _hostname and not @props.plain
                     _parsed = url.parse(anno.url)
                     if _parsed.host and _parsed.host isnt global.config.HOST
                         attrs['data-external'] = true
