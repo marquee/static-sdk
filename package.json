@@ -39,6 +39,7 @@
     "moment": "^2.8.3",
     "node-sass": "^3.7.0",
     "node-watch": "^0.3.4",
+    "optimize-js": "^1.0.1",
     "parse-link-header": "^0.2.0",
     "postcss": "5.0.4",
     "prompt": "^0.2.14",

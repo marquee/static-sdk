@@ -96,6 +96,7 @@ parseCSS = (css_source) ->
 UglifyJS = require 'uglify-js'
 fs = require 'fs'
 path = require 'path'
+optimizeJS = require 'optimize-js'
 element_query_engine = fs.readFileSync(path.join(__dirname, '_element_query_engine.js')).toString()
 
 module.exports = React.createClass
@@ -124,12 +125,12 @@ module.exports = React.createClass
             return fs.readFileSync(file).toString()
         css_source = styles.join('')
         eq_script = """
-                (function(){
+                (function(window){
                     var _query_data = #{ JSON.stringify(parseCSS(css_source), null, 4) };
                     #{ element_query_engine }
-                })();
+                })(window);
             """
         if process.env.NODE_ENV is 'production'
-            eq_script = UglifyJS.minify(eq_script, fromString: true).code
+            eq_script = optimizeJS(UglifyJS.minify(eq_script, fromString: true).code)
 
         <script dangerouslySetInnerHTML={__html: eq_script} />
