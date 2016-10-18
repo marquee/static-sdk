@@ -27,6 +27,7 @@ DOCS =
     tokens                  : 'configuration/#tokens'
     emitFile                : 'compiler/#-emitfile-'
     'emitFile.json'         : 'compiler/#-emitfile-'
+    'emitFile.path'         : 'compiler/#-emitfile-'
     'project.react'         : 'compiler/#-referenceerror-react-is-not-defined-'
     files                   : ''
     assets                  : 'assets/'
