@@ -1,5 +1,5 @@
 {
-  "name": "marquee-static-sdk",
+  "name": "proof-sdk",
   "version": "0.7.0-alpha.16",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
@@ -17,7 +17,7 @@
   },
   "main": "./index.js",
   "bin": {
-    "marqueestatic": "./bin/marqueestatic"
+    "proof": "./bin/proof"
   },
   "dependencies": {
     "autoprefixer": "^6.0.2",
