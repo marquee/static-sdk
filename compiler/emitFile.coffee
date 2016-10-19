@@ -54,6 +54,10 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
     # The actual function given to the compiler for generating files.
     emitFile = (file_path, file_content, options={}) ->
 
+        # Using variable-defined paths can easily cause undefined to be used.
+        unless file_path?
+            throw new SDKError('emitFile.path', 'emitFile got an undefined path')
+
         # Allow for scoping the entire site under a /path/
         if config.ROOT_PREFIX
             file_path = path.join(config.ROOT_PREFIX, file_path)

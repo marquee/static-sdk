@@ -1,6 +1,6 @@
 {
   "name": "proof-sdk",
-  "version": "0.7.0-alpha.16",
+  "version": "0.7.0-alpha.17",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
     "prepublish": "npm test && npm run clearbuild && npm run build",
@@ -39,6 +39,7 @@
     "moment": "^2.8.3",
     "node-sass": "^3.7.0",
     "node-watch": "^0.3.4",
+    "optimize-js": "^1.0.1",
     "parse-link-header": "^0.2.0",
     "postcss": "5.0.4",
     "prompt": "^0.2.14",

@@ -22,6 +22,36 @@ TAG_MAP_PLAIN =
     'subscript'     : 'sub'
 
 
+renderText = (text, annotations, plain=false) ->
+    # Render the text content to HTML, applying annotations if any.
+    text = new NOAT(text)
+
+    tag_map = if plain then TAG_MAP_PLAIN else TAG_MAP
+
+    annotations?.forEach (anno) =>
+        attrs = {}
+        if anno.type is 'link'
+            # Avoid trying to render links without a url specified.
+            unless anno.url
+                return
+            attrs.href = anno.url
+            unless plain
+                _hostname = global?.config?.HOST or window?.location.hostname
+                if _hostname and not plain
+                    _parsed = url.parse(anno.url)
+                    if _parsed.host and _parsed.host isnt _hostname
+                        attrs['data-external'] = true
+        if tag_map[anno.type]
+            [tag, classes...] = tag_map[anno.type].split('.')
+            if classes.length > 0 and not plain
+                attrs['class'] = classes.join(' ') 
+            text.add(tag, anno.start, anno.end, attrs)
+
+    return text
+
+renderPlainText = (text, annotations) -> renderText(text, annotations, true)
+
+
 
 module.exports = React.createClass
     displayName: 'TextBlock'
@@ -39,26 +69,7 @@ module.exports = React.createClass
         return null unless @props.block.content?
 
         # Render the text content to HTML, applying annotations if any.
-        text = new NOAT(@props.block.content)
-
-        tag_map = if @props.plain then TAG_MAP_PLAIN else TAG_MAP
-
-        @props.block.annotations?.forEach (anno) =>
-            attrs = {}
-            if anno.type is 'link'
-                # Avoid trying to render links without a url specified.
-                unless anno.url
-                    return
-                attrs.href = anno.url
-                unless @props.plain
-                    _parsed = url.parse(anno.url)
-                    if _parsed.host and _parsed.host isnt global.config.HOST
-                        attrs['data-external'] = true
-            if tag_map[anno.type]
-                [tag, classes...] = tag_map[anno.type].split('.')
-                if classes.length > 0 and not @props.plain
-                    attrs['class'] = classes.join(' ') 
-                text.add(tag, anno.start, anno.end, attrs)
+        text = renderText(@props.block.content, @props.block.annotations, @props.plain)
 
         # Choose the appropriate tag for the given block's role.
         # Unknown roles are ignored and not rendered.
@@ -89,3 +100,6 @@ module.exports = React.createClass
             className               : "Block TextBlock #{ variants }"
             dangerouslySetInnerHTML : {__html: text.toString()}
         )
+
+module.exports.renderText = renderText
+module.exports.renderPlainText = renderPlainText
