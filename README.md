@@ -1,13 +1,13 @@
 > This is _pre-release_ software. Unless you work at Marquee, or are one of its clients or partners, you probably should not do anything important with this yet.
 
-Marquee Static SDK
-==================
+Proof SDK
+=========
  
-[![NPM version](https://badge.fury.io/js/marquee-static-sdk.svg)](http://badge.fury.io/js/marquee-static-sdk) [![Build Status](https://travis-ci.org/marquee/static-sdk.svg)](https://travis-ci.org/marquee/static-sdk)
+[![NPM version](https://badge.fury.io/js/proof-sdk.svg)](http://badge.fury.io/js/proof-sdk) [![Build Status](https://travis-ci.org/marquee/static-sdk.svg)](https://travis-ci.org/marquee/static-sdk)
 
-The Marquee Static SDK is framework for compiling web publications and deploying them into static hosting environments. The SDK as a whole is designed to work with the [Marquee](http://marquee.by) editorial suite and content platform, but parts of it may be used in a standalone fashion.
+The Proof SDK is framework for compiling web publications and deploying them into static hosting environments. The SDK as a whole is designed to work with the [Marquee](http://marquee.by) editorial suite and content platform, but parts of it may be used in a standalone fashion.
 
-This package requires [node](https://nodejs.org/) and is distributed through [npm](https://www.npmjs.com/package/marquee-static-sdk/). It assumes a willingness to work in a command line environment and a basic familiarity with node and [git](http://git-scm.com/). Care is taken to keep the learning curve minimal, making projects developed using this SDK accessible to a wide variety of skill sets.
+This package requires [node](https://nodejs.org/) and is distributed through [npm](https://www.npmjs.com/package/proof-sdk/). It assumes a willingness to work in a command line environment and a basic familiarity with node and [git](http://git-scm.com/). Care is taken to keep the learning curve minimal, making projects developed using this SDK accessible to a wide variety of skill sets.
 
 
 ## Technical Overview
