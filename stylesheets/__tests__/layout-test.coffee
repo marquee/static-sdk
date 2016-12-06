@@ -8,7 +8,7 @@ css     = require 'css'
 renderSass = (sass_source) ->
     output = sass.renderSync
                 data: """
-                    @import "marquee"
+                    @import "proof"
 
                     #{ sass_source }
                 """
