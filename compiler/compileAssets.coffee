@@ -40,7 +40,7 @@ compileSass = (source_path, dest_path, project_directory, cb) ->
         file: source_path
         includePaths: [
             project_directory
-            path.join(project_directory, 'node_modules', 'marquee-static-sdk', 'stylesheets')
+            path.join(project_directory, 'node_modules', 'proof-sdk', 'stylesheets')
         ]
         , (err, compiled) ->
             throw err if err
