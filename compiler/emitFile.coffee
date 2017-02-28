@@ -8,7 +8,7 @@ path        = require 'path'
 fs          = require 'fs'
 mime        = require 'mime'
 
-module.exports = ({ project_directory, project, config, writeFile, exportMetadata }) ->
+module.exports = ({ project_directory, project, config, writeFile, exportMetadata, defer_emits }) ->
 
 
     # Require the project's copy of React so that the below validation and
@@ -62,33 +62,54 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
         if config.ROOT_PREFIX
             file_path = path.join(config.ROOT_PREFIX, file_path)
 
-        output_path                     = _processPath(file_path)
-        [output_type, output_content]   = _processContent(file_content, options)
+        output_path     = _processPath(file_path)
+        output_type     = null
+        output_content  = null
 
-        if options.content_type
-            output_type = options.content_type
+        _doProcess = ->
+            [_output_type, _output_content]   = _processContent(file_content, options)
+            output_content_to_render = file_content
 
-        # If _processContent didn't specify a content type, guess based on
-        # the output path.
-        unless output_type
-            output_type = mime.lookup(output_path)
+            output_type = _output_type
+            output_content = _output_content
 
-        SDKError.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
+            if options.content_type
+                output_type = options.content_type
 
-        writeFile
-            path        : output_path
-            content     : output_content
-            type        : output_type
+            # If _processContent didn't specify a content type, guess based on
+            # the output path.
+            unless output_type
+                output_type = mime.lookup(output_path)
+
+            unless defer_emits
+                _doWrite()
+            return [output_type, output_content]
+
+        _doWrite = ->
+            SDKError.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
+
+            writeFile
+                path        : output_path
+                content     : output_content
+                type        : output_type
+
+        unless defer_emits
+            _doProcess()
 
         files_emitted.push(output_path)
         if files_emitted_indexed[output_path]
             SDKError.warn("File emitted multiple times: #{ output_path }")
         else
-            files_emitted_indexed[output_path] = true
+            files_emitted_indexed[output_path] = {
+                path: output_path,
+                render: _doProcess,
+                type: output_type,
+            }
 
         exportMetadata(file_path, options.metadata) if options.metadata
 
     emitFile.files_emitted = files_emitted
+    files_emitted._indexed = files_emitted_indexed
     emitFile.files_emitted_indexed = files_emitted_indexed
 
     return emitFile

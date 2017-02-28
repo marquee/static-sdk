@@ -105,6 +105,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             config              : project_config
             writeFile           : _writeFile
             exportMetadata      : _exportMetadata
+            defer_emits         : options._defer_emits
         )
         _emitRedirect = require('./emitRedirect')(_emitFile)
         _emitRSS = require('./emitRSS')(_emitFile)

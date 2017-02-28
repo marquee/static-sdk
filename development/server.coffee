@@ -18,7 +18,7 @@ returnFile = (target_file, req, res, code=200) ->
 
 
 
-module.exports = (host, port, directory) ->
+module.exports = (host, port, directory, file_set) ->
 
     _router = (req,res) ->
         parsed_url = url.parse(req.url)
@@ -27,10 +27,18 @@ module.exports = (host, port, directory) ->
         if target_file.split('/').pop().indexOf('.') is -1
             target_file += '/index.html'
 
-        target_file = path.join(directory, target_file)
-        if fs.existsSync(target_file)
+        target_file = target_file.replace(/\/\//g,'/')
+        target_file_full_path = path.join(directory, target_file)
+
+        if file_set[target_file]
+            [_type, _content] = file_set[target_file].render()
             util.log(SDKError.colors.green("[200] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
-            returnFile(target_file, req, res)
+            res.writeHead 200,
+                'Content-Type': _type
+            res.end(_content)
+        else if fs.existsSync(target_file_full_path)
+            util.log(SDKError.colors.green("[200] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
+            returnFile(target_file_full_path, req, res)
         else
             util.log(SDKError.colors.yellow("[404] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
             not_found_file = path.join(directory, '404.html')
