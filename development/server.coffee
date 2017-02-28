@@ -32,14 +32,15 @@ module.exports = (host, port, directory, file_set) ->
 
         if file_set[target_file]
             [_type, _content] = file_set[target_file].render()
+            util.log(SDKError.colors.green("[200] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
             res.writeHead 200,
                 'Content-Type': _type
             res.end(_content)
         else if fs.existsSync(target_file_full_path)
-            util.log(SDKError.colors.green("[200] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file_full_path))
+            util.log(SDKError.colors.green("[200] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
             returnFile(target_file_full_path, req, res)
         else
-            util.log(SDKError.colors.yellow("[404] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file_full_path))
+            util.log(SDKError.colors.yellow("[404] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
             not_found_file = path.join(directory, '404.html')
             if fs.existsSync(not_found_file)
                 returnFile(not_found_file, req, res, 404)
