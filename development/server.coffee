@@ -37,7 +37,7 @@ module.exports = (host, port, directory, file_set) ->
             res.end(_content)
         else if fs.existsSync(target_file_full_path)
             util.log(SDKError.colors.green("[200] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file_full_path))
-            returnFile(target_file, req, res)
+            returnFile(target_file_full_path, req, res)
         else
             util.log(SDKError.colors.yellow("[404] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file_full_path))
             not_found_file = path.join(directory, '404.html')
