@@ -3,7 +3,7 @@
   "version": "0.7.0-alpha.19",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
-    "prepublish": "npm test && npm run clearbuild && npm run build",
+    "prepublish": "npm run clearbuild && npm run build",
     "postpublish": "npm run clearbuild && npm run deploy:docs",
     "build": "npm run build:source",
     "build:docs": "./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx",
