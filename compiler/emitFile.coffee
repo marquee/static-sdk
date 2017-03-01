@@ -8,6 +8,10 @@ path        = require 'path'
 fs          = require 'fs'
 mime        = require 'mime'
 
+# Create a singular cache of the emits so that the development server always
+# uses the same emit cache as each build. Otherwise it won't see changes.
+emit_cache = {}
+
 module.exports = ({ project_directory, project, config, writeFile, exportMetadata, defer_emits }) ->
 
 
@@ -49,7 +53,14 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
         return file_path
 
     files_emitted = []
-    files_emitted_indexed = {}
+
+    if defer_emits
+        # Reuse the existing cache object so the development server can see
+        # the changes, but be sure to flush it for consistency.
+        files_emitted_indexed = emit_cache
+        Object.keys(files_emitted_indexed).forEach (k) -> files_emitted_indexed[k] = null
+    else
+        files_emitted_indexed = {}
 
     # The actual function given to the compiler for generating files.
     emitFile = (file_path, file_content, options={}) ->
