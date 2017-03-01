@@ -1,6 +1,6 @@
 {
   "name": "proof-sdk",
-  "version": "0.7.0-alpha.19",
+  "version": "0.7.0-alpha.20",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
     "prepublish": "npm run clearbuild && npm run build",
