@@ -4,6 +4,7 @@ EmbedBlock = require './EmbedBlock'
 ImageBlock = require './ImageBlock'
 ListBlock = require './ListBlock'
 TextBlock = require './TextBlock'
+GalleryBlock = require './GalleryBlock'
 
 module.exports = (content, options={}) ->
     result = content?.map (block) ->
@@ -27,6 +28,8 @@ module.exports = (content, options={}) ->
                 return <EmbedBlock block=block key=block.id plain=options.plain />
             when 'list'
                 return <ListBlock block=block key=block.id plain=options.plain />
+            when 'gallery'
+                return <GalleryBlock block=block key=block.id plain=options.plain />
             else
                 return null
 
