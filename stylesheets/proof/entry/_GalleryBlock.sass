@@ -1,0 +1,105 @@
+@import "../_partials.sass"
+
+
+
+.GalleryLightbox
+    +layer(overlays)
+
+    background-color: rgba(black, 0.8)
+
+    ._LightboxImageCaption
+        background-color: rgba(black, 0.8)
+        color: white
+        padding:  1em
+
+    ._Credit
+        font-style: italic
+
+    ._ControlButton
+        +layer(overlays, 1)
+        background-color    : transparent
+        border              : 0
+        width               : 70px
+        cursor              : pointer
+        height              : 70px
+        opacity             : 0.7
+        &:hover,
+        &:focus
+            opacity: 1
+        &:active
+            opacity: 0.8
+        &:disabled
+            opacity: 0.2
+        ._Icon
+            fill: white
+
+.GalleryBlock
+    +layer(images)
+    position: relative
+    clear: both
+    max-width: $Block-column_width--main
+    width: 100%
+
+    &.-column_position--inset
+        max-width: $Block-column_width--text
+
+    +viewport-width-gt-extra_small
+
+        &.-position--left
+            ._Content
+                float: left
+                margin-right: $Block-margin
+
+        &.-position--right
+            ._Content
+                float: right
+                margin-left: $Block-margin
+    
+        &.-size--medium
+            &.-position--center
+                max-width: $Block-column_width--text
+            ._Content
+                max-width: $Block-column_width--text
+            &.-position--right
+                ._Content
+                    width: 51%
+                        // Not 50%, which, because of rounding, ends up being
+                        // 1 pixel too narrow, resulting in a blurry image.
+            &.-position--left
+                ._Content
+                    width: 51%
+
+        &.-size--large
+            &.-position--left
+                ._Content
+                    width: 100%
+                    max-width: $Block-column_width--main / 4 * 3
+            &.-position--right
+                ._Content
+                    width: 100%
+                    max-width: $Block-column_width--main / 4 * 3
+            &.-position--center
+                ._Content
+                    width: 100%
+                    max-width: $Block-column_width--main
+
+        &.-size--full
+            max-width: none
+            ._Content
+                width: 100%
+                max-width: none
+
+    ._Content
+        width           : 100%
+        float           : none
+        margin-left     : 0
+        margin-right    : 0
+        margin-bottom   : $Block-margin
+        max-width       : none
+
+    ._GridThumbnailImage
+        opacity: 1
+        transition-property: opacity
+        transition-duration: 0.2s
+        &:hover
+            opacity: 0.8

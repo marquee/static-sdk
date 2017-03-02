@@ -1,6 +1,7 @@
 module.exports =
     EmbedBlock          : require './EmbedBlock'
     ImageBlock          : require './ImageBlock'
+    GalleryBlock        : require './GalleryBlock'
     makeSocialMetaTags  : require './makeSocialMetaTags'
     ListBlock           : require './ListBlock'
     TextBlock           : require './TextBlock'
