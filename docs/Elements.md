@@ -11,13 +11,13 @@ You can try CJSX syntax live: http://jsdf.github.io/coffee-react-transform/
 
 ## Base
 
-`marquee-static-sdk/base` includes a set of React elements for lower level
+`proof-sdk/base` includes a set of React elements for lower level
 page elements, typically ones that aren’t visible in the page.
 
 
 ### analytics
 
-`marquee-static-sdk/base/analytics`
+`proof-sdk/base/analytics`
 
 The Analytics module contains several elements for including tracking snippets
 for different analytics services.
@@ -193,7 +193,7 @@ CoverImage component for cover images. Can be made a link.
 <CoverImage image=entry.cover_image link=entry.link />
 ```
 
-The CoverImage requires 'marquee-static-sdk/client/CoverImage' to be loaded
+The CoverImage requires 'proof-sdk/client/CoverImage' to be loaded
 in the client modules, which selects the correct image resolution based on
 available size and screen resolution, as well as image visibility. Or, the
 `<CoverImage>` can be used directly in a live React app, and will perform the

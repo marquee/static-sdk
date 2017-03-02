@@ -240,14 +240,14 @@ misspelled.
 This will throw a `Object has no method apply` error when `<Asset>` is used:
 
 ```coffeescript
-Asset = require 'marquee-static-sdk/base'
+Asset = require 'proof-sdk/base'
 ```
 
 vs destructuring or specific require:
 
 ```coffeescript
-{ Asset } = require 'marquee-static-sdk/base'
-Asset = require 'marquee-static-sdk/base/Asset'
+{ Asset } = require 'proof-sdk/base'
+Asset = require 'proof-sdk/base/Asset'
 ```
 
 ### Uncommitted changes detected, but no changes apparent

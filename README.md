@@ -5,7 +5,7 @@ Proof SDK
  
 [![NPM version](https://badge.fury.io/js/proof-sdk.svg)](http://badge.fury.io/js/proof-sdk) [![Build Status](https://travis-ci.org/marquee/static-sdk.svg)](https://travis-ci.org/marquee/static-sdk)
 
-The Proof SDK is framework for compiling web publications and deploying them into static hosting environments. The SDK as a whole is designed to work with the [Marquee](http://marquee.by) editorial suite and content platform, but parts of it may be used in a standalone fashion.
+The Proof SDK is framework for compiling web publications and deploying them into static hosting environments. The SDK as a whole is designed to work with the [Proof](https://proof.pub) editorial suite and content platform, but parts of it may be used in a standalone fashion.
 
 This package requires [node](https://nodejs.org/) and is distributed through [npm](https://www.npmjs.com/package/proof-sdk/). It assumes a willingness to work in a command line environment and a basic familiarity with node and [git](http://git-scm.com/). Care is taken to keep the learning curve minimal, making projects developed using this SDK accessible to a wide variety of skill sets.
 
@@ -58,8 +58,9 @@ _Note:_ the SDK has not been tested on Windows and very likely will not work pro
 
 5.  When ready to cut a release
 
-    1. Increment the version number in `package.json` in its own commit, with the comment matching the new version number, eg: `v0.7.2-alpha.3` (you can see the structure of the workflow in the git history)
+    1. Increment the version number in `package.json` in its own commit, with the comment matching the new version number, eg: `v0.8.0` (you can see the structure of the workflow in the git history)
     2. Merge `develop` into `master` using `--no-ff`: `git merge --no-ff develop`
     3. Create a tag at this merge commit with the version number
     4. Push `develop`, `master`, `--tags`
-    5. Run `npm publish` (requires a `env.json` in the Dropbox for deploying docs)
+    5. Run `npm publish`
+    6. Run `npm run deploy:docs` (requires a `env.json` with the right S3 credentials)

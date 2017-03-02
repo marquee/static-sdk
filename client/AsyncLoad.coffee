@@ -1,4 +1,4 @@
-Metric                          = require 'marquee-static-sdk/client/Metric'
+Metric                          = require './Metric'
 
 AGENT_IS_MOBILE                 = require './AGENT_IS_MOBILE'
 getElPositionAndSize            = require './utils/getElPositionAndSize'

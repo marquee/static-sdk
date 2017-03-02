@@ -22,7 +22,7 @@ rssTemplate = _.template """
             <description></description>
             <atom:link href="<%- full_link %>" rel="self" />
             <docs>http://www.rssboard.org/rss-specification</docs>
-            <generator>marquee-static-sdk/<%- marquee_version %></generator>
+            <generator>proof-sdk/<%- proof_version %></generator>
             <language><%- language %></language>
             <lastBuildDate><%- last_build_date %></lastBuildDate>
             <%= entries %>
@@ -69,7 +69,7 @@ module.exports = ({ title, entries, language }) ->
 
     entries = _entries.join('')
     last_build_date = rfc822Date(last_build_date)
-    marquee_version = sdk_package.version
+    proof_version = sdk_package.version
 
-    rssTemplate({ title, entries, language, full_link, last_build_date, marquee_version })
+    rssTemplate({ title, entries, language, full_link, last_build_date, proof_version })
 

@@ -17,7 +17,7 @@ module.exports =
     activate: (url_prefix, num_ctas) ->
         doSomething(num_ctas)
 
-require('marquee-static-sdk/client/client_modules').register(
+require('proof-sdk/client/client_modules').register(
     'Entry', module.exports
 )
 ```
@@ -30,7 +30,7 @@ method, it will be called with `new` and given the arguments.
 
 ```coffeescript
 module.exports = Entry
-require('marquee-static-sdk/client/client_modules').register(
+require('proof-sdk/client/client_modules').register(
     'SomeModules', module.exports
 )
 ```
@@ -51,14 +51,14 @@ require('viewport-units-buggyfill').init()
 require('fastclick')(document.body)
 
 # Initialize the client_modules system.
-require('marquee-static-sdk/client/client_modules')()
+require('proof-sdk/client/client_modules')()
 
 # Modules activated by client modules.
-require('marquee-static-sdk/client/AsyncLoad')
-require('marquee-static-sdk/client/Block')
-require('marquee-static-sdk/client/ImageBlock')
-require('marquee-static-sdk/client/ImageZoomer')
-require('marquee-static-sdk/client/core_tracking')
+require('proof-sdk/client/AsyncLoad')
+require('proof-sdk/client/Block')
+require('proof-sdk/client/ImageBlock')
+require('proof-sdk/client/ImageZoomer')
+require('proof-sdk/client/core_tracking')
 require('./ReadingProgress.coffee')
 require('./ShareEntry.coffee')
 require('./UAEvents.coffee')
@@ -112,7 +112,7 @@ constructors.
 
 The above requires the `Base` element to insert module activation script into
 the view when it renders. To do this, it uses the `<ActivateClientModules>`
-element from `marquee-static-sdk/base`.
+element from `proof-sdk/base`.
 
 Often there are modules that need to be used on all views, but need per-view
 arguments. The `Base::render` method can be merge view-specific modules with
@@ -123,11 +123,6 @@ the globally used ones:
 client_modules = {
     AsyncLoad       : []
     UAEvents        : []
-    core_tracking   : [{
-        source_id: @props.source_id
-        url: if process.env.NODE_ENV is 'production' then 'http://events.marquee-cdn.net' else 'http://events-dev.marquee-cdn.net'
-        publication: global.config.PUBLICATION_SHORT_NAME
-    }]
 }
 
 # View-specific client modules
@@ -147,13 +142,6 @@ The above renders the following JavaScript into the view:
     w.addEventListener('load',function(){
         w['Marquee'].activateModules({
             "AsyncLoad": [],
-            "core_tracking": [
-                {
-                    "source_id":"container_e70d996b90e54b8d970cac06cfc6dc88",
-                    "url":"http://events.marquee-cdn.net",
-                    "publication":"sample_pub"
-                }
-            ],
             "UAEvents":[],
             "deferred_social":[],
             "entry":[

@@ -24,13 +24,13 @@ module.exports = (project_directory, options={}) ->
         if not commit_sha
             _repo_message = "No repo detected. It is #{ SDKError.colors.bold('strongly') } recommended to only deploy from a source-controlled project."
             unless options.force
-                throw new SDKError('deploy.repo', "#{ _repo_message }\nUse `#{ SDKError.colors.magenta('marqueestatic deploy --force') }` to override.")
+                throw new SDKError('deploy.repo', "#{ _repo_message }\nUse `#{ SDKError.colors.magenta('proof deploy --force') }` to override.")
             SDKError.warn('deploy.repo', _repo_message)
 
         else if commit_sha.split('-').pop() is 'dirty'
             _repo_message = "Uncommitted changes detected. It is #{ SDKError.colors.bold('strongly') } recommended to only deploy from a clean working directory."
             unless options.force
-                throw new SDKError('deploy.repo', "#{ _repo_message }\nUse `#{ SDKError.colors.magenta('marqueestatic deploy --force') }` to override.")
+                throw new SDKError('deploy.repo', "#{ _repo_message }\nUse `#{ SDKError.colors.magenta('proof deploy --force') }` to override.")
             SDKError.warn('deploy.repo', _repo_message)
 
         # TODO: warn if branch is not master or behind origin/master
@@ -46,7 +46,7 @@ module.exports = (project_directory, options={}) ->
 
             ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_BUCKET'].forEach (prop) ->
                 unless project_config[prop]
-                    throw new SDKError('configuration.deploy', "Project missing `package.marquee.#{ prop }`.")
+                    throw new SDKError('configuration.deploy', "Project missing `package.proof.#{ prop }`.")
 
             _minify_start = Date.now()
 
