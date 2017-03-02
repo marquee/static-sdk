@@ -6,15 +6,15 @@ path    = require 'path'
 
 updatePackageJSON = (package_json_path, config) ->
     pkg = JSON.parse(fs.readFileSync(package_json_path).toString())
-    if pkg.marquee and typeof pkg.marquee isnt 'string'
+    if pkg.proof and typeof pkg.proof isnt 'string'
         throw new Error('Already set up!')
     delete pkg.scripts.setup
-    pkg.marquee                     = config
-    pkg.marquee.auto_assets         = true
-    pkg.marquee.WEBHOOK_TOKEN       = crypto.randomBytes(20).toString('hex')
-    pkg.marquee.CONTENT_API_HOST    = 'api.marquee.by'
-    pkg.scripts.build               = 'npm install && ./node_modules/.bin/marqueestatic build --verbose'
-    pkg.scripts.develop             = 'npm install && ./node_modules/.bin/marqueestatic develop --verbose --use-cache'
+    pkg.proof                       = config
+    pkg.proof.CONTENT_API_HOST      = 'api.proof.pub'
+    pkg.proof.cache_control =
+        'html': 'max-age=60'
+    pkg.scripts.build               = 'npm install && proof build --verbose'
+    pkg.scripts.develop             = 'npm install && proof develop --verbose --use-cache'
     pkg.scripts.deploy              = 'git push origin master'
 
     fs.writeFileSync(package_json_path, JSON.stringify(pkg, null, 2))

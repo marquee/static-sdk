@@ -8,7 +8,7 @@ use the `emitRSS` file emitter and the `fbInstantArticlesRSSFeed` renderer.
 In the project’s `main`:
 
 ```javascript
-var fbInstantArticlesRSSFeed = require('marquee-static-sdk/fb_instant_articles/fbInstantArticlesRSSFeed');
+var fbInstantArticlesRSSFeed = require('proof-sdk/fb_instant_articles/fbInstantArticlesRSSFeed');
 ```
 
 ```
@@ -28,7 +28,7 @@ A would-be-nice is to include the Marquee-related OG tags for the IA program in
 the `<head>` of the project’s `<Base>`:
 
 ```jsx
-var fb_generator_tags = require('marquee-static-sdk/fb_instant_articles/fb_generator_tags');
+var fb_generator_tags = require('proof-sdk/fb_instant_articles/fb_generator_tags');
 
 ...
 

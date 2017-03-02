@@ -6,18 +6,19 @@ property. They also need an entrypoint specified, under `"main"`.
 
     ...
     "main": "./main.cjsx",
-    "marquee": {
+    "proof": {
         "PUBLICATION_SHORT_NAME"    : "<short_name>",
         "CONTENT_API_TOKEN"         : "<read-only Content API token>",
         "CONTENT_API_HOST"          : "marquee.by",
         "AWS_BUCKET"                : "<example.com>",
         "AWS_ACCESS_KEY_ID"         : "<AWS Access Key ID>",
         "AWS_SECRET_ACCESS_KEY"     : "<AWS Secret Access Key>",
-        "WEBHOOK_TOKEN"             : "<randomly generated string>",
         "HOST"                      : "<example.com>",
         "SITE_TITLE"                : "<Site Title>",
         "SITE_TWITTER_SCREEN_NAME"  : "<@screen_name>",
-        "auto_assets"               : true
+        "cache_control": {
+            "html": "max-age=60"
+        }
     }
 
 * `PUBLICATION_SHORT_NAME` - the `short_name` of the publication on Marquee
@@ -26,11 +27,10 @@ property. They also need an entrypoint specified, under `"main"`.
 * `AWS_BUCKET` - the S3 bucket to deploy the compiled publication to
 * `AWS_ACCESS_KEY_ID` - an AWS Access Key ID with put object permission in the above bucket
 * `AWS_SECRET_ACCESS_KEY` - the corresponding Secret Access Key
-* `WEBHOOK_TOKEN` - the token that is required for the webhook service to activate the compiler when it receives a webhook
 * `HOST` - the domain of the publication, typically the same as the bucket, used to generate full sharing links
 * `SITE_TITLE` - the title of the publication, used in the `<title>` attribute
 * `SITE_TWITTER_SCREEN_NAME` - the Twitter `screen_name` for the publication, used for Twitter Cards
-* `auto_assets` - set to `false` to disable automatic asset compilation
+* `cache_control` - project-wide, per-extension Cache-Control settings (overrides defaults, can be overridden per-file during emits)
 
 
 ### Multiple Configurations
@@ -47,15 +47,14 @@ overriding any matching key names.
         ...
         "configurations": {
             "<name>": {
-                "AWS_BUCKET": "<alternate-bucket.tld>",
-                "auto_build": false
+                "AWS_BUCKET": "<staging-host.tld>",
+                "HOST": "<staging-host.tld>"
             }
         }
     }
 
-The `auto_build` option is useful in these configurations to avoid compiling
-to staging on every deploy or content change.
-
+Staging configurations are a good place to turn Cache-Control settings down
+or all the way to `0`, for easier development.
 
 
 ## Entrypoint
@@ -91,7 +90,7 @@ suitable user policy looks like this:
       "Version": "2012-10-17",
       "Statement": [
         {
-          "Sid": "Stmt1411849330000",
+          "Sid": "AllowDeploysToBucket",
           "Effect": "Allow",
           "Action": [
             "s3:ListBucket",
@@ -101,8 +100,8 @@ suitable user policy looks like this:
             "s3:PutObjectAcl"
           ],
           "Resource": [
-            "arn:aws:s3:::shortname.marquee.pub",
-            "arn:aws:s3:::shortname.marquee.pub/*"
+            "arn:aws:s3:::<bucket-name>",
+            "arn:aws:s3:::<bucket-name>/*"
           ]
         }
       ]

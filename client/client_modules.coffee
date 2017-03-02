@@ -16,7 +16,7 @@ client_modules={
 Inside modules to be selectively activated:
 
 ```
-require('marquee-static-sdk/client/client_modules').register('menu', activateMenu)
+require('proof-sdk/client/client_modules').register('menu', activateMenu)
 module.exports = activateMenu
 ```
 

@@ -50,9 +50,9 @@ module.exports = (project_directory, options, onCompile=null) ->
         ['CONTENT_API_TOKEN', 'CONTENT_API_HOST', 'HOST'].forEach (prop) ->
             unless project_config[prop]
                 _config_notice = ''
-                if project_package.marquee.configurations
+                if project_package.marquee.configurations or project_package.proof.configurations
                     _config_notice = ' A `--configuration <name>` may be required.'
-                throw new SDKError('configuration', "Project missing `package.marquee.#{ prop }`.#{ _config_notice }")
+                throw new SDKError('configuration', "Project missing `package.proof.#{ prop }`.#{ _config_notice }")
 
         # Load the project compiler entrypoint.
         buildFn = require(project_main)
@@ -90,6 +90,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             token               : project_config.CONTENT_API_TOKEN
             host                : project_config.CONTENT_API_HOST
             project             : project_package
+            config              : project_config
             project_directory   : project_directory
             use_cache           : options.use_cache
             ignore_schedule     : options.ignore_schedule

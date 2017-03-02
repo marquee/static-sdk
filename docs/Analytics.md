@@ -1,7 +1,7 @@
 
 # General analytics
 
-`marquee-static-sdk/base/analytics`
+`proof-sdk/base/analytics`
 
 The SDK provides script snippets for common analytics services, as well as a
 wrapper for customized snippets.
@@ -61,7 +61,7 @@ All Metrics include the following properties:
 Different analytics services support different event payloads. To connect an
 analytics service to a Metric, a service- and event-specific Tracker must be
 created. This Tracker parses the particular Metric’s event payload into a
-format the service supports. The `marquee-static-sdk/trackers` module provides
+format the service supports. The `proof-sdk/trackers` module provides
 several base Trackers for common analytics services, such as Google Analytics.
 
 For example, this snippet subscribes a Google Analytics Tracker to the
@@ -104,7 +104,7 @@ To add support for Metrics inside a custom client script, first require the
 `Metric` module:
 
 ```coffeescript
-Metric = require('marquee-static-sdk/client/Metric')
+Metric = require('proof-sdk/client/Metric')
 ```
 
 Next, create a Metric for a specific kind of event.

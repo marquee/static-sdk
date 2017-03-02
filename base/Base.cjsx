@@ -50,13 +50,7 @@ module.exports = React.createClass
 
     render: ->
         # Base client modules
-        client_modules = {
-            core_tracking   : [{
-                source_id   : @props.source_id
-                url         : if process.env.NODE_ENV is 'production' then 'http://events.marquee-cdn.net' else 'http://events-dev.marquee-cdn.net'
-                publication : global.config.PUBLICATION_SHORT_NAME
-            }]
-        }
+        client_modules = {}
 
         # Page-specific client modules
         client_modules[k] = v for k,v of @props.client_modules

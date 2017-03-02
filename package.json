@@ -1,15 +1,15 @@
 {
   "name": "proof-sdk",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "scripts": {
     "test": "npm run clearbuild && npm run build:source && jest",
     "prepublish": "npm run clearbuild && npm run build",
-    "postpublish": "npm run clearbuild && npm run deploy:docs",
+    "postpublish": "npm run clearbuild",
     "build": "npm run build:source",
-    "build:docs": "./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx",
-    "build:source": "./node_modules/coffee-react/bin/cjsx --output ./ --bare --compile ./ && rm ./docs/_compile_docs.js",
-    "deploy:docs": "npm run build:source && ./node_modules/coffee-react/bin/cjsx ./docs/_compile_docs.cjsx --production",
-    "develop": "./node_modules/coffee-react/bin/cjsx --watch --output ./ --bare --compile ./",
+    "build:docs": "cjsx ./docs/_compile_docs.cjsx",
+    "build:source": "cjsx --output ./ --bare --compile ./ && rm ./docs/_compile_docs.js",
+    "deploy:docs": "npm run build:source && cjsx ./docs/_compile_docs.cjsx --production",
+    "develop": "cjsx --watch --output ./ --bare --compile ./",
     "clearbuild": "find . -path ./node_modules -prune -or -path __tests__ -prune -or -name '*.js' -or -name '*.html' -or -name '*.css' | grep -v 'node_modules' | grep -v '__tests__' | xargs rm -f"
   },
   "engines": {
@@ -71,7 +71,7 @@
       "<rootDir>/node_modules/react"
     ]
   },
-  "homepage": "http://marquee.by",
+  "homepage": "https://proof.pub",
   "bugs": "https://github.com/marquee/static-sdk",
   "repository": {
     "type": "git",

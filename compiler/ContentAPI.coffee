@@ -191,7 +191,7 @@ class APIResults
 # Content API wrapper
 # Wraps object in models that provide _date helpers, etc
 class ContentAPI
-    constructor: ({ token, host, project, use_cache, project_directory, ignore_schedule, api_page_size, smart_cache, stale_after }) ->
+    constructor: ({ token, host, project, config, use_cache, project_directory, ignore_schedule, api_page_size, smart_cache, stale_after }) ->
         # The actual token permissions are not determined by the prefix, but
         # we can assume it reflects the permissions defined in the database.
         unless token.substring(0,2) is 'r0'
@@ -217,14 +217,14 @@ class ContentAPI
         # use the default SDK User Agent string. An assembled string looks
         # something like:
         #
-        #    shortname/1.0.0 marquee-static-sdk/0.10.0 (+http://shortname.marquee.pub)
+        #    shortname/1.0.0 proof-sdk/0.8.0 (+http://shortname.proof.press)
         #
         if project
-            @_ua = project.name
+            @_ua = config.PUBLICATION_SHORT_NAME
             if project.version
                 @_ua += "/#{ project.version }"
             @_ua += " #{ sdk_ua_string }"
-            @_ua += " (+http://#{ project.marquee.HOST })"
+            @_ua += " (+http://#{ config.HOST })"
         else
             @_ua = sdk_ua_string
 
