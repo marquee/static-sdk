@@ -4,7 +4,7 @@ React = require 'react'
 
 GalleryBlock = (props) ->
 
-    cx = new Classes('GalleryBlock')
+    cx = new Classes('Block GalleryBlock')
 
     layout = props.block.layout or {}
     size = layout.size or 'medium'
