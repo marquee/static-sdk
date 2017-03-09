@@ -35,7 +35,7 @@ Card = React.createClass
             className   : "Card #{ @props.className or '' } #{ variants }"
             href        : @props.link
             title       : @props.title
-            target      : if @props.link then @props.target or '_self' else null
+            target      : @props.target
         , @props.children
 
 
