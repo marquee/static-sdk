@@ -16,6 +16,7 @@ Card = React.createClass
         link        : React.PropTypes.string
         id          : React.PropTypes.string
         title       : React.PropTypes.string
+        target      : React.PropTypes.string
         className   : React.PropTypes.oneOfType([
                 React.PropTypes.string
                 React.PropTypes.object
@@ -34,8 +35,8 @@ Card = React.createClass
             className   : "Card #{ @props.className or '' } #{ variants }"
             href        : @props.link
             title       : @props.title
+            target      : @props.target
         , @props.children
-
 
 
 module.exports = Card
