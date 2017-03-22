@@ -26,7 +26,7 @@ GalleryBlock = (props) ->
             aspect_ratio    : if image.original?.height then image.original.width / image.original.height else 1
         }
     images ?= []
-    <div id=props.block.id className=cx data-images=JSON.stringify(images)>
+    <div id=props.block.id className=cx data-images=JSON.stringify(images) data-inline=props.inline>
         <noscript>
             {
                 images.map (image) ->
