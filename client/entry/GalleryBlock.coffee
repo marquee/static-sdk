@@ -64,26 +64,35 @@ class Lightbox
     IMAGE_SPACING = 10
     BOX_GUTTER = 20
 
-    constructor: (images) ->
+    constructor: (images, inline=false) ->
+        @_inline = inline
         @_images = images
         @el = document.createElement('div')
         @el.className       = 'GalleryLightbox'
-        @el.style.display   = 'none'
+        
         @el.style.height    = '100vh'
         @el.style.left      = '0'
-        @el.style.position  = 'fixed'
+        @el.style.position  = if inline then 'relative' else 'fixed'
         @el.style.top       = '0'
         @el.style.width     = '100vw'
-        @el.style.opacity   = '0'
+        @el.style.overflow  = 'hidden'
         @el.style.transitionProperty = 'opacity'
         @el.style.transitionDuration = '0.2s'
         @el.style.backgroundColor = "rgba(0,0,0,0.8)"
-        @el.addEventListener 'click', (e) =>
-            @hide()
+
         @_buildBox()
         @_buildControls()
         @_current_image_id = 0
-        document.body.appendChild(@el)
+
+        unless @_inline
+            @el.style.opacity   = '0'
+            @el.style.display   = 'none'
+            @el.addEventListener 'click', (e) =>
+                @hide()
+            document.body.appendChild(@el) 
+        else
+            window.requestAnimationFrame => @show(0)
+            
 
     _buildControls: ->
         @_previous_button = document.createElement('button')
@@ -110,17 +119,18 @@ class Lightbox
         @_next_button.style.top = '49vh'
         @el.appendChild(@_next_button)
 
-        @_close_button = document.createElement('button')
-        @_close_button.className = '_ControlButton -previous'
-        @_close_button.addEventListener 'click', (e) =>
-            e.stopPropagation()
-            @hide()
-        @_close_button.setAttribute('aria-label', 'Close Gallery')
-        @_close_button.innerHTML = CLOSE_ICON
-        @_close_button.style.position = 'absolute'
-        @_close_button.style.top = '1px'
-        @_close_button.style.right = '1px'
-        @el.appendChild(@_close_button)
+        unless @_inline
+            @_close_button = document.createElement('button')
+            @_close_button.className = '_ControlButton -previous'
+            @_close_button.addEventListener 'click', (e) =>
+                e.stopPropagation()
+                @hide()
+            @_close_button.setAttribute('aria-label', 'Close Gallery')
+            @_close_button.innerHTML = CLOSE_ICON
+            @_close_button.style.position = 'absolute'
+            @_close_button.style.top = '1px'
+            @_close_button.style.right = '1px'
+            @el.appendChild(@_close_button)
 
         
         
@@ -194,7 +204,10 @@ class Lightbox
         @el.appendChild(@_display_row)
 
     show: (id) ->
-        Lightbox.current?.hide()
+        unless @_inline
+            document.body.setAttribute('data-lock_scroll', 'true')
+            window.addEventListener('keyup', @_hideOnEscape)
+            window.addEventListener('keydown', @_navigateOnKeypress)
         window.requestAnimationFrame =>
             @is_showing = true
             window.setTimeout =>
@@ -202,9 +215,6 @@ class Lightbox
             , 40 
             @el.style.display = 'block'
             @el.style.opacity = '1'
-        document.body.setAttribute('data-lock_scroll', 'true')
-        window.addEventListener('keyup', @_hideOnEscape)
-        window.addEventListener('keydown', @_navigateOnKeypress)
 
     _setCurrentImage: (id) ->
         offset_width = 0
@@ -234,14 +244,14 @@ class Lightbox
             @hide()
 
     hide: ->
-        @el.style.display = 'none'
-        # This won't visibly transition but that's okay.
-        @el.style.opacity = '0'
-        @is_showing = false
-        Lightbox.current = null
-        document.body.setAttribute('data-lock_scroll', 'false')
-        window.removeEventListener('keyup', @_hideOnEscape)
-        window.removeEventListener('keydown', @_navigateOnKeypress)
+        unless @_inline
+            @el.style.display = 'none'
+            # This won't visibly transition but that's okay.
+            @el.style.opacity = '0'
+            @is_showing = false
+            document.body.setAttribute('data-lock_scroll', 'false')
+            window.removeEventListener('keyup', @_hideOnEscape)
+            window.removeEventListener('keydown', @_navigateOnKeypress)
 
     _nextImage: =>
         if @_current_image_id < @_images.length - 1
@@ -275,6 +285,12 @@ class GalleryBlock
         ).forEach (image, i) =>
             image.id = i
             image.width = Math.floor(image.aspect_ratio * @_options.grid_row_height)
+
+        if el.dataset.inline is 'true'
+            @el.appendChild(
+                (new Lightbox(this._images, true)).el
+            )
+            return
 
         @_buildGrid()
         @_renderSizes(@_content_el.offsetWidth)
