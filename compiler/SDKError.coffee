@@ -86,6 +86,10 @@ SDKError.warn = (subject, message, code=null) ->
         url = DOCS[subject]
     return util.log("#{ _prefix }#{ colors.warn(message) } Docs: #{ colors.underline(colors.help(url)) }")
 
+SDKError.throw = (subject, message) ->
+    util.log("#{ _prefix }#{ colors.error(message) } Docs: #{ colors.underline(colors.help(url)) }")
+    process.exit()
+
 SDKError.formatProjectPath = (p, f=null) ->
     p_parent = path.dirname(p) + '/'
     if f
