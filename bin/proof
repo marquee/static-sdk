@@ -83,6 +83,6 @@ switch (_command) {
         } else {
             console.log('No command given.');
         }
-        console.log('You must specify a command, `marqueestatic <command>`. See `marqueestatic --help`.')
+        console.log('You must specify a command, `proof <command>`. See `proof --help`.')
         process.exit(1);
 }
