@@ -24,9 +24,32 @@ module.exports = (project_directory, options, onCompile=null) ->
         fs.removeSync(build_directory)
 
     # Provide the commit sha to the build, if available.
-    getCurrentCommit project_directory, (commit_sha) ->
+    getCurrentCommit project_directory, (commit_sha, is_dirty) ->
         _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
         SDKError.alwaysLog("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
+
+        # Set up or invalidate React cache if necessary
+        react_cache_directory = path.join(project_directory, '.react-cache')
+        if options.use_react_cache
+            if is_dirty
+                unless options.force
+                    throw new SDKError.warn('react-cache.dirty', 'Repo has unstaged changes. Cannot use react-cache. Use --force to override.')
+                SDKError.warn('react-cache.dirty', 'Repo has unstaged changes. react-cache may produce outdated results!')
+            cache_commit_lock_file = path.join(react_cache_directory, '.commit.lock')
+            react_cache_is_valid = false
+            if fs.existsSync(react_cache_directory)
+                if fs.existsSync(cache_commit_lock_file)
+                    _cache_lock = fs.readFileSync(cache_commit_lock_file).toString()
+                    react_cache_is_valid = commit_sha.length > 0 and _cache_lock is commit_sha
+                unless react_cache_is_valid
+                    SDKError.log(SDKError.colors.grey("Resetting react-cache (react-cache@#{ _cache_lock }, project@#{ commit_sha })..."))
+                    fs.removeSync(react_cache_directory)
+                else
+                    SDKError.log(SDKError.colors.grey("react-cache@#{ _cache_lock }"))
+            unless react_cache_is_valid
+                fs.mkdirSync(react_cache_directory)
+                fs.writeFileSync(cache_commit_lock_file, commit_sha)
+
 
         # Load the project's package.json file, if present and valid.
         project_package_file = path.join(project_directory, 'package.json')
@@ -107,6 +130,8 @@ module.exports = (project_directory, options, onCompile=null) ->
             writeFile           : _writeFile
             exportMetadata      : _exportMetadata
             defer_emits         : options._defer_emits
+            cache_react_emits   : options.cache_react_emits
+            react_cache_directory: react_cache_directory
         )
         _emitRedirect = require('./emitRedirect')(_emitFile)
         _emitRSS = require('./emitRSS')(_emitFile)
@@ -207,7 +232,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                         done            : _done
                         info            : build_info
                         includeAssets   : (args...) ->
-                            console.warn('`includeAssets` is deprecated. Used `emitAssets`.')
+                            SDKError.warn('`includeAssets` is deprecated. Used `emitAssets`.')
                             _emitAssets(args...)
                         PRIORITY        : options.priority
                     # If the buildFn correctly returns a promise, use that

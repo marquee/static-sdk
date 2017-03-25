@@ -23,6 +23,7 @@ program
     .option('--api-page-size <number>', 'Page size to use when fetching from the API (default `100`)')
     .option('--smart-cache', 'Use modified_date to only fetch content modified since last build')
     .option('--stale-after <number>', 'Consider smart-cache stale after n hours (default `1`)')
+    .option('--react-cache', 'Cache emits of React elements based on props (experimental)')
     .parse(process.argv);
 
 if (program.production) {
@@ -60,7 +61,8 @@ var _options = {
     skip_build_info: program.skipBuildInfo || false,
     api_page_size: program.apiPageSize || 100,
     smart_cache: program.smartCache || false,
-    stale_after: program.staleAfter || 1
+    stale_after: program.staleAfter || 1,
+    use_react_cache: program.reactCache || false,
 }
 
 switch (_command) {

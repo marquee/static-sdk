@@ -14,4 +14,4 @@ module.exports = getCurrentCommit = (directory, cb) ->
         is_dirty = stdout.trim().length isnt 0
         exec 'git rev-parse --short=N HEAD', cwd: directory, (err, stdout, stderr) ->
             sha = stdout.split('\n').join('')
-            cb("#{ sha }#{ if is_dirty then '-dirty' else '' }")
+            cb("#{ sha }#{ if is_dirty then '-dirty' else '' }", is_dirty)

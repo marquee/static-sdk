@@ -7,13 +7,37 @@ colors      = SDKError.colors
 path        = require 'path'
 fs          = require 'fs'
 mime        = require 'mime'
+crypto      = require 'crypto'
 
 # Create a singular cache of the emits so that the development server always
 # uses the same emit cache as each build. Otherwise it won't see changes.
 emit_cache = {}
 
-module.exports = ({ project_directory, project, config, writeFile, exportMetadata, defer_emits }) ->
+getChecksum = (element) ->
+    key = "#{ element.type.name }#{ JSON.stringify(element.props) }"
+    return crypto.createHash('md5').update(key).digest('hex')
 
+getCacheKey = (filepath) ->
+    crypto.createHash('md5').update(filepath).digest('hex')
+
+
+module.exports = ({ project_directory, react_cache_directory, project, config, writeFile, exportMetadata, defer_emits, cache_react_emits }) ->
+
+    _getReactCache = (key) ->
+        p = path.join(react_cache_directory, key)
+        cached = null
+        if fs.existsSync(p)
+            try
+                cached = JSON.parse(fs.readFileSync(p).toString())
+            catch e
+                console.error(e)
+                cached = null
+        return cached
+
+    _setReactCache = (key, to_cache) ->
+        p = path.join(react_cache_directory, key)
+        to_cache = JSON.stringify(to_cache)
+        fs.writeFileSync(p, to_cache)
 
     # Require the project's copy of React so that the below validation and
     # rendering will work. Fails silently since React is not required at this
@@ -78,9 +102,29 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
         output_content  = null
 
         _doProcess = ->
-            [_output_type, _output_content]   = _processContent(file_content, options)
-            output_content_to_render = file_content
+            _output_key = null
+            _output_cache = null
+            _checksum = null
 
+            if React.isValidElement(file_content)
+                _output_key = getCacheKey(output_path)
+                if _output_key
+                    _output_cache = _getReactCache(_output_key)
+                    _checksum = getChecksum(file_content)
+            if _output_key and _output_cache and _checksum is _output_cache.checksum and _output_cache.emit
+                SDKError.log(colors.grey("Using react-cache version of #{ output_path }@#{ _checksum }"))
+                [_output_type, _output_content] = _output_cache.emit
+            else
+                [_output_type, _output_content] = _processContent(file_content, options)
+                if _output_key
+                    _output_cache =
+                        checksum: _checksum
+                        component: file_content.type.name
+                        emit: [_output_type, _output_content]
+                    SDKError.log(colors.grey("Caching react output of #{ output_path }@#{ _checksum }"))
+                    _setReactCache(_output_key, _output_cache)
+
+            output_content_to_render = file_content
             output_type = _output_type
             output_content = _output_content
 
