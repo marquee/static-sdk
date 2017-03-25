@@ -79,6 +79,18 @@ switch (_command) {
     case 'setup':
         require('../development/setup')(process.cwd(), _options);
         break;
+    case 'clearcache:api':
+        require('../development/clearcache')(process.cwd(), _options, '.api-cache');
+        break;
+    case 'clearcache:smart':
+        require('../development/clearcache')(process.cwd(), _options, '.smart-cache');
+        break;
+    case 'clearcache:react':
+        require('../development/clearcache')(process.cwd(), _options, '.react-cache');
+        break;
+    case 'clearcache':
+        require('../development/clearcache')(process.cwd(), _options);
+        break;
     default:
         if(_command) {
             console.log('Unknown command: `' + _command + '`');
