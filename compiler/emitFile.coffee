@@ -106,7 +106,7 @@ module.exports = ({ project_directory, react_cache_directory, project, config, w
             _output_cache = null
             _checksum = null
 
-            if React.isValidElement(file_content)
+            if cache_react_emits and React.isValidElement(file_content)
                 _output_key = getCacheKey(output_path)
                 if _output_key
                     _output_cache = _getReactCache(_output_key)
