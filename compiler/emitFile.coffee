@@ -14,14 +14,16 @@ crypto      = require 'crypto'
 emit_cache = {}
 
 getChecksum = (element) ->
-    key = "#{ element.type.name }#{ JSON.stringify(element.props) }"
-    return crypto.createHash('md5').update(key).digest('hex')
+    hashed_props = crypto.createHash('md5').update(
+        JSON.stringify(element.props)
+    ).digest('hex')
+    return "#{ global.build_info.commit }/#{ global.build_info.asset_hash }/#{ element.type.name or element.type.displayName }=#{ hashed_props }"
 
 getCacheKey = (filepath) ->
     crypto.createHash('md5').update(filepath).digest('hex')
 
 
-module.exports = ({ project_directory, react_cache_directory, project, config, writeFile, exportMetadata, defer_emits, cache_react_emits }) ->
+module.exports = ({ project_directory, react_cache_directory, project, config, writeFile, exportMetadata, defer_emits, use_react_cache }) ->
 
     _getReactCache = (key) ->
         p = path.join(react_cache_directory, key)
@@ -106,11 +108,12 @@ module.exports = ({ project_directory, react_cache_directory, project, config, w
             _output_cache = null
             _checksum = null
 
-            if cache_react_emits and React.isValidElement(file_content)
+            if use_react_cache and React.isValidElement(file_content)
                 _output_key = getCacheKey(output_path)
                 if _output_key
                     _output_cache = _getReactCache(_output_key)
                     _checksum = getChecksum(file_content)
+
             if _output_key and _output_cache and _checksum is _output_cache.checksum and _output_cache.emit
                 SDKError.log(colors.grey("Using react-cache version of #{ output_path }@#{ _checksum }"))
                 [_output_type, _output_content] = _output_cache.emit

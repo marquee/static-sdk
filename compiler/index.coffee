@@ -130,7 +130,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             writeFile           : _writeFile
             exportMetadata      : _exportMetadata
             defer_emits         : options._defer_emits
-            cache_react_emits   : options.cache_react_emits
+            use_react_cache     : options.use_react_cache
             react_cache_directory: react_cache_directory
         )
         _emitRedirect = require('./emitRedirect')(_emitFile)
