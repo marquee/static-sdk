@@ -166,8 +166,12 @@ compileAssets = (opts) ->
         callback
         hash_files
         project_config
+        build_cache
     } = opts
 
+    if build_cache?['assets/*']
+        callback(build_cache['assets/*'])
+        return
 
     asset_source_dir    = path.join(project_directory, 'assets')
     asset_cache_dir     = path.join(project_directory, '.asset-cache')
@@ -193,6 +197,9 @@ compileAssets = (opts) ->
             hash.update(_source_content, 'binary')
         asset_hash = hash.digest('hex')
         asset_dest_dir = path.join(asset_dest_dir, asset_hash)
+
+    build_cache?['assets/*'] = asset_hash
+
     fs.ensureDirSync(asset_cache_dir)
     fs.ensureDirSync(asset_dest_dir)
 

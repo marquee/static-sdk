@@ -6,7 +6,7 @@ module.exports = (project_directory, options, which_cache=null) ->
     if which_cache
         caches_to_clear = [which_cache]
     else
-        caches_to_clear = ['.api-cache', '.smart-cache', '.react-cache']
+        caches_to_clear = ['.api-cache', '.smart-cache', '.asset-cache', '.build-cache']
     caches_to_clear.forEach (cache_dir) ->
         _dir = path.join(project_directory, cache_dir)
         if fs.existsSync(_dir)

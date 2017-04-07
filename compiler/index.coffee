@@ -37,26 +37,32 @@ module.exports = (project_directory, options, onCompile=null) ->
         SDKError.alwaysLog("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
 
         # Set up or invalidate React cache if necessary
-        react_cache_directory = path.join(project_directory, '.react-cache')
-        if options.use_react_cache
+        build_cache_directory = path.join(project_directory, '.build-cache')
+        build_cache_file = path.join(build_cache_directory, 'cache.json')
+        build_cache = null
+        if options.build_cache
             if is_dirty
                 unless options.force
-                    throw new SDKError.warn('react-cache.dirty', 'Repo has unstaged changes. Cannot use react-cache. Use --force to override.')
-                SDKError.warn('react-cache.dirty', 'Repo has unstaged changes. react-cache may produce outdated results!')
-            cache_commit_lock_file = path.join(react_cache_directory, '.commit.lock')
-            react_cache_is_valid = false
-            if fs.existsSync(react_cache_directory)
+                    throw new SDKError.warn('build-cache.dirty', 'Repo has unstaged changes. Cannot use build-cache. Use --force to override.')
+                SDKError.warn('build-cache.dirty', 'Repo has unstaged changes. build-cache may produce outdated results!')
+            cache_commit_lock_file = path.join(build_cache_directory, '.commit.lock')
+
+            build_cache_is_valid = false
+            if fs.existsSync(build_cache_directory)
                 if fs.existsSync(cache_commit_lock_file)
                     _cache_lock = fs.readFileSync(cache_commit_lock_file).toString()
-                    react_cache_is_valid = commit_sha.length > 0 and _cache_lock is commit_sha
-                unless react_cache_is_valid
-                    SDKError.log(SDKError.colors.grey("Resetting react-cache (react-cache@#{ _cache_lock }, project@#{ commit_sha })..."))
-                    fs.removeSync(react_cache_directory)
+                    build_cache_is_valid = commit_sha.length > 0 and _cache_lock is commit_sha
+                unless build_cache_is_valid
+                    SDKError.log(SDKError.colors.grey("Resetting build-cache (build-cache@#{ _cache_lock }, project@#{ commit_sha })..."))
+                    fs.removeSync(build_cache_directory)
                 else
-                    SDKError.log(SDKError.colors.grey("react-cache@#{ _cache_lock }"))
-            unless react_cache_is_valid
-                fs.mkdirSync(react_cache_directory)
+                    SDKError.log(SDKError.colors.grey("build-cache@#{ _cache_lock }"))
+                    build_cache = JSON.parse(fs.readFileSync(build_cache_file).toString())
+            unless build_cache_is_valid
+                fs.mkdirSync(build_cache_directory)
                 fs.writeFileSync(cache_commit_lock_file, commit_sha)
+                fs.writeFileSync(build_cache_file, '{}')
+                build_cache = {}
 
 
         # Load the project's package.json file, if present and valid.
@@ -138,8 +144,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             writeFile           : _writeFile
             exportMetadata      : _exportMetadata
             defer_emits         : options._defer_emits
-            use_react_cache     : options.use_react_cache
-            react_cache_directory: react_cache_directory
+            build_cache         : build_cache
         )
         _emitRedirect = require('./emitRedirect')(_emitFile)
         _emitRSS = require('./emitRSS')(_emitFile)
@@ -175,6 +180,11 @@ module.exports = (project_directory, options, onCompile=null) ->
             unless _emitFile.files_emitted_indexed['index.html'] or _emitFile.files_emitted_indexed['/index.html']
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
 
+            if build_cache?
+                build_cache_str = JSON.stringify(build_cache)
+                SDKError.log("Saving build-cache file (#{ build_cache_str.length } bytes) ...")
+                fs.writeFileSync(build_cache_file, build_cache_str)
+
             num_indexed = Object.keys(_emitFile.files_emitted_indexed).length
             num_emitted = _emitFile.files_emitted.length
             if num_indexed isnt num_emitted
@@ -182,6 +192,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package, project_config)
 
         compileAssets
+            build_cache         : build_cache
             project_directory   : project_directory
             build_directory     : build_directory
             hash_files          : process.env.NODE_ENV is 'production'

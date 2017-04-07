@@ -13,20 +13,39 @@ crypto      = require 'crypto'
 # uses the same emit cache as each build. Otherwise it won't see changes.
 emit_cache = {}
 
-getChecksum = (element) ->
-    hashed_props = crypto.createHash('md5').update(
-        JSON.stringify(element.props)
+circularJSONStringify = (obj) ->
+    cache = new Set()
+    result = JSON.stringify obj, (key, value) ->
+        if typeof value is 'object' and value isnt null
+            if cache.has(value)
+                # Circular reference found, discard key
+                return
+            cache.add(value)
+        return value
+    return result
+
+
+
+getContentChecksum = (content) ->
+    hashed_content = crypto.createHash('md5').update(
+        content
     ).digest('hex')
-    return "#{ global.build_info.commit }/#{ global.build_info.asset_hash }/#{ element.type.name or element.type.displayName }=#{ hashed_props }"
+    return "#{ global.build_info.commit }/#{ global.build_info.asset_hash }/raw_content=#{ hashed_content }"
+
+getReactChecksum = (element) ->
+    hashed_props = crypto.createHash('md5').update(
+        circularJSONStringify(element.props)
+    ).digest('hex')
+    return "#{ global.build_info.commit }/#{ global.build_info.asset_hash }/#{ element.type.name or element.type.displayName or 'React.Component' }-props=#{ hashed_props }"
 
 getCacheKey = (filepath) ->
     crypto.createHash('md5').update(filepath).digest('hex')
 
 
-module.exports = ({ project_directory, react_cache_directory, project, config, writeFile, exportMetadata, defer_emits, use_react_cache }) ->
+module.exports = ({ project_directory, project, config, writeFile, exportMetadata, defer_emits, build_cache }) ->
 
     _getReactCache = (key) ->
-        p = path.join(react_cache_directory, key)
+        p = path.join(build_cache_directory, key)
         cached = null
         if fs.existsSync(p)
             try
@@ -37,7 +56,7 @@ module.exports = ({ project_directory, react_cache_directory, project, config, w
         return cached
 
     _setReactCache = (key, to_cache) ->
-        p = path.join(react_cache_directory, key)
+        p = path.join(build_cache_directory, key)
         to_cache = JSON.stringify(to_cache)
         fs.writeFileSync(p, to_cache)
 
@@ -104,28 +123,24 @@ module.exports = ({ project_directory, react_cache_directory, project, config, w
         output_content  = null
 
         _doProcess = ->
-            _output_key = null
             _output_cache = null
             _checksum = null
 
-            if use_react_cache and React.isValidElement(file_content)
-                _output_key = getCacheKey(output_path)
-                if _output_key
-                    _output_cache = _getReactCache(_output_key)
-                    _checksum = getChecksum(file_content)
+            if build_cache?
+                if React.isValidElement(file_content)
+                    _new_checksum = getReactChecksum(file_content)
+                else if typeof file_content is 'string'
+                    _new_checksum = getContentChecksum(file_content)
 
-            if _output_key and _output_cache and _checksum is _output_cache.checksum and _output_cache.emit
-                SDKError.log(colors.grey("Using react-cache version of #{ output_path }@#{ _checksum }"))
-                [_output_type, _output_content] = _output_cache.emit
+            if build_cache and output_path and _new_checksum and _new_checksum is build_cache[output_path]
+                SDKError.log(colors.grey("Skipping unchanged build-cache version of #{ output_path }@#{ _new_checksum }"))
+                _output_type = null
+                _output_content = null
             else
                 [_output_type, _output_content] = _processContent(file_content, options)
-                if _output_key
-                    _output_cache =
-                        checksum: _checksum
-                        component: file_content.type.name
-                        emit: [_output_type, _output_content]
-                    SDKError.log(colors.grey("Caching react output of #{ output_path }@#{ _checksum }"))
-                    _setReactCache(_output_key, _output_cache)
+                if build_cache and _new_checksum
+                    SDKError.log(colors.grey("Adding to build-cache: #{ output_path }@#{ _new_checksum }"))
+                    build_cache[output_path] = _new_checksum
 
             output_content_to_render = file_content
             output_type = _output_type
@@ -139,7 +154,7 @@ module.exports = ({ project_directory, react_cache_directory, project, config, w
             unless output_type
                 output_type = mime.lookup(output_path)
 
-            unless defer_emits
+            unless defer_emits or not output_content
                 _doWrite()
             return [output_type, output_content]
 
@@ -154,17 +169,18 @@ module.exports = ({ project_directory, react_cache_directory, project, config, w
         unless defer_emits
             _doProcess()
 
-        files_emitted.push(output_path)
-        if files_emitted_indexed[output_path]
-            SDKError.warn("File emitted multiple times: #{ output_path }")
-        else
-            files_emitted_indexed[output_path] = {
-                path: output_path,
-                render: _doProcess,
-                type: output_type,
-            }
+        if defer_emits or output_content
+            files_emitted.push(output_path)
+            if files_emitted_indexed[output_path]
+                SDKError.warn("File emitted multiple times: #{ output_path }")
+            else
+                files_emitted_indexed[output_path] = {
+                    path: output_path,
+                    render: _doProcess,
+                    type: output_type,
+                }
 
-        exportMetadata(file_path, options.metadata) if options.metadata
+            exportMetadata(file_path, options.metadata) if options.metadata
 
     emitFile.files_emitted = files_emitted
     files_emitted._indexed = files_emitted_indexed
