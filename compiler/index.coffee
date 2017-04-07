@@ -1,5 +1,13 @@
 # Enable support for requiring `.cjsx` files.
 require('coffee-react/register')
+# Enable support for requiring `.jsx` files.
+react_preset = require('babel-preset-react')
+require('babel-register')({
+    ignore: /node_modules/,
+    presets: [react_preset],
+})
+
+
 
 fs                      = require 'fs-extra'
 path                    = require 'path'
