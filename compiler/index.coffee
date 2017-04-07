@@ -243,6 +243,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                             SDKError.warn('`includeAssets` is deprecated. Used `emitAssets`.')
                             _emitAssets(args...)
                         PRIORITY        : options.priority
+                    result_promise?.then?(_done)
                     # If the buildFn correctly returns a promise, use that
                     # instead of the surrounding try/catch to guard
                     # against errors.
