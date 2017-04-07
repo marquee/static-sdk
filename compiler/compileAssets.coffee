@@ -16,7 +16,7 @@ brfs            = require 'brfs'
 walkSync        = require './walkSync'
 sqwish          = require 'sqwish'
 UglifyJS        = require 'uglify-js'
-
+babelify        = require 'babelify'
 
 compileCoffee = (source_path, dest_path, project_directory, cb) ->
     SDKError.log(SDKError.colors.grey("Compiling (coffee): #{ source_path.replace(project_directory, '') }"))
@@ -57,6 +57,30 @@ compileSass = (source_path, dest_path, project_directory, cb) ->
                 throw err if err
     )
 
+compileJS = (source_path, dest_path, project_directory, cb) ->
+    SDKError.log(SDKError.colors.grey("Compiling (js/x): #{ source_path.replace(project_directory, '') }"))
+    b = browserify([source_path], { extensions: ['.js', '.jsx', '.es', '.es6']})
+    compiled = b.transform(
+        babelify,
+        presets: [
+            # Require these directly so they can be properly
+            # discovered by babel.
+            require('babel-preset-react'),
+            require('babel-preset-env'),
+        ]
+    ).transform(
+        global: true,
+        envify(NODE_ENV: process.env.NODE_ENV)
+    ).transform(brfs).bundle (err, compiled) ->
+        throw err if err
+        file_data = compiled.toString()
+        if process.env.NODE_ENV is 'production'
+            SDKError.log(SDKError.colors.grey("Minifying #{ source_path.replace(project_directory,'') }"))
+            file_data = UglifyJS.minify(file_data.toString(), fromString: true).code
+        fs.writeFile dest_path, file_data, (err) ->
+            throw err if err
+            cb()
+
 copyAndMinifyJS = (source, destination, project_directory, callback) ->
     fs.readFile source, (err, file_data) ->
         throw err if err?
@@ -93,13 +117,18 @@ processAsset = (opts) ->
             dest_path = path_parts.join('.')
             compileCoffee opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
-        when 'sass'
+        when 'sass', 'scss'
             path_parts.push('css')
             dest_path = path_parts.join('.')
             compileSass opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
+        when 'jsx'
+            path_parts.push('js')
+            dest_path = path_parts.join('.')
+            compileJS opts.asset, dest_path, opts.project_directory, ->
+                opts.callback()
         when 'js'
-            copyAndMinifyJS opts.asset, dest_path, opts.project_directory, ->
+            compileJS opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
         when 'css'
             copyAndMinifyJS opts.asset, dest_path, opts.project_directory, ->
@@ -202,9 +231,9 @@ compileAssets.includeAssets = (opts) ->
         _f = f.split('.')
         _ext = _f.pop()
         switch _ext
-            when 'coffee', 'cjsx'
+            when 'coffee', 'cjsx', 'jsx'
                 _f.push('js')
-            when 'sass'
+            when 'sass', 'scss'
                 _f.push('css')
             else
                 _f.push(_ext)
