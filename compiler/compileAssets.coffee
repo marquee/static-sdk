@@ -168,9 +168,9 @@ compileAssets = (opts) ->
         project_config
     } = opts
 
-    asset_source_dir    = path.join(project_directory, 'assets')
-    asset_cache_dir     = path.join(build_directory, '.asset-cache')
 
+    asset_source_dir    = path.join(project_directory, 'assets')
+    asset_cache_dir     = path.join(project_directory, '.asset-cache')
     if project_config.ROOT_PREFIX
         asset_dest_dir = path.join(build_directory, project_config.ROOT_PREFIX, 'assets')
     else
@@ -182,6 +182,17 @@ compileAssets = (opts) ->
         callback?(null)
         return
 
+    asset_hash = null
+    if hash_files
+        # Hash all the compiled assets, not just the auto ones.
+        compiled_assets = walkSync(asset_source_dir)
+        hash = crypto.createHash('md5')
+        compiled_assets.sort()
+        compiled_assets.forEach (asset_path) ->
+            _source_content = fs.readFileSync(asset_path)
+            hash.update(_source_content, 'binary')
+        asset_hash = hash.digest('hex')
+        asset_dest_dir = path.join(asset_dest_dir, asset_hash)
     fs.ensureDirSync(asset_cache_dir)
     fs.ensureDirSync(asset_dest_dir)
 
@@ -199,18 +210,6 @@ compileAssets = (opts) ->
             callback: ->
                 to_process -= 1
                 if to_process is 0
-                    asset_hash = null
-                    if hash_files
-                        # Hash all the compiled assets, not just the auto ones.
-                        compiled_assets = walkSync(asset_cache_dir)
-                        hash = crypto.createHash('md5')
-                        compiled_assets.sort()
-                        compiled_assets.forEach (asset_path) ->
-                            _source_content = fs.readFileSync(asset_path)
-                            hash.update(_source_content, 'binary')
-                        asset_hash = hash.digest('hex')
-                        asset_dest_dir = path.join(asset_dest_dir, asset_hash)
-
                     copyAssetsToBuild(project_directory, asset_cache_dir, asset_dest_dir)
                     callback?(asset_hash)
 
@@ -238,7 +237,7 @@ compileAssets.includeAssets = (opts) ->
             else
                 _f.push(_ext)
         _f = _f.join('.')
-        _source = path.join(build_directory, '.asset-cache', _f)
+        _source = path.join(project_directory, '.asset-cache', _f)
         if asset_hash
             _dest = path.join(build_directory, 'assets', asset_hash, _f)
         else

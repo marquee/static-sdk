@@ -205,7 +205,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                     asset_hash              : asset_hash
                     build_directory         : build_directory
                     asset_dest_directory    : asset_dest_directory
-                    asset_cache_directory   : path.join(build_directory, '.asset-cache')
+                    asset_cache_directory   : path.join(project_directory, '.asset-cache')
                 global.build_info = build_info
                 
                 if project_config.FULLY_QUALIFY_ASSET_URL
