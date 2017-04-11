@@ -38,7 +38,6 @@ getEtagFor = (file) ->
 
 
 module.exports = (options, build_directory, local_files, project_config, callback) ->
-    SDKError.log(SDKError.colors.grey("Finding changed/deleted files..."))
 
     ignore_prefix_exp = (
         if project_config.IGNORE_PREFIX
@@ -60,17 +59,27 @@ module.exports = (options, build_directory, local_files, project_config, callbac
             return not key.match(root_prefix_exp)?
         return false
 
-    getFilesOnS3 project_config, (remote_files) ->
-        local_map = {}
-        remote_map = {}
-        local_files.forEach (f) ->
-            key = f.replace(build_directory, '').substring(1)
-            unless _isIgnorable(key)
-                local_map[key] = {
-                    local_path: f
-                    key: key
-                }
+    local_map = {}
+    remote_map = {}
+    local_files.forEach (f) ->
+        key = f.replace(build_directory, '').substring(1)
+        unless _isIgnorable(key)
+            local_map[key] = {
+                local_path: f
+                key: key
+            }
 
+    if options.no_delete
+        callback(
+            changed: Object.values(local_map).map (v) -> { local: v, remote: null }
+            deleted: []
+            unchanged: []
+        )
+
+    SDKError.log(SDKError.colors.grey("Finding changed/deleted files..."))
+
+
+    getFilesOnS3 project_config, (remote_files) ->
         unknown = []
         changed = []
         deleted = []

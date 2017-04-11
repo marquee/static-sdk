@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --max_old_space_size=4096
 
 var program = require('commander');
 
@@ -9,7 +9,8 @@ program
     .option('-c, --configuration <name>', 'A configuration to use')
     .option('--host <host>', 'Set the development server host, eg 0.0.0.0 for external access (default `localhost`)')
     .option('--port <port>', 'Set the development server port (default `5000`)')
-    .option('--use-cache', 'Cache API responses (for development)')
+    .option('--use-cache', 'Cache API responses (for development) [Deprecated, use --api-cache]')
+    .option('--api-cache', 'Cache API responses (for development)')
     .option('--verbose', 'Show non-error info messages')
     .option('--deploy-stats <file>', 'Write deploy stats to the given file (JSON formatted)')
     .option('--fake-deploy', 'Run through the deploy process but do not actually upload or delete data')
@@ -22,6 +23,7 @@ program
     .option('--api-page-size <number>', 'Page size to use when fetching from the API (default `100`)')
     .option('--smart-cache', 'Use modified_date to only fetch content modified since last build')
     .option('--stale-after <number>', 'Consider smart-cache stale after n hours (default `1`)')
+    .option('--build-cache', 'Skip emits unchanged since previous build [experimental]')
     .parse(process.argv);
 
 if (program.production) {
@@ -36,26 +38,31 @@ if (program.verbose) {
     global.VERBOSE = false;
 }
 
+if (program.useCache) {
+    console.warn('The --use-cache option is deprecated. Please use --api-cache.')
+}
+
 var _command = program.args[0];
 var _options = {
     force: program.force || false,
     configuration: program.configuration || null,
     production: program.production || false,
-    use_cache: program.useCache || false,
+    use_cache: program.apiCache || program.useCache || false,
     host: program.host || 'localhost',
     port: program.port || '5000',
     verbose: program.verbose || false,
     deploy_stats: program.deployStats || null,
     fake_deploy: program.fakeDeploy || false,
     batch_size: program.batchSize || 5,
-    no_delete: program.noDelete || (program.priority !== null && program.priority !== undefined) || false,
+    no_delete: program.noDelete || (program.priority !== null && program.priority !== undefined) || program.buildCache || false,
     priority: program.priority || Infinity,
     skip_upload_errors: program.skipUploadErrors || false,
     ignore_schedule: program.ignoreSchedule || false,
     skip_build_info: program.skipBuildInfo || false,
     api_page_size: program.apiPageSize || 100,
     smart_cache: program.smartCache || false,
-    stale_after: program.staleAfter || 1
+    stale_after: program.staleAfter || 1,
+    build_cache: program.buildCache || false,
 }
 
 switch (_command) {
@@ -72,12 +79,27 @@ switch (_command) {
     case 'setup':
         require('../development/setup')(process.cwd(), _options);
         break;
+    case 'clearcache:api':
+        require('../development/clearcache')(process.cwd(), _options, '.api-cache');
+        break;
+    case 'clearcache:smart':
+        require('../development/clearcache')(process.cwd(), _options, '.smart-cache');
+        break;
+    case 'clearcache:build':
+        require('../development/clearcache')(process.cwd(), _options, '.build-cache');
+        break;
+    case 'clearcache:asset':
+        require('../development/clearcache')(process.cwd(), _options, '.asset-cache');
+        break;
+    case 'clearcache':
+        require('../development/clearcache')(process.cwd(), _options);
+        break;
     default:
         if(_command) {
             console.log('Unknown command: `' + _command + '`');
         } else {
             console.log('No command given.');
         }
-        console.log('You must specify a command, `marqueestatic <command>`. See `marqueestatic --help`.')
+        console.log('You must specify a command, `proof <command>`. See `proof --help`.')
         process.exit(1);
 }

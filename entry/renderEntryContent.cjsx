@@ -1,5 +1,5 @@
 React = require 'react'
-
+ReactDOMServer = require 'react-dom/server'
 EmbedBlock = require './EmbedBlock'
 ImageBlock = require './ImageBlock'
 ListBlock = require './ListBlock'
@@ -35,7 +35,7 @@ module.exports = (content, options={}) ->
 
     if result and options.to_string
         result = result.map (block) ->
-            React.renderToStaticMarkup(block)
+            ReactDOMServer.renderToStaticMarkup(block)
         result = result.join('')
 
     return result

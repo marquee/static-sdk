@@ -1,5 +1,13 @@
 # Enable support for requiring `.cjsx` files.
 require('coffee-react/register')
+# Enable support for requiring `.jsx` files.
+react_preset = require('babel-preset-react')
+require('babel-register')({
+    ignore: /node_modules/,
+    presets: [react_preset],
+})
+
+
 
 fs                      = require 'fs-extra'
 path                    = require 'path'
@@ -24,9 +32,38 @@ module.exports = (project_directory, options, onCompile=null) ->
         fs.removeSync(build_directory)
 
     # Provide the commit sha to the build, if available.
-    getCurrentCommit project_directory, (commit_sha) ->
+    getCurrentCommit project_directory, (commit_sha, is_dirty) ->
         _sha = if commit_sha then SDKError.colors.grey("@#{ commit_sha }") else ''
         SDKError.alwaysLog("Compiling: #{ formatProjectPath(project_directory) }#{ _sha }")
+
+        # Set up or invalidate React cache if necessary
+        build_cache_directory = path.join(project_directory, '.build-cache')
+        build_cache_file = path.join(build_cache_directory, 'cache.json')
+        build_cache = null
+        if options.build_cache
+            if is_dirty
+                unless options.force
+                    throw new SDKError.warn('build-cache.dirty', 'Repo has unstaged changes. Cannot use build-cache. Use --force to override.')
+                SDKError.warn('build-cache.dirty', 'Repo has unstaged changes. build-cache may produce outdated results!')
+            cache_commit_lock_file = path.join(build_cache_directory, '.commit.lock')
+
+            build_cache_is_valid = false
+            if fs.existsSync(build_cache_directory)
+                if fs.existsSync(cache_commit_lock_file)
+                    _cache_lock = fs.readFileSync(cache_commit_lock_file).toString()
+                    build_cache_is_valid = commit_sha.length > 0 and _cache_lock is commit_sha
+                unless build_cache_is_valid
+                    SDKError.log(SDKError.colors.grey("Resetting build-cache (build-cache@#{ _cache_lock }, project@#{ commit_sha })..."))
+                    fs.removeSync(build_cache_directory)
+                else
+                    SDKError.log(SDKError.colors.grey("build-cache@#{ _cache_lock }"))
+                    build_cache = JSON.parse(fs.readFileSync(build_cache_file).toString())
+            unless build_cache_is_valid
+                fs.mkdirSync(build_cache_directory)
+                fs.writeFileSync(cache_commit_lock_file, commit_sha)
+                fs.writeFileSync(build_cache_file, '{}')
+                build_cache = {}
+
 
         # Load the project's package.json file, if present and valid.
         project_package_file = path.join(project_directory, 'package.json')
@@ -107,6 +144,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             writeFile           : _writeFile
             exportMetadata      : _exportMetadata
             defer_emits         : options._defer_emits
+            build_cache         : build_cache
         )
         _emitRedirect = require('./emitRedirect')(_emitFile)
         _emitRSS = require('./emitRSS')(_emitFile)
@@ -142,6 +180,11 @@ module.exports = (project_directory, options, onCompile=null) ->
             unless _emitFile.files_emitted_indexed['index.html'] or _emitFile.files_emitted_indexed['/index.html']
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
 
+            if build_cache?
+                build_cache_str = JSON.stringify(build_cache)
+                SDKError.log("Saving build-cache file (#{ build_cache_str.length } bytes) ...")
+                fs.writeFileSync(build_cache_file, build_cache_str)
+
             num_indexed = Object.keys(_emitFile.files_emitted_indexed).length
             num_emitted = _emitFile.files_emitted.length
             if num_indexed isnt num_emitted
@@ -149,6 +192,7 @@ module.exports = (project_directory, options, onCompile=null) ->
             onCompile?(_emitFile.files_emitted, compileAssets.files_emitted, project_package, project_config)
 
         compileAssets
+            build_cache         : build_cache
             project_directory   : project_directory
             build_directory     : build_directory
             hash_files          : process.env.NODE_ENV is 'production'
@@ -172,7 +216,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                     asset_hash              : asset_hash
                     build_directory         : build_directory
                     asset_dest_directory    : asset_dest_directory
-                    asset_cache_directory   : path.join(build_directory, '.asset-cache')
+                    asset_cache_directory   : path.join(project_directory, '.asset-cache')
                 global.build_info = build_info
                 
                 if project_config.FULLY_QUALIFY_ASSET_URL
@@ -207,9 +251,10 @@ module.exports = (project_directory, options, onCompile=null) ->
                         done            : _done
                         info            : build_info
                         includeAssets   : (args...) ->
-                            console.warn('`includeAssets` is deprecated. Used `emitAssets`.')
+                            SDKError.warn('`includeAssets` is deprecated. Used `emitAssets`.')
                             _emitAssets(args...)
                         PRIORITY        : options.priority
+                    result_promise?.then?(_done)
                     # If the buildFn correctly returns a promise, use that
                     # instead of the surrounding try/catch to guard
                     # against errors.

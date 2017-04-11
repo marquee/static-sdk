@@ -17,7 +17,7 @@ request = require 'request'
 W       = require 'when'
 url     = require 'url'
 sdk_ua_string = require './sdk_ua_string'
-
+_       = require 'lodash'
 SDKError = require './SDKError'
 colors = SDKError.colors
 
@@ -88,7 +88,9 @@ class CDNImage
 class Model
     constructor: (source_data) ->
         @_data = source_data
+        @_keys = []
         @_configureProperties()
+        
 
     _configureProperties: ->
         for k,v of @_data
@@ -97,6 +99,7 @@ class Model
                 @_configureProp('cover_image')
 
     _configureProp: (name) ->
+        @_keys.push(name)
         Object.defineProperty this, name,
             get : => @get(name)
             set : (new_val) => @set(name, new_val)
@@ -104,6 +107,8 @@ class Model
             configurable : true
 
     toJSON: -> @_data
+
+    keys: -> @_keys
 
     get: (name) ->
         # Don't try to make the entry contents into Models
@@ -164,7 +169,8 @@ class APIResults
             @[item.id] = item if item.id
 
 
-    aggregateBy: (property) ->
+    aggregateBy: -> @aggregatedBy(arguments...)
+    aggregatedBy: (property) ->
         result = {}
         @_items.forEach (item) ->
             if item[property]?
@@ -183,7 +189,38 @@ class APIResults
         _res = @_items.pop()
         @length = @_items.length
         return _res
+    copy: -> new APIResults([@_items...])
+    sortedBy: (key) ->
+        if key[0] is '-'
+            key = key.slice(1)
+            descending = true
+        else
+            descending = false
+        sorted_list = _.sortBy(@copy(), key)
+        if descending
+            sorted_list.reverse()
+        return new APIResults(sorted_list)
 
+    paginated: (page_size=10, linkerFn=APIResults.defaultLinker) ->
+        pages = _.chunk(@_items, page_size).map (chunk, i) ->
+            page_number = i + 1
+            return {
+                items   : chunk
+                number  : page_number
+                link    : linkerFn(page_number)
+            }
+        pages.forEach (page, i) ->
+            page.next = pages[i + 1]
+            page.previous = pages[i - 1]
+        return pages
+
+
+APIResults.defaultLinker = (n) ->
+    if n
+        if n > 1
+            return "/#{ n }/"
+        return '/'
+    return null
 
 
 
@@ -515,6 +552,13 @@ class ContentAPI
             SDKError.log("Got #{ result.length } topics from API.")
             cb?(result)
 
+    loadData: ->
+        new Promise (resolve, reject) =>
+            Promise.all([
+                @entries(), @packages(), @people(), @locations(), @topics()
+            ]).then(normalizeContentData).then(resolve)
+            .catch(reject)
+
     ENTRY       : ENTRY
     PACKAGE     : PACKAGE
     POST        : POST
@@ -525,6 +569,45 @@ class ContentAPI
     PERSON      : PERSON
     LOCATION    : LOCATION
     TOPIC       : TOPIC
+
+normalizeContentData = (all_collections) ->
+    object_index = new Map()
+    all_collections.forEach (collection) ->
+        collection.forEach (model) ->
+            object_index.set(model.id, model)
+
+    _getFromIndex = (obj_or_id) ->
+        if not obj_or_id
+            return
+        if obj_or_id.id
+            return object_index.get(obj_or_id.id)
+        return object_index.get(obj_or_id)
+
+    all_collections.forEach (collection) ->
+        collection.forEach (model) ->
+            model.keys().forEach (key) ->
+                unless model[key]
+                    return
+                _type = key.split('_').pop()
+
+                if _type in ['content', 'entities', 'entity'] and not (model.type is ENTRY and key is 'content')
+                    if Array.isArray(model[key])
+                        model[key] = model[key].map(_getFromIndex)
+                    else if typeof model[key] is 'object'
+                        if model[key].id
+                            if object_index[model[key].id]
+                                model[key] = object_index.get(model[key].id)
+                            else
+                                console.warn 'UNKNOWN?', key, model[key]
+                        else
+                            Object.keys(model[key]).forEach (k) ->
+                                model[key][k] = _getFromIndex(model[key][k])
+                    else if typeof model[key] is 'string' and object_index.get(model[key])
+                        model[key] = object_index.get(model[key])
+
+    [entries, packages, people, locations, topics] = all_collections
+    return { entries, packages, people, locations, topics }
+
 
 module.exports              = ContentAPI
 module.exports.CDNImage     = CDNImage

@@ -30,6 +30,8 @@ DOCS =
     'emitFile.path'         : 'compiler/#-emitfile-'
     'project.react'         : 'compiler/#-referenceerror-react-is-not-defined-'
     files                   : ''
+    'build-cache.dirty'     : 'compiler/'
+    'build-cache.develop'   : 'compiler/'
     assets                  : 'assets/'
     'assets.emitAssets'     : 'assets/#-emitassets-'
     compiler                : 'compiler/'
@@ -85,6 +87,10 @@ SDKError.warn = (subject, message, code=null) ->
     else
         url = DOCS[subject]
     return util.log("#{ _prefix }#{ colors.warn(message) } Docs: #{ colors.underline(colors.help(url)) }")
+
+SDKError.throw = (subject, message) ->
+    util.log("#{ _prefix }#{ colors.error(message) } Docs: #{ colors.underline(colors.help(url)) }")
+    process.exit()
 
 SDKError.formatProjectPath = (p, f=null) ->
     p_parent = path.dirname(p) + '/'

@@ -16,7 +16,7 @@ brfs            = require 'brfs'
 walkSync        = require './walkSync'
 sqwish          = require 'sqwish'
 UglifyJS        = require 'uglify-js'
-
+babelify        = require 'babelify'
 
 compileCoffee = (source_path, dest_path, project_directory, cb) ->
     SDKError.log(SDKError.colors.grey("Compiling (coffee): #{ source_path.replace(project_directory, '') }"))
@@ -57,6 +57,30 @@ compileSass = (source_path, dest_path, project_directory, cb) ->
                 throw err if err
     )
 
+compileJS = (source_path, dest_path, project_directory, cb) ->
+    SDKError.log(SDKError.colors.grey("Compiling (js/x): #{ source_path.replace(project_directory, '') }"))
+    b = browserify([source_path], { extensions: ['.js', '.jsx', '.es', '.es6']})
+    compiled = b.transform(
+        babelify,
+        presets: [
+            # Require these directly so they can be properly
+            # discovered by babel.
+            require('babel-preset-react'),
+            require('babel-preset-env'),
+        ]
+    ).transform(
+        global: true,
+        envify(NODE_ENV: process.env.NODE_ENV)
+    ).transform(brfs).bundle (err, compiled) ->
+        throw err if err
+        file_data = compiled.toString()
+        if process.env.NODE_ENV is 'production'
+            SDKError.log(SDKError.colors.grey("Minifying #{ source_path.replace(project_directory,'') }"))
+            file_data = UglifyJS.minify(file_data.toString(), fromString: true).code
+        fs.writeFile dest_path, file_data, (err) ->
+            throw err if err
+            cb()
+
 copyAndMinifyJS = (source, destination, project_directory, callback) ->
     fs.readFile source, (err, file_data) ->
         throw err if err?
@@ -93,13 +117,18 @@ processAsset = (opts) ->
             dest_path = path_parts.join('.')
             compileCoffee opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
-        when 'sass'
+        when 'sass', 'scss'
             path_parts.push('css')
             dest_path = path_parts.join('.')
             compileSass opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
+        when 'jsx'
+            path_parts.push('js')
+            dest_path = path_parts.join('.')
+            compileJS opts.asset, dest_path, opts.project_directory, ->
+                opts.callback()
         when 'js'
-            copyAndMinifyJS opts.asset, dest_path, opts.project_directory, ->
+            compileJS opts.asset, dest_path, opts.project_directory, ->
                 opts.callback()
         when 'css'
             copyAndMinifyJS opts.asset, dest_path, opts.project_directory, ->
@@ -137,11 +166,15 @@ compileAssets = (opts) ->
         callback
         hash_files
         project_config
+        build_cache
     } = opts
 
-    asset_source_dir    = path.join(project_directory, 'assets')
-    asset_cache_dir     = path.join(build_directory, '.asset-cache')
+    if build_cache?['assets/*']
+        callback(build_cache['assets/*'])
+        return
 
+    asset_source_dir    = path.join(project_directory, 'assets')
+    asset_cache_dir     = path.join(project_directory, '.asset-cache')
     if project_config.ROOT_PREFIX
         asset_dest_dir = path.join(build_directory, project_config.ROOT_PREFIX, 'assets')
     else
@@ -152,6 +185,20 @@ compileAssets = (opts) ->
         SDKError.warn('assets', 'No project ./assets/ folder found.')
         callback?(null)
         return
+
+    asset_hash = null
+    if hash_files
+        # Hash all the compiled assets, not just the auto ones.
+        compiled_assets = walkSync(asset_source_dir)
+        hash = crypto.createHash('md5')
+        compiled_assets.sort()
+        compiled_assets.forEach (asset_path) ->
+            _source_content = fs.readFileSync(asset_path)
+            hash.update(_source_content, 'binary')
+        asset_hash = hash.digest('hex')
+        asset_dest_dir = path.join(asset_dest_dir, asset_hash)
+
+    build_cache?['assets/*'] = asset_hash
 
     fs.ensureDirSync(asset_cache_dir)
     fs.ensureDirSync(asset_dest_dir)
@@ -170,18 +217,6 @@ compileAssets = (opts) ->
             callback: ->
                 to_process -= 1
                 if to_process is 0
-                    asset_hash = null
-                    if hash_files
-                        # Hash all the compiled assets, not just the auto ones.
-                        compiled_assets = walkSync(asset_cache_dir)
-                        hash = crypto.createHash('md5')
-                        compiled_assets.sort()
-                        compiled_assets.forEach (asset_path) ->
-                            _source_content = fs.readFileSync(asset_path)
-                            hash.update(_source_content, 'binary')
-                        asset_hash = hash.digest('hex')
-                        asset_dest_dir = path.join(asset_dest_dir, asset_hash)
-
                     copyAssetsToBuild(project_directory, asset_cache_dir, asset_dest_dir)
                     callback?(asset_hash)
 
@@ -202,14 +237,14 @@ compileAssets.includeAssets = (opts) ->
         _f = f.split('.')
         _ext = _f.pop()
         switch _ext
-            when 'coffee', 'cjsx'
+            when 'coffee', 'cjsx', 'jsx'
                 _f.push('js')
-            when 'sass'
+            when 'sass', 'scss'
                 _f.push('css')
             else
                 _f.push(_ext)
         _f = _f.join('.')
-        _source = path.join(build_directory, '.asset-cache', _f)
+        _source = path.join(project_directory, '.asset-cache', _f)
         if asset_hash
             _dest = path.join(build_directory, 'assets', asset_hash, _f)
         else

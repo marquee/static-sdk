@@ -37,7 +37,7 @@ module.exports = React.createClass
     getDefaultProps: -> {
         defer: false
         text: ''
-        protocol: 'http'
+        protocol: 'https'
     }
 
     render: ->

@@ -1,14 +1,14 @@
-Marquee Static SDK
-==================
+Proof SDK
+=========
 
-The Marquee Static SDK is a set of tools for building reader-facing websites,
-often called “frontends”, backed by [Marquee](http://marquee.by)-powered
+The Proof SDK is a set of tools for building reader-facing websites,
+often called “frontends”, backed by [Proof](https://proof.pub)-powered
 publications. These frontends are compiled into static form — that is, the
 output is a simple set of files — for simplicity and speed in serving to
 readers.
 
 The front-end for a publication starts with a _compiler_. This compiler takes
-content from the Marquee API and compiles it into the HTML, CSS, and
+content from the Proof API and compiles it into the HTML, CSS, and
 JavaScript that make up the reader-facing website. The compiler is intended to
 be run whenever the publication’s content has changed, either doing a complete
 rebuild, or only parts that have changed content. It also is run whenever the
@@ -26,7 +26,7 @@ Much of the SDK is opinionated with regards to workflow, programming
 languages, and asset handling, but it does allow for flexibility at a lower
 level.
 
-The SDK is optimized around [CoffeeScript][coffeescript] and [Sass](sass),
+The SDK is optimized around [ES2015+][es2015] and [Sass](sass),
 the [CommonJS][commonjs] style of module loading, hosting with
 [S3/CloudFront][s3-hosting], and [React](react)-based components. It even
 includes a complete suite of components for constructing a typical publication
@@ -51,7 +51,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 interpreted as described in [RFC 2119][rfc2119].
 
 
-[coffeescript]: http://coffeescript.org
+[es2015]: https://babeljs.io/learn-es2015/
 [commonjs]: http://commonjs.org/
 [react]: http://facebook.github.io/react/
 [sass]: http://sass-lang.com
