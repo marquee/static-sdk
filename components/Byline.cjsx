@@ -2,13 +2,15 @@ React = require 'react'
 
 _joinFn = (names, options={}) ->
 
-    unless names?.length > 0
-        return ''
-
     if typeof names is 'string'
         return names
 
-    if names[0].name?
+    if not names? or names.length is 0
+        return ''
+
+    if names.name
+        names = [names.name]
+    else if names[0].name?
         # The incoming names are entities
         names = (n.name for n in names)
     else
