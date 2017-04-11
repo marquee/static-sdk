@@ -17,7 +17,7 @@ request = require 'request'
 W       = require 'when'
 url     = require 'url'
 sdk_ua_string = require './sdk_ua_string'
-
+_       = require 'lodash'
 SDKError = require './SDKError'
 colors = SDKError.colors
 
@@ -199,6 +199,27 @@ class APIResults
         if descending
             sorted_list.reverse()
         return new APIResults(sorted_list)
+
+    paginated: (page_size=10, linkerFn=APIResults.defaultLinker) ->
+        pages = _.chunk(@_items, page_size).map (chunk, i) ->
+            page_number = i + 1
+            return {
+                items   : chunk
+                number  : page_number
+                link    : linkerFn(page_number)
+            }
+        pages.forEach (page, i) ->
+            page.next = pages[i + 1]
+            page.previous = pages[i - 1]
+        return pages
+
+
+APIResults.defaultLinker = (n) ->
+    if n
+        if n > 1
+            return "/#{ n }/"
+        return '/'
+    return null
 
 
 
