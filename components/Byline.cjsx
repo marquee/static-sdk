@@ -19,8 +19,9 @@ _joinFn = (names, options={}) ->
 
     _join = options.join or ', '
     _and  = options.and or '&'
-    _last = names[names.length - 1]
-    names[names.length - 1] = "#{ _and } #{ _last }"
+    if names.length > 1
+        _last = names[names.length - 1]
+        names[names.length - 1] = "#{ _and } #{ _last }"
     if names.length > 2
         names = names.join(_join)
     else
