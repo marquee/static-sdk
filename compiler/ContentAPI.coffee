@@ -188,7 +188,7 @@ class APIResults
         _res = @_items.pop()
         @length = @_items.length
         return _res
-
+    copy: -> new APIResults([@_items...])
 
 
 
