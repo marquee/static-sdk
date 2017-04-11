@@ -189,6 +189,16 @@ class APIResults
         @length = @_items.length
         return _res
     copy: -> new APIResults([@_items...])
+    sortedBy: (key) ->
+        if key[0] is '-'
+            key = key.slice(1)
+            descending = true
+        else
+            descending = false
+        sorted_list = _.sortBy(@copy(), key)
+        if descending
+            sorted_list.reverse()
+        return new APIResults(sorted_list)
 
 
 
