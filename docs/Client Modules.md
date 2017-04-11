@@ -12,10 +12,12 @@ single bundle method of delivering the script to the browser.
 Inside a particular client script, the module exports an `activate` function
 using the CommonJS style, and registers itself under a unique name.
 
-```coffeescript
-module.exports =
-    activate: (url_prefix, num_ctas) ->
+```javascript
+module.exports = {
+    activate: (url_prefix, num_ctas) => {
         doSomething(num_ctas)
+    }
+}
 
 require('proof-sdk/client/client_modules').register(
     'Entry', module.exports
@@ -28,7 +30,7 @@ and are specified by the view.
 `module.exports` MAY also be a constructor. If it does not have an `activate`
 method, it will be called with `new` and given the arguments.
 
-```coffeescript
+```javascript
 module.exports = Entry
 require('proof-sdk/client/client_modules').register(
     'SomeModules', module.exports
@@ -43,9 +45,9 @@ of the built-in utilities like `AsyncLoad` do this.)
 
 ## Inside the script entry point
 
-A typical `script.coffee` entry point will look something like:
+A typical `script.js` entry point will look something like:
 
-```coffeescript
+```javascript
 # Buggyfill for iOS <8.0, Android <4.4
 require('viewport-units-buggyfill').init()
 require('fastclick')(document.body)
@@ -54,20 +56,17 @@ require('fastclick')(document.body)
 require('proof-sdk/client/client_modules')()
 
 # Modules activated by client modules.
-require('proof-sdk/client/AsyncLoad')
-require('proof-sdk/client/Block')
+require('proof-sdk/client/GalleryBlock')
 require('proof-sdk/client/ImageBlock')
 require('proof-sdk/client/ImageZoomer')
-require('proof-sdk/client/core_tracking')
-require('./ReadingProgress.coffee')
-require('./ShareEntry.coffee')
-require('./UAEvents.coffee')
-require('./deferred_social.coffee')
-require('./entry.coffee')
-require('./entry_injections.coffee')
-require('./header.coffee')
-require('./not_found.coffee')
-require('./search.coffee')
+require('./ReadingProgress')
+require('./ShareEntry')
+require('./UAEvents')
+require('./deferred_social')
+require('./Entry')
+require('./Header')
+require('./NotFound')
+require('./SearchApp')
 ```
 
 The first two are used on all views and always activate as soon as the script
@@ -94,14 +93,14 @@ along with arguments to be given to the modules’ activate methods or
 constructors.
 
 
-```cjsx
+```jsx
 <Base
-    client_modules  = {
-        Entry               : [global.config.ROOT_PREFIX, @props.num_ctas]
-        ShareEntry          : []
-        entry_injections    : [@props.num_to_inject]
-        ImageZoomer         : []
-    }
+    client_modules  = {{
+        Entry               : [global.config.ROOT_PREFIX, props.num_ctas],
+        ShareEntry          : [],
+        entry_injections    : [props.num_to_inject],
+        ImageZoomer         : [],
+    }}
 >
     …page content…
 </Base>
@@ -118,21 +117,21 @@ Often there are modules that need to be used on all views, but need per-view
 arguments. The `Base::render` method can be merge view-specific modules with
 the globally used ones:
 
-```cjsx
+```jsx
 # Base client modules
-client_modules = {
+client_modules = {{
     AsyncLoad       : []
     UAEvents        : []
-}
+}}
 
 # View-specific client modules
-client_modules[k] = v for k,v of @props.client_modules
+Object.assign(client_modules, props.client_modules)
 ```
 
 and then include the activation element:
 
-```cjsx
-<ActivateClientModules modules=client_modules />
+```jsx
+<ActivateClientModules modules={ client_modules } />
 ```
 
 The above renders the following JavaScript into the view:

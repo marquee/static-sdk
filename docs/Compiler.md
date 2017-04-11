@@ -13,12 +13,10 @@ SDK to compile the publication.
 
 The bare minimum for a compiler is the following:
 
-```coffeescript
-module.exports = ({
-    api, config, done, info, emitFile, emitRedirect
-}) ->
-    emitFile('index.html', 'Hello, world!')
-    done()
+```javascript
+module.exports = async function ({ emitFile }) {
+    emitFile('/', 'Hello, world!')
+}
 ```
 
 Compilers are “just” JavaScript running on a node platform, and are thus free
@@ -27,32 +25,58 @@ persisted to disk, as they MAY be executed in fresh contexts at arbitrary
 times. They MAY make requests to the Marquee Content API, as well as any other
 available service.
 
+The main function is given an object as an argument that has various functions
+and other information it can use to generate the website.
+
+    api             : api
+    emitFile        : _emitFile
+    emitRedirect    : _emitRedirect
+    emitRSS         : _emitRSS
+    emitAssets      : _emitAssets
+    config          : project_config
+    project         : project_package
+    payload         : options.payload
+    done            : _done
+    info            : build_info
 
 ### `api`
 
 The `api` argument is an API wrapper for the Content API initialized with
-the project’s token info from its configuration. It provides four methods for
-retrieving content. It only supplies released versions of content.
+the project’s token info from its configuration. It provides a method for
+loading all of a publication’s content data. Only released content will
+be included.
+
+```javascript
+const { entries, packages, locations, people, topics } = await api.loadData()
+```
+
+The content objects will be normalized, forward references to instances
+will be constructed. (ie two entries that point to the same author entity
+will point to the same JavaScript Object instance.)
+
+It also provides four methods for retrieving content by type. Note that these
+will not normalize.
 
 * `api.entries()`
 * `api.packages()`
 * `api.channels()`
 * `api.posts()`
 
-Each method accepts a callback, or returns a promise and can be used with a
-library such as `when`.
+Each method returns a promise, and also accepts a callback.
 
-```coffeescript
-W = require 'when'
-W.all([
+```javascript
+const [entries, packages] = await Promise.all([
     api.entries()
     api.packages()
-]).then ([entries, packages]) ->
+])
 ```
 
-```coffeescript
-api.entries (entries) ->
+```javascript
+api.entries((entries) => {
+    ...
+})
 ```
+
 
 
 ### `config`
@@ -65,6 +89,16 @@ information about how this works.
 
 
 ### `done`
+
+If using the `async` keyword is undesired or impossible, the `done` callback
+can be used instead:
+
+```javascript
+module.exports = function ({ emitFile, done }) {
+    emitFile('/', 'Hello, world!')
+    done()
+}
+```
 
 The `done` function MUST be called when the compiler has finished emitting all
 the files necessary. Be sure to call it _after_ asynchronous functions return.
@@ -85,13 +119,13 @@ site content.
 
 The function takes a file path, and the content of the file:
 
-```coffeescript
+```javascript
 emitFile('index.html', html_content_string)
 ```
 
 `emitFile` MAY also take a React component and will render it to static markup.
 
-```coffeescript
+```jsx
 emitFile('404.html', <NotFound />)
 ```
 
@@ -99,24 +133,39 @@ Because React cannot represent the doctype, the output string will have
 `<!doctype html>` prepended to it. To emit only a fragment, without the
 doctype, set the option `fragment` to `true`:
 
-```cjsx
-emitFile('fragments/call-to-action.html', <CallToAction />, fragment: true)
+```jsx
+emitFile('fragments/call-to-action.html', <CallToAction />, { fragment: true })
 ```
 
 For clean URLs, any path that does not end in an extension will output the
 file as an `index.html` inside a folder with the given path.
 
-```coffeescript
-emitFile('entry-slug', <Entry />)
+```jsx
+emitFile('story-slug', <Story entry={ entry } />)
 ```
 
 will output a file at `/entry-slug/index.html`.
 
+And
+
+```jsx
+emitFile('/', <Home entries={ entries } />)
+```
+
+will output a file at `/index.html`.
+
+
 JSON-serializable objects MAY be given as content, and will be serialized to
 a JSON-formatted string.
 
-```coffeescript
+```javascript
 emitFile('data.json', { key: "value" })
+```
+
+will output
+
+```json
+{"key":"value"}
 ```
 
 
@@ -126,7 +175,7 @@ The `emitRedirect` function allows for creating a 301 redirect from one URL
 to another; it’s commonly used when migrating to a new URL structure. It takes
 a path or slug like `emitFile` and a URL to redirect to.
 
-```coffeescript
+```javascript
 emitRedirect('/entries/old-slug/', '/articles/new-slug/')
 ```
 
@@ -150,32 +199,34 @@ parts of the site that need to be updated right away after a build is triggered
 will be updated quickly, while the less important or infrequently changed parts
 can be deferred to a later, likely cron-controlled build.
 
-```coffeescript
-if PRIORITY >= 1
-    # do less important things
+```javascript
+if (PRIORITY >= 1) {
+    // do less important things
+}
 ```
 
 A useful pattern is to combine priority checks with date, to ensure that
 recently modified content is updated.
 
-```coffeescript
-if PRIORITY >=2 or NOW - entry.modified_date < ONE_HOUR
-    # emit entry files
+```javascript
+if (PRIORITY >= 2 || NOW - entry.modified_date < ONE_HOUR) {
+    // emit entry files
+}
 ```
 
 where `NOW` and `ONE_HOUR` are the current `Date` and the number of milliseconds
 in one hour, respectively.
 
 
-## CJSX
+## JSX
 
 The preferred way to author a publication compiler is in
-[CJSX](https://github.com/jsdf/coffee-react-transform), the
-[CoffeeScript](http://coffeescript.org) variant of the JSX language for
-[React](http://reactjs.com). It is not required, but provides for clean,
-uncrufty code on top of a robust component architecture. Regular CoffeeScript
-or JavaScript may be used, provided it follows the CommonJS convention and
-exports a proper main function.
+[JSX](http://buildwithreact.com/tutorial/jsx) using [React](http://reactjs.com).
+It is not required, but provides for clean, uncrufty code on top of a robust
+component architecture.
+
+Regular JavaScript may be used, provided it follows the CommonJS convention and
+exports a proper main function. CoffeeScript is also supported.
 
 Most compiled publications are not especially interactive and do not need to
 be constructed as a full React-powered client-side application. However, the
@@ -183,15 +234,16 @@ strict component-oriented approach provided by React helps organize the
 project and improves code reusability. It also provides a starting point that
 allows for evolving into a full-fledged React application on the client.
 
-The SDK will automatically convert CJSX syntax inside `.coffee` files, but the
-recommended convention is to name those files with the `.cjsx` extension for
-clarity.
+[CJSX](https://github.com/jsdf/coffee-react-transform), the
+[CoffeeScript](http://coffeescript.org) variant of the JSX language is also
+supported, though that project has been deprecated since October 2016, and
+is not recommended.
 
 
 
 ## Dynamic publications
 
-It is called the Marquee _Static_ SDK because the output is intended to be
+It is called the Proof _Static_ SDK because the output is intended to be
 served in a static way, generally using S3. However, there are ways to
 imitate or approximate many dynamic behaviors, like basic search, infinite
 scroll, and soft content references.
@@ -202,7 +254,7 @@ instead of full pages. For example, to do search, the compiler can make
 by-word indexes of the content using certain fields; the client then performs
 the same word normalization, requests the corresponding `<word>.json` files,
 and generates the result list. Proper search can also be accomplished with
-a search API endpoint, such as the one provided by the Marquee content platform.
+a search API endpoint, such as the one provided by the Proof content platform.
 
 
 
@@ -239,15 +291,16 @@ misspelled.
 
 This will throw a `Object has no method apply` error when `<Asset>` is used:
 
-```coffeescript
-Asset = require 'proof-sdk/base'
+```javascript
+const Asset = require('proof-sdk/base')
 ```
 
 vs destructuring or specific require:
 
-```coffeescript
-{ Asset } = require 'proof-sdk/base'
-Asset = require 'proof-sdk/base/Asset'
+```javascript
+const { Asset } = require('proof-sdk/base')
+// or
+const Asset = require('proof-sdk/base/Asset')
 ```
 
 ### Uncommitted changes detected, but no changes apparent

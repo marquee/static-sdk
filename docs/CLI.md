@@ -1,15 +1,15 @@
 # CLI
 
-The SDK’s CLI provides a `marqueestatic` command for executing builds, a
+The SDK’s CLI provides a `proof` command for executing builds, a
 development server, and deploys. It is installed local to the project. For
 convenience, projects usually alias common commands and options using the
 npm scripts feature in their `package.json`.
 
 Typical aliases:
 
-* `npm run develop`: `npm install && ./node_modules/.bin/marqueestatic develop --verbose --use-cache`
-* `npm run deploy`: `git push origin master && git push marquee master`
-* `npm run deploy:staging`: `npm install && ./node_modules/.bin/marqueestatic deploy --configuration staging`
+* `npm run develop`: `npm install && proof develop --verbose --use-cache`
+* `npm run deploy`: `git push origin master && git push proof master`
+* `npm run deploy:staging`: `npm install && proof deploy --configuration staging`
 
 Note: the `deploy` command uses a git push. Projects SHOULD NOT be deployed to
 production from a local copy if the local branch diverges from the repository
@@ -71,10 +71,11 @@ Set the host for the development server. Defaults to `localhost`. Set to
 Set the port for the development server. Defaults to `5000`: `--port 8080`.
 
 
-### `--use-cache`
+### `--api-cache`
 
 Cache Content API responses to disk for quicker rebuilds during development.
-To reset this, simply delete the `.api-cache` directory from the project folder.
+To reset this, run `proof clearcache:api` or simply delete the `.api-cache`
+directory from the project folder.
 
 
 ### `--verbose`
@@ -139,9 +140,9 @@ use a larger page number, and vice versa.
 Use the `modified_date` property to only fetch content that has changed since
 the last deploy (from the instance of the cache).
 
-To reset, delete the `.smart-cache` folder.
+To reset, run `proof clearcache:smart` or delete the `.smart-cache` folder.
 
-Note: unlike `--use-cache`, this cache does not segregate content based on
+Note: unlike `--api-cache`, this cache does not segregate content based on
 endpoint and token. Be careful when using locally and deploying to production!
 
 
@@ -150,6 +151,19 @@ endpoint and token. Be careful when using locally and deploying to production!
 Consider the smart-cache content stale after `n` hours.
 
 
+### `--build-cache`
+
+Cache builds based on hashes of emits. If `emitFile` is given a string, an
+MD5 hash is used. if `emitFile` is given a React component, a hash of the 
+props provided is used. If the hash hasn’t changed since the last build, the
+file is ignored. This avoids the overhead of React’s `renderToStaticMarkup`.
+The asset hash is also cached.
+
+This caching assumes the remote files have not been manipulated by another
+build. It should only be used in a production CI setup. Changes in git sha
+will invalidate the cache.
+
+To reset, run `proof clearcache:build` or delete the `.build-cache` folder.
 
 
 
