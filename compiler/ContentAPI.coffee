@@ -169,7 +169,8 @@ class APIResults
             @[item.id] = item if item.id
 
 
-    aggregateBy: (property) ->
+    aggregateBy: -> @aggregatedBy(arguments...)
+    aggregatedBy: (property) ->
         result = {}
         @_items.forEach (item) ->
             if item[property]?
