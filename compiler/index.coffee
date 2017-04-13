@@ -98,7 +98,7 @@ module.exports = (project_directory, options, onCompile=null) ->
 
 
         # Set up metadata exporting function.
-        metadata_for_s3 = {}
+        metadata_for_s3 = new Map()
 
         # This is used by the metadata argument of emitFile to gather metadata
         # for each emitted file, to be added to the object’s S3 metadata.
@@ -110,12 +110,15 @@ module.exports = (project_directory, options, onCompile=null) ->
                     throw new SDKError('emitFile.metadata', 'emitFile metadata MUST be JSON-serializable')
                 if file_path[0] is '/'
                     file_path = file_path.substring(1)
-                metadata_for_s3[file_path] = file_meta
+                metadata_for_s3.set(file_path, file_meta)
 
         # Save out the metadata to a `.metadata.json` file in the build
         # directory. Used by the deploy process to actually apply the metadata.
         _writeMetadata = ->
-            metadata_content = JSON.stringify(metadata_for_s3)
+            _metadata_json = {}
+            _metadata_json[k] = v for k,v in metadata_for_s3.entries()
+                
+            metadata_content = JSON.stringify(_metadata_json)
             SDKError.log(SDKError.colors.grey("Writing #{ metadata_content.length } bytes of metadata..."))
             fs.writeFileSync(
                     path.join(build_directory, '.metadata.json')
