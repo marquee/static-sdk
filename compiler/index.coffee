@@ -175,9 +175,9 @@ module.exports = (project_directory, options, onCompile=null) ->
 
             _writeMetadata()
             # Check that the project has necessary files.
-            unless _emitFile.files_emitted_indexed['404.html'] or _emitFile.files_emitted_indexed['/404.html']
+            unless _emitFile.files_emitted_indexed.get('404.html') or _emitFile.files_emitted_indexed.get('/404.html')
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
-            unless _emitFile.files_emitted_indexed['index.html'] or _emitFile.files_emitted_indexed['/index.html']
+            unless _emitFile.files_emitted_indexed.get('index.html') or _emitFile.files_emitted_indexed.get('/index.html')
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
 
             if build_cache?
@@ -185,7 +185,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                 SDKError.log("Saving build-cache file (#{ build_cache_str.length } bytes) ...")
                 fs.writeFileSync(build_cache_file, build_cache_str)
 
-            num_indexed = Object.keys(_emitFile.files_emitted_indexed).length
+            num_indexed = _emitFile.files_emitted_indexed.size
             num_emitted = _emitFile.files_emitted.length
             if num_indexed isnt num_emitted
                 SDKError.warn('files', "#{ num_emitted - num_indexed } too many emits. Check for multiple emits of the same file.")

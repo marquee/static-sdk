@@ -11,7 +11,7 @@ crypto      = require 'crypto'
 
 # Create a singular cache of the emits so that the development server always
 # uses the same emit cache as each build. Otherwise it won't see changes.
-emit_cache = {}
+emit_cache = new Map()
 
 circularJSONStringify = (obj) ->
     cache = new Set()
@@ -87,9 +87,9 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
         # Reuse the existing cache object so the development server can see
         # the changes, but be sure to flush it for consistency.
         files_emitted_indexed = emit_cache
-        Object.keys(files_emitted_indexed).forEach (k) -> files_emitted_indexed[k] = null
+        files_emitted_indexed.clear()
     else
-        files_emitted_indexed = {}
+        files_emitted_indexed = new Map()
 
     # The actual function given to the compiler for generating files.
     emitFile = (file_path, file_content, options={}) ->
@@ -151,16 +151,16 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
 
         if defer_emits or output_content
             files_emitted.push(output_path)
-            if files_emitted_indexed[output_path]
+            if files_emitted_indexed.get(output_path)
                 SDKError.warn("File emitted multiple times: #{ output_path }")
             else
-                files_emitted_indexed[output_path] = {
+                files_emitted_indexed.set(output_path, {
                     path: output_path,
                     # Avoid hanging on to the _doProcess function to prevent
                     # a memory leak.
                     render: if defer_emits then _doProcess else null,
                     type: output_type,
-                }
+                })
             output_content = null
 
             exportMetadata(file_path, options.metadata) if options.metadata
