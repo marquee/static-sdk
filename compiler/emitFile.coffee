@@ -116,7 +116,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
                 else if typeof file_content is 'string'
                     _new_checksum = getContentChecksum(file_content)
 
-            if build_cache and output_path and _new_checksum and _new_checksum is build_cache[output_path]
+            if build_cache and output_path and _new_checksum and _new_checksum is build_cache.get(output_path)
                 SDKError.log(colors.grey("Skipping unchanged build-cache version of #{ output_path }@#{ _new_checksum }"))
                 _output_type = null
                 _output_content = null
@@ -124,7 +124,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
                 [_output_type, _output_content] = _processContent(file_content, options)
                 if build_cache and _new_checksum
                     SDKError.log(colors.grey("Adding to build-cache: #{ output_path }@#{ _new_checksum }"))
-                    build_cache[output_path] = _new_checksum
+                    build_cache.set(output_path, _new_checksum)
 
             output_content_to_render = file_content
             output_type = _output_type

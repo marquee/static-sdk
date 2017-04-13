@@ -57,12 +57,12 @@ module.exports = (project_directory, options, onCompile=null) ->
                     fs.removeSync(build_cache_directory)
                 else
                     SDKError.log(SDKError.colors.grey("build-cache@#{ _cache_lock }"))
-                    build_cache = JSON.parse(fs.readFileSync(build_cache_file).toString())
+                    build_cache = new Map(JSON.parse(fs.readFileSync(build_cache_file).toString()))
             unless build_cache_is_valid
                 fs.mkdirSync(build_cache_directory)
                 fs.writeFileSync(cache_commit_lock_file, commit_sha)
-                fs.writeFileSync(build_cache_file, '{}')
-                build_cache = {}
+                fs.writeFileSync(build_cache_file, '[]')
+                build_cache = new Map()
 
 
         # Load the project's package.json file, if present and valid.
@@ -181,7 +181,7 @@ module.exports = (project_directory, options, onCompile=null) ->
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
 
             if build_cache?
-                build_cache_str = JSON.stringify(build_cache)
+                build_cache_str = JSON.stringify(Array.from(build_cache.entries()))
                 SDKError.log("Saving build-cache file (#{ build_cache_str.length } bytes) ...")
                 fs.writeFileSync(build_cache_file, build_cache_str)
 
