@@ -155,16 +155,12 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
                 output_type = mime.lookup(output_path)
 
             unless defer_emits or not output_content
-                _doWrite()
+                SDKError.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
+                writeFile
+                    path        : output_path
+                    content     : output_content
+                    type        : output_type
             return [output_type, output_content]
-
-        _doWrite = ->
-            SDKError.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
-
-            writeFile
-                path        : output_path
-                content     : output_content
-                type        : output_type
 
         unless defer_emits
             _doProcess()
@@ -176,9 +172,12 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
             else
                 files_emitted_indexed[output_path] = {
                     path: output_path,
-                    render: _doProcess,
+                    # Avoid hanging on to the _doProcess function to prevent
+                    # a memory leak.
+                    render: if defer_emits then _doProcess else null,
                     type: output_type,
                 }
+            output_content = null
 
             exportMetadata(file_path, options.metadata) if options.metadata
 
