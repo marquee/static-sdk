@@ -44,22 +44,6 @@ getCacheKey = (filepath) ->
 
 module.exports = ({ project_directory, project, config, writeFile, exportMetadata, defer_emits, build_cache }) ->
 
-    _getReactCache = (key) ->
-        p = path.join(build_cache_directory, key)
-        cached = null
-        if fs.existsSync(p)
-            try
-                cached = JSON.parse(fs.readFileSync(p).toString())
-            catch e
-                console.error(e)
-                cached = null
-        return cached
-
-    _setReactCache = (key, to_cache) ->
-        p = path.join(build_cache_directory, key)
-        to_cache = JSON.stringify(to_cache)
-        fs.writeFileSync(p, to_cache)
-
     # Require the project's copy of React so that the below validation and
     # rendering will work. Fails silently since React is not required at this
     # point. (For some reason, different copies of React can't validate each
