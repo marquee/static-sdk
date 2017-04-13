@@ -30,8 +30,8 @@ module.exports = (host, port, directory, file_set) ->
         target_file = target_file.replace(/\/\//g,'/')
         target_file_full_path = path.join(directory, target_file)
 
-        if file_set[target_file]
-            [_type, _content] = file_set[target_file].render()
+        if file_set.get(target_file)
+            [_type, _content] = file_set.get(target_file).render()
             util.log(SDKError.colors.green("[200] #{ req.method }: #{ req.url } ") + SDKError.colors.grey(target_file))
             res.writeHead 200,
                 'Content-Type': _type

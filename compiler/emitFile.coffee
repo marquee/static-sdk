@@ -11,7 +11,7 @@ crypto      = require 'crypto'
 
 # Create a singular cache of the emits so that the development server always
 # uses the same emit cache as each build. Otherwise it won't see changes.
-emit_cache = {}
+emit_cache = new Map()
 
 circularJSONStringify = (obj) ->
     cache = new Set()
@@ -43,22 +43,6 @@ getCacheKey = (filepath) ->
 
 
 module.exports = ({ project_directory, project, config, writeFile, exportMetadata, defer_emits, build_cache }) ->
-
-    _getReactCache = (key) ->
-        p = path.join(build_cache_directory, key)
-        cached = null
-        if fs.existsSync(p)
-            try
-                cached = JSON.parse(fs.readFileSync(p).toString())
-            catch e
-                console.error(e)
-                cached = null
-        return cached
-
-    _setReactCache = (key, to_cache) ->
-        p = path.join(build_cache_directory, key)
-        to_cache = JSON.stringify(to_cache)
-        fs.writeFileSync(p, to_cache)
 
     # Require the project's copy of React so that the below validation and
     # rendering will work. Fails silently since React is not required at this
@@ -103,9 +87,9 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
         # Reuse the existing cache object so the development server can see
         # the changes, but be sure to flush it for consistency.
         files_emitted_indexed = emit_cache
-        Object.keys(files_emitted_indexed).forEach (k) -> files_emitted_indexed[k] = null
+        files_emitted_indexed.clear()
     else
-        files_emitted_indexed = {}
+        files_emitted_indexed = new Map()
 
     # The actual function given to the compiler for generating files.
     emitFile = (file_path, file_content, options={}) ->
@@ -132,7 +116,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
                 else if typeof file_content is 'string'
                     _new_checksum = getContentChecksum(file_content)
 
-            if build_cache and output_path and _new_checksum and _new_checksum is build_cache[output_path]
+            if build_cache and output_path and _new_checksum and _new_checksum is build_cache.get(output_path)
                 SDKError.log(colors.grey("Skipping unchanged build-cache version of #{ output_path }@#{ _new_checksum }"))
                 _output_type = null
                 _output_content = null
@@ -140,7 +124,7 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
                 [_output_type, _output_content] = _processContent(file_content, options)
                 if build_cache and _new_checksum
                     SDKError.log(colors.grey("Adding to build-cache: #{ output_path }@#{ _new_checksum }"))
-                    build_cache[output_path] = _new_checksum
+                    build_cache.set(output_path, _new_checksum)
 
             output_content_to_render = file_content
             output_type = _output_type
@@ -155,30 +139,29 @@ module.exports = ({ project_directory, project, config, writeFile, exportMetadat
                 output_type = mime.lookup(output_path)
 
             unless defer_emits or not output_content
-                _doWrite()
+                SDKError.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
+                writeFile
+                    path        : output_path
+                    content     : output_content
+                    type        : output_type
             return [output_type, output_content]
-
-        _doWrite = ->
-            SDKError.log("Saving #{ colors.green(output_path) } #{ colors.grey('(' + output_content.length + ' bytes, ' + output_type + ')') }")
-
-            writeFile
-                path        : output_path
-                content     : output_content
-                type        : output_type
 
         unless defer_emits
             _doProcess()
 
         if defer_emits or output_content
             files_emitted.push(output_path)
-            if files_emitted_indexed[output_path]
+            if files_emitted_indexed.get(output_path)
                 SDKError.warn("File emitted multiple times: #{ output_path }")
             else
-                files_emitted_indexed[output_path] = {
+                files_emitted_indexed.set(output_path, {
                     path: output_path,
-                    render: _doProcess,
+                    # Avoid hanging on to the _doProcess function to prevent
+                    # a memory leak.
+                    render: if defer_emits then _doProcess else null,
                     type: output_type,
-                }
+                })
+            output_content = null
 
             exportMetadata(file_path, options.metadata) if options.metadata
 

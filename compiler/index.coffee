@@ -38,7 +38,7 @@ module.exports = (project_directory, options, onCompile=null) ->
 
         # Set up or invalidate React cache if necessary
         build_cache_directory = path.join(project_directory, '.build-cache')
-        build_cache_file = path.join(build_cache_directory, 'cache.json')
+        build_cache_file = path.join(build_cache_directory, 'cache-v0.9.2.json')
         build_cache = null
         if options.build_cache
             if is_dirty
@@ -57,12 +57,17 @@ module.exports = (project_directory, options, onCompile=null) ->
                     fs.removeSync(build_cache_directory)
                 else
                     SDKError.log(SDKError.colors.grey("build-cache@#{ _cache_lock }"))
-                    build_cache = JSON.parse(fs.readFileSync(build_cache_file).toString())
+                    try
+                        build_cache = new Map(JSON.parse(fs.readFileSync(build_cache_file).toString()))
+                    catch e
+                        SDKError.warn(SDKError.colors.yellow("Unable to parse build-cache file, resetting..."))
+                        build_cache_is_valid = false
+                        fs.removeSync(build_cache_directory)
             unless build_cache_is_valid
                 fs.mkdirSync(build_cache_directory)
                 fs.writeFileSync(cache_commit_lock_file, commit_sha)
-                fs.writeFileSync(build_cache_file, '{}')
-                build_cache = {}
+                fs.writeFileSync(build_cache_file, '[]')
+                build_cache = new Map()
 
 
         # Load the project's package.json file, if present and valid.
@@ -98,7 +103,7 @@ module.exports = (project_directory, options, onCompile=null) ->
 
 
         # Set up metadata exporting function.
-        metadata_for_s3 = {}
+        metadata_for_s3 = new Map()
 
         # This is used by the metadata argument of emitFile to gather metadata
         # for each emitted file, to be added to the object’s S3 metadata.
@@ -110,12 +115,15 @@ module.exports = (project_directory, options, onCompile=null) ->
                     throw new SDKError('emitFile.metadata', 'emitFile metadata MUST be JSON-serializable')
                 if file_path[0] is '/'
                     file_path = file_path.substring(1)
-                metadata_for_s3[file_path] = file_meta
+                metadata_for_s3.set(file_path, file_meta)
 
         # Save out the metadata to a `.metadata.json` file in the build
         # directory. Used by the deploy process to actually apply the metadata.
         _writeMetadata = ->
-            metadata_content = JSON.stringify(metadata_for_s3)
+            _metadata_json = {}
+            _metadata_json[k] = v for k,v in metadata_for_s3.entries()
+                
+            metadata_content = JSON.stringify(_metadata_json)
             SDKError.log(SDKError.colors.grey("Writing #{ metadata_content.length } bytes of metadata..."))
             fs.writeFileSync(
                     path.join(build_directory, '.metadata.json')
@@ -175,17 +183,17 @@ module.exports = (project_directory, options, onCompile=null) ->
 
             _writeMetadata()
             # Check that the project has necessary files.
-            unless _emitFile.files_emitted_indexed['404.html'] or _emitFile.files_emitted_indexed['/404.html']
+            unless _emitFile.files_emitted_indexed.get('404.html') or _emitFile.files_emitted_indexed.get('/404.html')
                 SDKError.warn('files', 'Projects SHOULD have a /404.html')
-            unless _emitFile.files_emitted_indexed['index.html'] or _emitFile.files_emitted_indexed['/index.html']
+            unless _emitFile.files_emitted_indexed.get('index.html') or _emitFile.files_emitted_indexed.get('/index.html')
                 SDKError.warn('files', 'Projects SHOULD have a /index.html')
 
             if build_cache?
-                build_cache_str = JSON.stringify(build_cache)
+                build_cache_str = JSON.stringify(Array.from(build_cache.entries()))
                 SDKError.log("Saving build-cache file (#{ build_cache_str.length } bytes) ...")
                 fs.writeFileSync(build_cache_file, build_cache_str)
 
-            num_indexed = Object.keys(_emitFile.files_emitted_indexed).length
+            num_indexed = _emitFile.files_emitted_indexed.size
             num_emitted = _emitFile.files_emitted.length
             if num_indexed isnt num_emitted
                 SDKError.warn('files', "#{ num_emitted - num_indexed } too many emits. Check for multiple emits of the same file.")

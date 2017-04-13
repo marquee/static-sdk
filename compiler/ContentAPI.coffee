@@ -359,7 +359,10 @@ class ContentAPI
     _getSmartCacheItems: (type) ->
         cache_file = path.join(@_SMART_CACHE_DIRECTORY, "#{ type }.json")
         if fs.existsSync(cache_file)
-            cache_data = JSON.parse(fs.readFileSync(cache_file))
+            try
+                cache_data = JSON.parse(fs.readFileSync(cache_file))
+            catch e
+                SDKError.warn("Unable to read smart-cache file: #{ cache_file }, ignoring!")
             if cache_data?
                 { data, date } = cache_data
                 return [
