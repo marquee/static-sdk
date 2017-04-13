@@ -38,7 +38,7 @@ module.exports = (project_directory, options, onCompile=null) ->
 
         # Set up or invalidate React cache if necessary
         build_cache_directory = path.join(project_directory, '.build-cache')
-        build_cache_file = path.join(build_cache_directory, 'cache.json')
+        build_cache_file = path.join(build_cache_directory, 'cache-v0.9.2.json')
         build_cache = null
         if options.build_cache
             if is_dirty
@@ -57,7 +57,12 @@ module.exports = (project_directory, options, onCompile=null) ->
                     fs.removeSync(build_cache_directory)
                 else
                     SDKError.log(SDKError.colors.grey("build-cache@#{ _cache_lock }"))
-                    build_cache = new Map(JSON.parse(fs.readFileSync(build_cache_file).toString()))
+                    try
+                        build_cache = new Map(JSON.parse(fs.readFileSync(build_cache_file).toString()))
+                    catch e
+                        SDKError.warn(SDKError.colors.yellow("Unable to parse build-cache file, resetting..."))
+                        build_cache_is_valid = false
+                        fs.removeSync(build_cache_directory)
             unless build_cache_is_valid
                 fs.mkdirSync(build_cache_directory)
                 fs.writeFileSync(cache_commit_lock_file, commit_sha)
