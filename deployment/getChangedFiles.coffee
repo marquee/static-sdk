@@ -59,19 +59,19 @@ module.exports = (options, build_directory, local_files, project_config, callbac
             return not key.match(root_prefix_exp)?
         return false
 
-    local_map = {}
-    remote_map = {}
+    local_map = new Map()
+    remote_map = new Set()
     local_files.forEach (f) ->
         key = f.replace(build_directory, '').substring(1)
         unless _isIgnorable(key)
-            local_map[key] = {
+            local_map.set(key, {
                 local_path: f
                 key: key
-            }
+            })
 
     if options.no_delete
         callback(
-            changed: Object.values(local_map).map (v) -> { local: v, remote: null }
+            changed: Array.from(local_map.values()).map (v) -> { local: v, remote: null }
             deleted: []
             unchanged: []
         )
@@ -90,11 +90,11 @@ module.exports = (options, build_directory, local_files, project_config, callbac
 
             # Ignore files that don't exist locally when deleting of remote
             # files is disabled.
-            if options.no_delete and not local_map[f.Key]
+            if options.no_delete and not local_map.get(f.Key)
                 return
 
-            remote_map[f.Key] = true
-            unless local_map[f.Key]?
+            remote_map.add(f.Key)
+            unless local_map.get(f.Key)?
                 # Files that don't exist locally and need to be deleted from
                 # the remote deployment.
                 deleted.push
@@ -104,11 +104,11 @@ module.exports = (options, build_directory, local_files, project_config, callbac
                 # Files that exist locally and remotely and need to be checked
                 # for sameness.
                 unknown.push
-                    local: local_map[f.Key]
+                    local: local_map.get(f.Key)
                     remote: f
 
         for k,v of local_map
-            unless remote_map[k]
+            unless remote_map.has(k)
                 # Files that exist locally but not remotely and definitely need
                 # to be uploaded.
                 changed.push
