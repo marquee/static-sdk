@@ -69,12 +69,13 @@ module.exports = (options, build_directory, local_files, project_config, callbac
                 key: key
             })
 
-    if options.no_delete
+    if options.build_cache
         callback(
             changed: Array.from(local_map.values()).map (v) -> { local: v, remote: null }
             deleted: []
             unchanged: []
         )
+        return
 
     SDKError.log(SDKError.colors.grey("Finding changed/deleted files..."))
 
