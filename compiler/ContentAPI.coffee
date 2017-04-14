@@ -373,8 +373,8 @@ class ContentAPI
 
     _setSmartCacheItems: (type, items, date) ->
         cache_file = path.join(@_SMART_CACHE_DIRECTORY, "#{ type }.json")
-        fs.writeFile cache_file, JSON.stringify(data: items, date: date), (err) ->
-            SDKError.log("smart cache, #{ type }: #{ items.length } items saved to cache")
+        SDKError.log("smart cache, saving #{ items.length } #{ type } items...")
+        fs.writeFileSync(cache_file, JSON.stringify(data: items, date: date))
 
     _filterReleasesWithSmartCache: (query, cb) ->
         _now = new Date()
