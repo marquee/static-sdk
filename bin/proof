@@ -13,7 +13,8 @@ program
     .option('--api-cache', 'Cache API responses (for development)')
     .option('--verbose', 'Show non-error info messages')
     .option('--deploy-stats <file>', 'Write deploy stats to the given file (JSON formatted)')
-    .option('--fake-deploy', 'Run through the deploy process but do not actually upload or delete data')
+    .option('--fake-deploy', 'Run through the deploy process but do not actually upload or delete data [Deprecated, use --fake]')
+    .option('--fake', 'Run through the deploy process but do not actually upload or delete data')
     .option('--batch-size <number>', 'Number of simultaneous uploads during deployments (default `5`)')
     .option('--no-delete', 'Skip deleting old remote files')
     .option('--skip-upload-errors', 'Only log errors on deploy upload instead of halting')
@@ -52,7 +53,7 @@ var _options = {
     port: program.port || '5000',
     verbose: program.verbose || false,
     deploy_stats: program.deployStats || null,
-    fake_deploy: program.fakeDeploy || false,
+    fake_deploy: program.fake || program.fakeDeploy || false,
     batch_size: program.batchSize || 5,
     no_delete: program.noDelete || (program.priority !== null && program.priority !== undefined) || program.buildCache || false,
     priority: program.priority || Infinity,
