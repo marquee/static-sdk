@@ -4,6 +4,15 @@ url             = require 'url'
 UglifyJS        = require 'uglify-js'
 
 { Classes } = require 'shiny'
+
+
+EmbedCard = (props) ->
+    <a className='EmbedCard' href={ props.url }>
+        <img src={ props.thumbnail_url } />
+        <h1>{ props.title }</h1>
+        <p>{ props.description }</p>
+    </a>
+
 module.exports = React.createClass
     displayName: 'EmbedBlock'
 
@@ -37,8 +46,15 @@ module.exports = React.createClass
         unless size is 'full'
             cx.set('position', position)
 
-        embed_video_url = parseVideoURL(@props.block.content)
         embed_id = "#{ @props.block.id }_content"
+
+        embed_video_url = parseVideoURL(@props.block.content)
+        if not embed_video_url
+            if @props.block.embedly_result
+                embed_card = <EmbedCard {... @props.block.embedly_result} />
+            else
+                embed_markup = @props.block.content
+        
 
         if @props.plain
             if embed_video_url
@@ -49,8 +65,10 @@ module.exports = React.createClass
                             mozallowfullscreen
                             allowFullScreen
                         />
+            else if embed_card
+                embed = embed_card
             else
-                embed = <div dangerouslySetInnerHTML={__html: @props.block.content} />
+                embed = <div dangerouslySetInnerHTML={__html: embed_markup} />
 
             return <figure>
                 {embed}
@@ -73,10 +91,10 @@ module.exports = React.createClass
                             mozallowfullscreen
                             allowFullScreen
                         />
+            else if embed_card
+                embed = embed_card
             else
-                embed = <div id=embed_id dangerouslySetInnerHTML={
-                    __html: @props.block.content
-                } />
+                embed = <div dangerouslySetInnerHTML={__html: embed_markup} />
 
         <figure
             id          = @props.block.id
