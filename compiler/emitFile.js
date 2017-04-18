@@ -14,20 +14,7 @@ const crypto = require('crypto')
 // uses the same emit cache as each build. Otherwise it won't see changes.
 let emit_cache = new Map();
 
-let circularJSONStringify = function(obj) {
-    let cache = new Set();
-    let result = JSON.stringify(obj, function(key, value) {
-        if ((typeof value === 'object') && (value !== null)) {
-            if (cache.has(value)) {
-                // Circular reference found, discard key
-                return;
-            }
-            cache.add(value);
-        }
-        return value;
-    });
-    return result;
-};
+const circularJSONStringify = require('./circularJSONStringify')
 
 
 
