@@ -1,3 +1,4 @@
+// @flow
 module.exports = Object.freeze({
     ENTRY       : 'container',
     PACKAGE     : 'package',
