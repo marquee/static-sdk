@@ -1,10 +1,6 @@
-node_modules
+node_modules/*
 .DS_Store
-*.js
-*.css
-*.html
 .env.json
-!__tests__/_preprocessor.js
 .termconfig
 npm-debug.log
 .DS_Store
