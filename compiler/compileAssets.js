@@ -17,136 +17,160 @@ const walkSync        = require('./walkSync')
 const { formatProjectPath } = SDKError
 
 function compileCoffee (source_path, dest_path, project_directory, cb) {
-    SDKError.log(SDKError.colors.grey(`Compiling (coffee): ${ source_path.replace(project_directory, '') }`))
-    const b = browserify([source_path])
-    const compiled = b.transform(
-        coffee_reactify
-    ).transform(
-        envify({ NODE_ENV: process.env.NODE_ENV })
-    ).transform(brfs).bundle( (err, compiled) => {
-        if (err) {
-            throw err 
-        }
-        if ('production' === process.env.NODE_ENV) {
-            SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-            compiled = UglifyJS.minify(compiled.toString(), { fromString: true }).code
-        }
-        fs.writeFile(dest_path, compiled, (err) => {
+    return new Promise( (resolve, reject) => {
+        SDKError.log(SDKError.colors.grey(`Compiling (coffee): ${ source_path.replace(project_directory, '') }`))
+        const b = browserify([source_path])
+        const compiled = b.transform(
+            coffee_reactify
+        ).transform(
+            envify({ NODE_ENV: process.env.NODE_ENV })
+        ).transform(brfs).bundle( (err, compiled) => {
             if (err) {
-                throw err 
+                reject(err)
+                return
             }
-            cb()
+            if ('production' === process.env.NODE_ENV) {
+                SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
+                compiled = UglifyJS.minify(compiled.toString(), { fromString: true }).code
+            }
+            fs.writeFile(dest_path, compiled, (err) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve()
+            })
         })
     })
 }
 
 function compileSass (source_path, dest_path, project_directory, cb) {
-    SDKError.log(SDKError.colors.grey(`Compiling (sass): ${ source_path.replace(project_directory, '') }`))
-    Sass.render({
-        file: source_path,
-        includePaths: [
-            project_directory,
-            path.join(project_directory, 'node_modules', 'proof-sdk', 'stylesheets'),
-        ],
-    } , (err, compiled) => {
-            if (err) {
-                throw err 
-            }
-            const _prefixing = postcss([autoprefixer]).process(compiled.css)
-            _prefixing.then( (result) => {
-                compiled = result.css
-                if ('production' === process.env.NODE_ENV) {
-                    SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-                    compiled = sqwish.minify(compiled.toString())
-                }
-                fs.writeFile(dest_path, compiled, (err) => {
-                    if (err) {
-                        throw err 
-                    }
-                    cb()
-                })
-            }).catch( (err) => {
+    return new Promise( (resolve, reject) => {
+        SDKError.log(SDKError.colors.grey(`Compiling (sass): ${ source_path.replace(project_directory, '') }`))
+        Sass.render({
+            file: source_path,
+            includePaths: [
+                project_directory,
+                path.join(project_directory, 'node_modules', 'proof-sdk', 'stylesheets'),
+            ],
+        } , (err, compiled) => {
                 if (err) {
-                    throw err 
+                    reject(err)
+                    return
                 }
-            })
+                const _prefixing = postcss([autoprefixer]).process(compiled.css)
+                _prefixing.then( (result) => {
+                    compiled = result.css
+                    if ('production' === process.env.NODE_ENV) {
+                        SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
+                        compiled = sqwish.minify(compiled.toString())
+                    }
+                    fs.writeFile(dest_path, compiled, (err) => {
+                        if (err) {
+                            reject(err)
+                            return
+                        }
+                        resolve()
+                    })
+                }).catch( (err) => {
+                    if (err) {
+                        reject(err)
+                        return
+                    }
+                })
+        })
     })
 }
 
+
 function compileJS (source_path, dest_path, project_directory, cb) {
-    SDKError.log(SDKError.colors.grey(`Compiling (js/x): ${ source_path.replace(project_directory, '') }`))
-    const b = browserify([source_path], { extensions: ['.js', '.jsx', '.es', '.es6']})
-    const compiled = b.transform(
-        babelify,
-        {
-            presets: [
-                // Require these directly so they can be properly
-                // discovered by babel.
-                require('babel-preset-react'),
-                require('babel-preset-env'),
-            ]
-        }
-    ).transform(
-        { global: true },
-        envify({ NODE_ENV: process.env.NODE_ENV })
-    ).transform(brfs).bundle( (err, compiled) => {
-        if (err) {
-            throw err 
-        }
-        file_data = compiled.toString()
-        if ('production' === process.env.NODE_ENV) {
-            SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-            file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
-        }
-        fs.writeFile(dest_path, file_data, (err) => {
-            if (err) {
-                throw err 
+    return new Promise( (resolve, reject) => {
+        SDKError.log(SDKError.colors.grey(`Compiling (js/x): ${ source_path.replace(project_directory, '') }`))
+        const b = browserify([source_path], { extensions: ['.js', '.jsx', '.es', '.es6']})
+        const compiled = b.transform(
+            babelify,
+            {
+                presets: [
+                    // Require these directly so they can be properly
+                    // discovered by babel.
+                    require('babel-preset-react'),
+                    require('babel-preset-env'),
+                ]
             }
-            cb()
+        ).transform(
+            { global: true },
+            envify({ NODE_ENV: process.env.NODE_ENV })
+        ).transform(brfs).bundle( (err, compiled) => {
+            if (err) {
+                reject(err)
+                return
+            }
+            file_data = compiled.toString()
+            if ('production' === process.env.NODE_ENV) {
+                SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
+                file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
+            }
+            fs.writeFile(dest_path, file_data, (err) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve()
+            })
         })
     })
 }
 
 function copyAndMinifyJS (source, destination, project_directory, callback) {
-    fs.readFile(source, (err, file_data) => {
-        if (err) {
-            throw err 
-        }
-        if ('production' === process.env.NODE_ENV) {
-            SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
-            file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
-        }
-        fs.writeFile(destination, file_data, (err) => {
+    return new Promise( (resolve, reject) => {
+        fs.readFile(source, (err, file_data) => {
             if (err) {
-                throw err 
+                reject(err)
+                return
             }
-            callback()
+            if ('production' === process.env.NODE_ENV) {
+                SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
+                file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
+            }
+            fs.writeFile(destination, file_data, (err) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve()
+            })
         })
     })
 }
 
 function copyAndMinifyCSS (source, destination, project_directory, callback) {
-    fs.readFile(source, (err, file_data) => {
-        if (err) {
-            throw err 
-        }
-        if ('production' === process.env.NODE_ENV) {
-            SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
-            file_data = sqwish.minify(file_data.toString())
-        }
-        fs.writeFile(destination, file_data, (err) => {
+    return new Promise( (resolve, reject) => {
+        fs.readFile(source, (err, file_data) => {
             if (err) {
-                throw err 
+                reject(err)
+                return
             }
-            callback()
+            if ('production' === process.env.NODE_ENV) {
+                SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
+                file_data = sqwish.minify(file_data.toString())
+            }
+            fs.writeFile(destination, file_data, (err) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve()
+            })
         })
     })
 }
 
 function copyAsset (source, destination, project_directory, callback) {
-    SDKError.log(SDKError.colors.grey(`Copying ${ source.replace(project_directory,'') }`))
-    fs.copy(source, destination, () => {
-        callback()
+    return new Promise( (resolve, reject) => {
+        SDKError.log(SDKError.colors.grey(`Copying ${ source.replace(project_directory,'') }`))
+        fs.copy(source, destination, () => {
+            resolve()
+        })
     })
 }
 
@@ -159,39 +183,27 @@ function processAsset (opts) {
         case 'coffee':
             path_parts.push('js')
             dest_path = path_parts.join('.')
-            compileCoffee(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
-            })
+            return compileCoffee(opts.asset, dest_path, opts.project_directory)
             break
         case 'sass':
         case 'scss':
             path_parts.push('css')
             dest_path = path_parts.join('.')
-            compileSass(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
-            })
+            return compileSass(opts.asset, dest_path, opts.project_directory)
             break
         case 'jsx':
             path_parts.push('js')
             dest_path = path_parts.join('.')
-            compileJS(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
-            })
+            return compileJS(opts.asset, dest_path, opts.project_directory)
             break
         case 'js':
-            compileJS(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
-            })
+            return compileJS(opts.asset, dest_path, opts.project_directory)
             break
         case 'css':
-            copyAndMinifyJS(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
-            })
+            return copyAndMinifyJS(opts.asset, dest_path, opts.project_directory)
             break
         default:
-            copyAsset(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
-            })
+            return copyAsset(opts.asset, dest_path, opts.project_directory)
     }
 }
 
@@ -208,10 +220,20 @@ function copyAssetsToBuild (project_directory, asset_cache_dir, asset_dest_dir) 
     
     SDKError.log(`Copying ${ SDKError.colors.green(_to_copy.length) } assets to build: ${ formatProjectPath(project_directory, asset_dest_dir) }`)
 
-    _to_copy.forEach( (f) => {
-        fs.copySync(f.source, f.destination)
-        compileAssets.files_emitted.push(f.destination)
-    })
+    return Promise.all(
+        _to_copy.map( (f) => {
+            return new Promise( (resolve, reject) => {
+                fs.copy(f.source, f.destination, (err) => {
+                    if (err) {
+                        reject(err)
+                        return
+                    }
+                    compileAssets.files_emitted.push(f.destination)
+                    resolve()
+                })
+            })
+        })
+    )
 }
 
 
@@ -274,21 +296,23 @@ function compileAssets (opts) {
     // on their own.
     const assets = walkSync(asset_source_dir, ['_','.'])
     let to_process = assets.length
-    assets.forEach((asset) => {
-        processAsset({
-            asset_source_dir    : asset_source_dir,
-            asset_cache_dir     : asset_cache_dir,
-            asset_dest_dir      : asset_dest_dir,
-            asset               : asset,
-            project_directory   : project_directory,
-            callback: () => {
-                to_process -= 1
-                if (0 === to_process) {
-                    copyAssetsToBuild(project_directory, asset_cache_dir, asset_dest_dir)
-                    callback && callback(asset_hash)
-                }
-            },
-        })
+    
+    Promise.all(
+        assets.map( (asset) => (
+            processAsset({
+                asset_source_dir    : asset_source_dir,
+                asset_cache_dir     : asset_cache_dir,
+                asset_dest_dir      : asset_dest_dir,
+                asset               : asset,
+                project_directory   : project_directory,
+            })
+        ))
+    ).then(
+        ( () => { copyAssetsToBuild(project_directory, asset_cache_dir, asset_dest_dir) })
+    ).then( () => {
+        null != callback && callback(asset_hash)
+    }).catch( (err) => {
+        throw err
     })
 }
 
