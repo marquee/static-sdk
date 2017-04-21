@@ -82,44 +82,62 @@ function compileSass (source_path, dest_path, project_directory, cb) {
     })
 }
 
+const rollup = require('rollup')
+const rollupCommonJS = require('rollup-plugin-commonjs')
+const rollupBuble = require('rollup-plugin-buble')
+const rollupGlobals = require('rollup-plugin-node-globals')
+const rollupReplace = require('rollup-plugin-replace')
+const rollupResolve = require('rollup-plugin-node-resolve')
+const rollupUglify = require('rollup-plugin-uglify')
+function compileJS (source_path, dest_path, project_directory) {
 
-function compileJS (source_path, dest_path, project_directory, cb) {
     return new Promise( (resolve, reject) => {
         SDKError.log(SDKError.colors.grey(`Compiling (js/x): ${ source_path.replace(project_directory, '') }`))
-        const b = browserify([source_path], { extensions: ['.js', '.jsx', '.es', '.es6']})
-        const compiled = b.transform(
-            babelify,
-            {
-                presets: [
-                    // Require these directly so they can be properly
-                    // discovered by babel.
-                    require('babel-preset-react'),
-                    require('babel-preset-env'),
-                ]
-            }
-        ).transform(
-            { global: true },
-            envify({ NODE_ENV: process.env.NODE_ENV })
-        ).transform(brfs).bundle( (err, compiled) => {
-            if (err) {
-                reject(err)
-                return
-            }
-            file_data = compiled.toString()
-            if ('production' === process.env.NODE_ENV) {
-                SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-                file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
-            }
-            fs.writeFile(dest_path, file_data, (err) => {
-                if (err) {
-                    reject(err)
-                    return
-                }
-                resolve()
+        const plugins = [
+            rollupBuble(),
+            rollupCommonJS({
+              exclude: 'node_modules/process-es6/**',
+              include: [
+                'node_modules/fbjs/**',
+                'node_modules/object-assign/**',
+                'node_modules/react/**',
+                'node_modules/react-dom/**',
+                'node_modules/prop-types/**'
+              ]
+            }),
+            rollupGlobals(),
+            rollupReplace({ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) }),
+            rollupResolve({
+                browser: true,
+                main: true,
+                extensions: ['.js', '.jsx', '.es', '.es6'],
+            }),
+        ]
+
+        if ('production' === process.env.NODE_ENV) {
+            plugins.push(rollupUglify())
+        }
+
+        rollup.rollup({
+            entry: source_path,
+            plugins: plugins,
+        }).then( (bundle) => {
+            bundle.write({
+                format: 'iife',
+                moduleName: 'script',
+                dest: dest_path,
+                sourceMap: 'production' === process.env.NODE_ENV,
             })
+                .then( () => resolve() )
+                .catch( (err) => {
+                    reject(err)
+                })
+        }).catch( (err) => {
+            reject(err)
         })
     })
 }
+
 
 function copyAndMinifyJS (source, destination, project_directory, callback) {
     return new Promise( (resolve, reject) => {
