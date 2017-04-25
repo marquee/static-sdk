@@ -1,0 +1,593 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`flattenDescription should flatten nested enumerates 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "enumeration": undefined,
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "name": "about",
+        "path": "about",
+        "props": Object {},
+      },
+      "type": [Function],
+    },
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 0,
+            "item": Object {
+              "slug": "x",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": Object {
+              "slug": "y",
+            },
+            "previous": null,
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 1,
+            "item": Object {
+              "slug": "y",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": Object {
+              "slug": "z",
+            },
+            "previous": Object {
+              "slug": "x",
+            },
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 2,
+            "item": Object {
+              "slug": "z",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": undefined,
+            "previous": Object {
+              "slug": "y",
+            },
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+      ],
+      "enumeration": EnumerationItem {
+        "index": 0,
+        "item": Object {
+          "slug": "a",
+        },
+        "items": Array [
+          Object {
+            "slug": "a",
+          },
+          Object {
+            "slug": "b",
+          },
+          Object {
+            "slug": "c",
+          },
+        ],
+        "next": Object {
+          "slug": "b",
+        },
+        "previous": null,
+      },
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "linkKey": [Function],
+        "name": "collection_detail",
+        "path": [Function],
+        "props": [Function],
+      },
+      "type": [Function],
+    },
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 0,
+            "item": Object {
+              "slug": "x",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": Object {
+              "slug": "y",
+            },
+            "previous": null,
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 1,
+            "item": Object {
+              "slug": "y",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": Object {
+              "slug": "z",
+            },
+            "previous": Object {
+              "slug": "x",
+            },
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 2,
+            "item": Object {
+              "slug": "z",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": undefined,
+            "previous": Object {
+              "slug": "y",
+            },
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+      ],
+      "enumeration": EnumerationItem {
+        "index": 1,
+        "item": Object {
+          "slug": "b",
+        },
+        "items": Array [
+          Object {
+            "slug": "a",
+          },
+          Object {
+            "slug": "b",
+          },
+          Object {
+            "slug": "c",
+          },
+        ],
+        "next": Object {
+          "slug": "c",
+        },
+        "previous": Object {
+          "slug": "a",
+        },
+      },
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "linkKey": [Function],
+        "name": "collection_detail",
+        "path": [Function],
+        "props": [Function],
+      },
+      "type": [Function],
+    },
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 0,
+            "item": Object {
+              "slug": "x",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": Object {
+              "slug": "y",
+            },
+            "previous": null,
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 1,
+            "item": Object {
+              "slug": "y",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": Object {
+              "slug": "z",
+            },
+            "previous": Object {
+              "slug": "x",
+            },
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+        Object {
+          "children": Array [],
+          "enumeration": EnumerationItem {
+            "index": 2,
+            "item": Object {
+              "slug": "z",
+            },
+            "items": Array [
+              Object {
+                "slug": "x",
+              },
+              Object {
+                "slug": "y",
+              },
+              Object {
+                "slug": "z",
+              },
+            ],
+            "next": undefined,
+            "previous": Object {
+              "slug": "y",
+            },
+          },
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+      ],
+      "enumeration": EnumerationItem {
+        "index": 2,
+        "item": Object {
+          "slug": "c",
+        },
+        "items": Array [
+          Object {
+            "slug": "a",
+          },
+          Object {
+            "slug": "b",
+          },
+          Object {
+            "slug": "c",
+          },
+        ],
+        "next": undefined,
+        "previous": Object {
+          "slug": "b",
+        },
+      },
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "linkKey": [Function],
+        "name": "collection_detail",
+        "path": [Function],
+        "props": [Function],
+      },
+      "type": [Function],
+    },
+  ],
+  "enumeration": undefined,
+  "parent": undefined,
+  "props": Object {
+    "component": [Function],
+    "name": "home",
+    "path": "/",
+    "props": Object {},
+  },
+  "type": [Function],
+}
+`;
+
+exports[`flattenDescription should flatten the description 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "enumeration": undefined,
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "name": "about",
+        "path": "about",
+        "props": Object {},
+      },
+      "type": [Function],
+    },
+    Object {
+      "children": Array [],
+      "enumeration": EnumerationItem {
+        "index": 0,
+        "item": Object {
+          "slug": "a",
+        },
+        "items": Array [
+          Object {
+            "slug": "a",
+          },
+          Object {
+            "slug": "b",
+          },
+          Object {
+            "slug": "c",
+          },
+        ],
+        "next": Object {
+          "slug": "b",
+        },
+        "previous": null,
+      },
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "linkKey": [Function],
+        "name": "story_detail",
+        "path": [Function],
+        "props": [Function],
+      },
+      "type": [Function],
+    },
+    Object {
+      "children": Array [],
+      "enumeration": EnumerationItem {
+        "index": 1,
+        "item": Object {
+          "slug": "b",
+        },
+        "items": Array [
+          Object {
+            "slug": "a",
+          },
+          Object {
+            "slug": "b",
+          },
+          Object {
+            "slug": "c",
+          },
+        ],
+        "next": Object {
+          "slug": "c",
+        },
+        "previous": Object {
+          "slug": "a",
+        },
+      },
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "linkKey": [Function],
+        "name": "story_detail",
+        "path": [Function],
+        "props": [Function],
+      },
+      "type": [Function],
+    },
+    Object {
+      "children": Array [],
+      "enumeration": EnumerationItem {
+        "index": 2,
+        "item": Object {
+          "slug": "c",
+        },
+        "items": Array [
+          Object {
+            "slug": "a",
+          },
+          Object {
+            "slug": "b",
+          },
+          Object {
+            "slug": "c",
+          },
+        ],
+        "next": undefined,
+        "previous": Object {
+          "slug": "b",
+        },
+      },
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "linkKey": [Function],
+        "name": "story_detail",
+        "path": [Function],
+        "props": [Function],
+      },
+      "type": [Function],
+    },
+  ],
+  "enumeration": undefined,
+  "parent": undefined,
+  "props": Object {
+    "component": [Function],
+    "name": "home",
+    "path": "/",
+    "props": Object {},
+  },
+  "type": [Function],
+}
+`;
+
+exports[`flattenDescription should omit children of empty enumerate items 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "enumeration": undefined,
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "name": "about",
+        "path": "about",
+        "props": Object {},
+      },
+      "type": [Function],
+    },
+  ],
+  "enumeration": undefined,
+  "parent": undefined,
+  "props": Object {
+    "component": [Function],
+    "name": "home",
+    "path": "/",
+    "props": Object {},
+  },
+  "type": [Function],
+}
+`;

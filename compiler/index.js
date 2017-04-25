@@ -187,6 +187,12 @@ module.exports = function(project_directory, options, onCompile) {
         });
         let _emitRedirect = require('./emitRedirect')(_emitFile);
         let _emitRSS = require('./emitRSS')(_emitFile);
+        let _processSiteDescription = require('../declarative/processSiteDescription')({
+            project_directory   : project_directory,
+            project             : project_package,
+            config              : project_config,
+            emitFile            : _emitFile,
+        });
 
         // Set a timeout for the compiler.
         let TIMEOUT = 30 * 60; // 30 minutes
@@ -195,9 +201,13 @@ module.exports = function(project_directory, options, onCompile) {
         }
         , TIMEOUT * 1000);
 
-        let _done = function() {
+        let _done = function(site_description=null) {
             SDKError.clearPrefix();
             clearTimeout(_done_timeout);
+
+            if (null != site_description) {
+                _processSiteDescription(site_description)
+            }
 
             if (!options.skip_build_info) {
                 let _info_to_emit = {
