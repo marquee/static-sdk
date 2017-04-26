@@ -5,6 +5,29 @@ type LinkMatch = string | Map<any, string>
 type LinkMap = Map<string, LinkMatch>
 */
 
+
+function unsetConfig ()/*: Object*/ {
+    return new Proxy({}, {
+        get: (target, name) => {
+            throw new Error('Site description not yet parsed')
+        },
+        set: () => {
+            throw new Error('config is not writable')
+        }
+    })
+}
+
+function closedConfig ()/*: Object*/ {
+    return new Proxy({}, {
+        get: (target, name) => {
+            throw new Error('BuildState closed! config must be accessed before renders begin.')
+        },
+        set: () => {
+            throw new Error('config is not writable')
+        }
+    })
+}
+
 class BuildState {
     /*::
     config: ?any
@@ -18,7 +41,7 @@ class BuildState {
 
     constructor () {
 
-        this._config = null
+        this._config = unsetConfig()
         this._named_links = null
         this._is_closed = false
 
@@ -48,9 +71,6 @@ class BuildState {
     }
 
     __setConfig (new_config/*: Object */) {
-        if (null != this._config) {
-            throw new Error('Site description already parsed!')
-        }
         this._config = Object.freeze(new_config)
     }
 
@@ -66,6 +86,7 @@ class BuildState {
             throw new Error('BuildState already closed!')
         }
         this._is_closed = true
+        this._config = closedConfig()
     }
 
     linkTo (name/*:string*/, key/*:?Object*/)/*: string*/ {
@@ -90,7 +111,7 @@ class BuildState {
 
         const matched_key = name_paths.get(key)
         if (null == matched_key) {
-            throw new Error(`Key for link name ${ name } did not match`)
+            throw new Error(`Key for link name ${ name } did not match any paths: ${ null != key ? key.toString() : 'null' }`)
         }
         return matched_key
     }

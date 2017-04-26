@@ -11,7 +11,8 @@ describe('current-build', () => {
 
     describe('config', () => {
         it('should fail if used before set up', () => {
-            expect( () => current_build.config).toThrow()
+            current_build.config // should work
+            expect( () => current_build.config.HOST).toThrow()
         })
 
         it('should work if used after set up', () => {
@@ -23,14 +24,14 @@ describe('current-build', () => {
         })
 
         it('should fail if used after close up', () => {
-            expect( () => current_build.config).toThrow()
+            expect( () => current_build.config.HOST).toThrow()
             current_build.__setConfig({
                 HOST: 'example.com',
                 HTTPS: false,
             })
             expect(current_build.config.HOST).toEqual('example.com')
             current_build.__close()
-            expect( () => current_build.config).toThrow()
+            expect( () => current_build.config.HOST).toThrow()
         })
     })
 
