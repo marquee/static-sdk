@@ -6,6 +6,7 @@ const HTMLView = props => null
 HTMLView['Content-Type'] = 'text/html'
 HTMLView.is_compressable = true
 HTMLView.renderOutput = (input) => '<!doctype>' + ReactDOMServer.renderToStaticMarkup(input)
+HTMLView.makeEmit = (descriptor) => React.createElement(descriptor.props.component, descriptor.gathered_props)
 
 const Sitemap = props => null
 Sitemap['Content-Type'] = 'text/xml'
