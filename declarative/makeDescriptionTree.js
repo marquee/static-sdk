@@ -1,7 +1,7 @@
 // @flow
 
 const React = require('react')
-
+const { Skip } = require('./Site')
 /*::
 type DescriptorNode = {
     parent: ?DescriptorNode,
@@ -11,7 +11,10 @@ type DescriptorNode = {
 }
 */
 
-function makeDescriptionTree (node/*: React.Element<*> */, parent/*: ?DescriptorNode */)/*: DescriptorNode */ {
+function makeDescriptionTree (node/*: React.Element<*> */, parent/*: ?DescriptorNode */)/*: ?DescriptorNode */ {
+    if (Skip === node.type) {
+        return null
+    }
     const props = {}
     if (null != node.type.default_props) {
         Object.assign(props, node.type.default_props)
@@ -31,7 +34,12 @@ function makeDescriptionTree (node/*: React.Element<*> */, parent/*: ?Descriptor
         props       : props,
         children    : [],
     }
-    _description_node.children = children.map( c => makeDescriptionTree(c, _description_node) )
+    children.forEach( c => {
+        const c_node = makeDescriptionTree(c, _description_node)
+        if (null != c_node) {
+            _description_node.children.push(c_node)
+        }
+    })
     return _description_node
 }
 

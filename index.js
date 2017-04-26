@@ -4,6 +4,7 @@ const {
     HTMLView,
     RSSView,
     Sitemap,
+    Skip,
 } = require('./declarative/Site')
 
 
@@ -13,6 +14,7 @@ module.exports = {
     HTMLView,
     RSSView,
     Sitemap,
+    Skip,
     entry: require('./entry'),
 }
 

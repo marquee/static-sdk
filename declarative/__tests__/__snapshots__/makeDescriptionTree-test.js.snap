@@ -56,3 +56,29 @@ Object {
   "type": [Function],
 }
 `;
+
+exports[`makeDescriptionTree should skip Skips 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "name": "about",
+        "path": "about",
+        "props": Object {},
+      },
+      "type": [Function],
+    },
+  ],
+  "parent": undefined,
+  "props": Object {
+    "component": [Function],
+    "name": "home",
+    "path": "/",
+    "props": Object {},
+  },
+  "type": [Function],
+}
+`;

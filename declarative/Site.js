@@ -25,10 +25,13 @@ Enumerate.Log = props => null
 
 const Assets = props => null
 
+const Skip = props => null
+
 module.exports = {
     Assets,
     Enumerate,
     HTMLView,
     RSSView,
     Sitemap,
+    Skip,
 }
