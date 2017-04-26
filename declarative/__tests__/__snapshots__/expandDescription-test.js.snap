@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`flattenDescription should flatten nested enumerates 1`] = `
+exports[`expandDescription should expand nested enumerates 1`] = `
 Object {
   "children": Array [
     Object {
@@ -435,7 +435,7 @@ Object {
 }
 `;
 
-exports[`flattenDescription should flatten the description 1`] = `
+exports[`expandDescription should expand the description 1`] = `
 Object {
   "children": Array [
     Object {
@@ -564,7 +564,7 @@ Object {
 }
 `;
 
-exports[`flattenDescription should omit children of empty enumerate items 1`] = `
+exports[`expandDescription should omit children of empty enumerate items 1`] = `
 Object {
   "children": Array [
     Object {

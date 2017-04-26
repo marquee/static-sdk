@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`extractLinks should extract links 1`] = `
+Map {
+  "home" => "/",
+  "about" => "/about/",
+  "collection_detail" => Map {
+    Object {
+      "slug": "a",
+    } => "/a/",
+  },
+  "story_detail" => Map {
+    Object {
+      "slug": "x",
+    } => "/a/x/",
+    Object {
+      "slug": "y",
+    } => "/a/y/",
+    Object {
+      "slug": "z",
+    } => "/a/z/",
+  },
+}
+`;

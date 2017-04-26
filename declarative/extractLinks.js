@@ -1,6 +1,7 @@
 // @flow
 
-const { EnumerationItem } = require('./flattenDescription')
+const EnumerationItem = require('./EnumerationItem')
+
 /*::
 type NodePropsType = {
     props           : ?(Object | Function),
@@ -9,10 +10,10 @@ type NodePropsType = {
     path            : ?(string | Function),
     linkKey         : ?(string | Function | Object),
 }
-type FlattenedDescriptorNode = {
+type ExpandedDescriptorNode = {
     enumeration     : ?EnumerationItem,
-    children        : Array<FlattenedDescriptorNode>,
-    parent          : ?FlattenedDescriptorNode,
+    children        : Array<ExpandedDescriptorNode>,
+    parent          : ?ExpandedDescriptorNode,
     props           : NodePropsType,
     type            : Object,
 }
@@ -20,11 +21,11 @@ type LinkMatch = string | Map<any, string>
 type LinkMap = Map<string, LinkMatch>
 */
 
-function extractLinks (flattened_description/*: FlattenedDescriptorNode */)/*: LinkMap*/ {
+function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: LinkMap*/ {
 
     const named_links = new Map()
 
-    function _traverse (node/*: FlattenedDescriptorNode*/, parent_path/*: string */) {
+    function _traverse (node/*: ExpandedDescriptorNode*/, parent_path/*: string */) {
         const node_name = node.props.name
         const node_enumeration = node.enumeration
 
@@ -96,7 +97,7 @@ function extractLinks (flattened_description/*: FlattenedDescriptorNode */)/*: L
         }
         node.children.forEach( c => _traverse(c, this_path))
     }
-    _traverse(flattened_description, '')
+    _traverse(expanded_description, '')
 
     return named_links
 }

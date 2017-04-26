@@ -5,7 +5,7 @@ describe('extractLinks', () => {
     // Using the whole chain since creating suitable mock objects manually
     // would be tedious or essentially duplicating what these do.
     const makeDescriptionTree       = require('../makeDescriptionTree')
-    const flattenDescription        = require('../flattenDescription')
+    const expandDescription         = require('../expandDescription')
     const extractLinks              = require('../extractLinks')
     const React                     = require('react')
     const { HTMLView, Enumerate }   = require('../Site')
@@ -17,7 +17,7 @@ describe('extractLinks', () => {
         const mock_collection = { slug: 'a' }
         const mock_story = { slug: 'x' }
         const other_mock_story = { slug: 'y' }
-        const flattened = flattenDescription(
+        const expanded = expandDescription(
             makeDescriptionTree(
                 r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
                     r(HTMLView, { props: {}, name: 'about', path: 'about', component: () => r('div') }),
@@ -31,10 +31,10 @@ describe('extractLinks', () => {
                 )
             )
         )
-        const links = extractLinks(flattened)
-        // expect(
-        //     links
-        // ).toMatchSnapshot()
+        const links = extractLinks(expanded)
+        expect(
+            links
+        ).toMatchSnapshot()
         expect(links.get('home')).toEqual('/')
         expect(links.get('about')).toEqual('/about/')
         expect(links.get('collection_detail').get(mock_collection)).toEqual('/a/')
@@ -44,7 +44,7 @@ describe('extractLinks', () => {
 
 
     it('should fail on duplicate singleton names', () => {
-        const flattened = flattenDescription(
+        const expanded = expandDescription(
             makeDescriptionTree(
                 r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
                     r(HTMLView, { props: {}, name: 'about', path: 'about', component: () => r('div') }),
@@ -52,12 +52,12 @@ describe('extractLinks', () => {
                 )
             )
         )
-        expect( () => extractLinks(flattened) ).toThrow()
+        expect( () => extractLinks(expanded) ).toThrow()
     })
 
     it('should fail on duplicate names and keys', () => {
         const mock_story = {slug: 'x'}
-        const flattened = flattenDescription(
+        const expanded = expandDescription(
             makeDescriptionTree(
                 r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
                     r(HTMLView, { props: {}, name: 'story_detail', linkKey: () => mock_story, path: s => s.slug, component: () => r('div') }),
@@ -65,12 +65,12 @@ describe('extractLinks', () => {
                 )
             )
         )
-        expect( () => extractLinks(flattened) ).toThrow()
+        expect( () => extractLinks(expanded) ).toThrow()
     })
 
     it('should fail on keying existing singleton name', () => {
         const mock_story = {slug: 'x'}
-        const flattened = flattenDescription(
+        const expanded = expandDescription(
             makeDescriptionTree(
                 r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
                     r(HTMLView, { props: {}, name: 'story_detail', path: 'story/', component: () => r('div') }),
@@ -78,12 +78,12 @@ describe('extractLinks', () => {
                 )
             )
         )
-        expect( () => extractLinks(flattened) ).toThrow()
+        expect( () => extractLinks(expanded) ).toThrow()
     })
 
     it('should fail on reusing a keyed name for a singleton', () => {
         const mock_story = {slug: 'x'}
-        const flattened = flattenDescription(
+        const expanded = expandDescription(
             makeDescriptionTree(
                 r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
                     r(HTMLView, { props: {}, name: 'story_detail', linkKey: () => mock_story, path: s => s.slug, component: () => r('div') }),
@@ -91,7 +91,7 @@ describe('extractLinks', () => {
                 )
             )
         )
-        expect( () => extractLinks(flattened) ).toThrow()
+        expect( () => extractLinks(expanded) ).toThrow()
     })
 
 })

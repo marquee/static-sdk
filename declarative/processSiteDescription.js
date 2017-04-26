@@ -1,6 +1,7 @@
 const current_build         = require('../current-build')
 const extractLinks          = require('./extractLinks')
-const flattenDescription    = require('./flattenDescription')
+const expandDescription     = require('./expandDescription')
+const gatherPropsInPlace    = require('./gatherPropsInPlace')
 const makeDescriptionTree   = require('./makeDescriptionTree')
 const React                 = require('react')
 const { Enumerate, Assets } = require('./Site')
@@ -96,16 +97,19 @@ function processSiteDescription (kwargs) {
         emitFile
     } = kwargs
     return function (site_description) {
-        console.log({ site_description })
+        console.log('processSiteDescription 1', site_description)
         const description_tree = makeDescriptionTree(site_description)
-        console.log({ description_tree })
-        const flattened_description = flattenDescription(
+        console.log('processSiteDescription 2', description_tree)
+        const expanded_description = expandDescription(
             description_tree
         )
-        console.log({ flattened_description })
-        const path_links = extractLinks(flattened_description)
-        console.log({ path_links })
-        // console.log(description_tree)
+        console.log('processSiteDescription 3', expanded_description)
+        const path_links = extractLinks(expanded_description)
+        current_build.__setLinks(path_links)
+        current_build.__setConfig(config)
+        gatherPropsInPlace(expanded_description)
+        current_build.__close()
+
     }
 }
 
