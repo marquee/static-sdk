@@ -7,15 +7,15 @@ HTMLView['Content-Type'] = 'text/html'
 HTMLView.is_compressable = true
 HTMLView.makeEmit = descriptor => React.createElement(descriptor.props.component, descriptor.gathered_props)
 
-const Sitemap = props => null
-Sitemap['Content-Type'] = 'text/plain'
-Sitemap.is_compressable = true
-Sitemap.default_props = {
+const SitemapView = props => null
+SitemapView['Content-Type'] = 'text/plain'
+SitemapView.is_compressable = true
+SitemapView.default_props = {
     path: 'sitemap.txt'
 }
 const r = React.createElement
 const ONE_MONTH = 1000 * 60 * 60 * 24 * 30
-Sitemap.makeEmit = (descriptor, { all_descriptors, config }) => {
+SitemapView.makeEmit = (descriptor, { all_descriptors, config }) => {
 
     const links = new Set()
     all_descriptors.forEach( d => {
@@ -38,15 +38,15 @@ RSSView.renderOutput = (input) => '<xml> RSS!'
 const Enumerate = props => null
 Enumerate.Log = props => null
 
-const Assets = props => null
+const AssetPipeline = props => null
 
 const Skip = props => null
 
 module.exports = {
-    Assets,
+    AssetPipeline,
     Enumerate,
     HTMLView,
     RSSView,
-    Sitemap,
+    SitemapView,
     Skip,
 }

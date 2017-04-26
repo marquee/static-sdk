@@ -23,7 +23,7 @@ type ExpandedDescriptorNode = {
 type LinkMatch = string | Map<any, string>
 type LinkMap = Map<string, LinkMatch>
 */
-const { Sitemap } = require('./Site')
+
 function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: LinkMap*/ {
 
     const named_links = new Map()

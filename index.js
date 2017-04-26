@@ -1,19 +1,19 @@
 const {
-    Assets,
+    AssetPipeline,
     Enumerate,
     HTMLView,
     RSSView,
-    Sitemap,
+    SitemapView,
     Skip,
 } = require('./declarative/Site')
 
 
 module.exports = {
-    Assets,
+    AssetPipeline,
     Enumerate,
     HTMLView,
     RSSView,
-    Sitemap,
+    SitemapView,
     Skip,
     entry: require('./entry'),
     renderEntryContent: require('./entry/renderEntryContent'),

@@ -65,8 +65,7 @@
       "<rootDir>/node_modules/react"
     ],
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "<rootDir>/entry/__tests__/_SAMPLE_ENTRY.js"
+      "/node_modules/"
     ]
   },
   "homepage": "https://proof.pub",

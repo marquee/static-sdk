@@ -5,7 +5,7 @@ const flattenDescription    = require('./flattenDescription')
 const gatherPropsInPlace    = require('./gatherPropsInPlace')
 const makeDescriptionTree   = require('./makeDescriptionTree')
 const React                 = require('react')
-const { Enumerate, Assets, Sitemap } = require('./Site')
+const { Enumerate, SitemapView } = require('./Site')
 
 function processSiteDescription (kwargs) {
     const {
@@ -30,11 +30,11 @@ function processSiteDescription (kwargs) {
         const all_descriptors = flattenDescription(expanded_description)
 
         all_descriptors.forEach( descriptor => {
-            if (Sitemap === descriptor.type) {
+            if (SitemapView === descriptor.type) {
                 emitFile(
                     descriptor.evaluated_path,
-                    Sitemap.makeEmit(descriptor, { all_descriptors, config }),
-                    { 'Content-Type': Sitemap['Content-Type']}
+                    SitemapView.makeEmit(descriptor, { all_descriptors, config }),
+                    { 'Content-Type': SitemapView['Content-Type']}
                 )
             } else if (null != descriptor.evaluated_path && null != descriptor.type.makeEmit) {
                 emitFile(
