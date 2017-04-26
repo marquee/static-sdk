@@ -1,5 +1,4 @@
 
-# move caches to .__proof/
 const fs              = require('fs-extra')
 const path            = require('path')
 const SDKError        = require('../compiler/SDKError')

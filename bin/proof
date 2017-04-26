@@ -9,7 +9,6 @@ program
     .option('-c, --configuration <name>', 'A configuration to use')
     .option('--host <host>', 'Set the development server host, eg 0.0.0.0 for external access (default `localhost`)')
     .option('--port <port>', 'Set the development server port (default `5000`)')
-    .option('--use-cache', 'Cache API responses (for development) [Deprecated, use --api-cache]')
     .option('--api-cache', 'Cache API responses (for development)')
     .option('--verbose', 'Show non-error info messages')
     .option('--deploy-stats <file>', 'Write deploy stats to the given file (JSON formatted)')
@@ -39,16 +38,12 @@ if (program.verbose) {
     global.VERBOSE = false;
 }
 
-if (program.useCache) {
-    console.warn('The --use-cache option is deprecated. Please use --api-cache.')
-}
-
 var _command = program.args[0];
 var _options = {
     force: program.force || false,
     configuration: program.configuration || null,
     production: program.production || false,
-    use_cache: program.apiCache || program.useCache || false,
+    use_cache: program.apiCache || false,
     host: program.host || 'localhost',
     port: program.port || '5000',
     verbose: program.verbose || false,
