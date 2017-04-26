@@ -1,7 +1,23 @@
+const {
+    Assets,
+    Enumerate,
+    HTMLView,
+    RSSView,
+    Sitemap,
+} = require('./declarative/Site')
+
+
 module.exports = {
-    base        : require('./base'),
-    components  : require('./components'),
-    cards       : require('./cards'),
-    entry       : require('./entry'),
-    utils       : require('./utils'),
+    Assets,
+    Enumerate,
+    HTMLView,
+    RSSView,
+    Sitemap,
+    entry: require('./entry'),
 }
+
+
+
+
+
+
