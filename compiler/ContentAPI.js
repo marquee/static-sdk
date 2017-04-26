@@ -60,6 +60,8 @@ class Model {
         );
     }
 
+    toString() { return `[${ this._data.type }:${ this._data.role }:${ this._data.id }]`; }
+
     toJSON() { return this._data; }
 
     keys() { return this._keys; }
