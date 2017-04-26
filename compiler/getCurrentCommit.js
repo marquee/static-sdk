@@ -6,6 +6,7 @@ module.exports = function getCurrentCommit (directory, callback) {
     // If not a git repository, return null.
     if (!fs.existsSync(path.join(directory, '.git'))) {
         callback(null)
+        return
     }
     // http://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
     exec(
