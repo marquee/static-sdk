@@ -42,6 +42,28 @@ describe('extractLinks', () => {
         expect(links.get('story_detail').get(other_mock_story)).toEqual('/a/y/')
     })
 
+    it('should handle Enumerates with paths', () => {
+
+        const mock_collection = { slug: 'a' }
+        const mock_story = { slug: 'x' }
+        const other_mock_story = { slug: 'y' }
+        const expanded = expandDescription(
+            makeDescriptionTree(
+                r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
+                    r(Enumerate, { path: 'stories', items: [mock_story, other_mock_story, {slug: 'z'}] },
+                        r(HTMLView, { props: c => c, name: 'story_detail', path: c => c.slug, linkKey: c => c, component: () => r('div') })
+                    )
+                )
+            )
+        )
+        const links = extractLinks(expanded)
+        expect(
+            links
+        ).toMatchSnapshot()
+        expect(links.get('home')).toEqual('/')
+        expect(links.get('story_detail').get(mock_story)).toEqual('/stories/x/')
+        expect(links.get('story_detail').get(other_mock_story)).toEqual('/stories/y/')
+    })
 
     it('should fail on duplicate singleton names', () => {
         const expanded = expandDescription(

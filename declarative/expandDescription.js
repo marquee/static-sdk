@@ -48,7 +48,7 @@ function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedD
             throw new Error('Enumerate items function did not return an iterable with a forEach.')
         }
         items_array.forEach( (item, index) => {
-            const _e = new EnumerationItem({ items: items_array, index, item })
+            const _e = new EnumerationItem({ items: items_array, index, item, path: node.props.path })
             node.children.forEach( child => {
                 to_return.push(..._expandDescription(child, parent, _e))
             })

@@ -50,6 +50,13 @@ function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: Lin
             }
 
             if (null != node_path_string) {
+                if (null != node_enumeration && null != node_enumeration.path) {
+                    if ('string' === typeof node_enumeration.path) {
+                        node_path_string = `${ node_enumeration.path }/${ node_path_string }`
+                    } else {
+                        throw new Error('Enumerate cannot use iteratee functions as paths')
+                    }
+                }
                 this_path = `/${ parent_path }/${ node_path_string }/`.replace(/\/+/g,'/')
                 const existing_link_def = named_links.get(node_name)
                 const node_linkKey = node.props.linkKey

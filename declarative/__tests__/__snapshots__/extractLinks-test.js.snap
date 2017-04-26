@@ -22,3 +22,20 @@ Map {
   },
 }
 `;
+
+exports[`extractLinks should handle Enumerates with paths 1`] = `
+Map {
+  "home" => "/",
+  "story_detail" => Map {
+    Object {
+      "slug": "x",
+    } => "/stories/x/",
+    Object {
+      "slug": "y",
+    } => "/stories/y/",
+    Object {
+      "slug": "z",
+    } => "/stories/z/",
+  },
+}
+`;
