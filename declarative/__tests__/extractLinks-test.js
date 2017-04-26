@@ -27,7 +27,8 @@ describe('extractLinks', () => {
                                 r(HTMLView, { props: c => c, name: 'story_detail', path: c => c.slug, linkKey: c => c, component: () => r('div') })
                             )
                         )
-                    )
+                    ),
+                    r(HTMLView, { props: {}, name: 'raw_html', path: 'raw.html', component: () => r('div') }),
                 )
             )
         )
@@ -37,6 +38,7 @@ describe('extractLinks', () => {
         ).toMatchSnapshot()
         expect(links.get('home')).toEqual('/')
         expect(links.get('about')).toEqual('/about/')
+        expect(links.get('raw_html')).toEqual('/raw.html')
         expect(links.get('collection_detail').get(mock_collection)).toEqual('/a/')
         expect(links.get('story_detail').get(mock_story)).toEqual('/a/x/')
         expect(links.get('story_detail').get(other_mock_story)).toEqual('/a/y/')

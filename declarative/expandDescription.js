@@ -24,6 +24,8 @@ type ExpandedDescriptorNode = {
     props           : NodePropsType,
     type            : Object,
     evaluated_path  : ?string,
+    link_key        : ?any,
+    gathered_props  : ?Object,
 }
 */
 
@@ -61,7 +63,9 @@ function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedD
             props           : node.props,
             children        : [],
             enumeration     : enumeration,
+            gathered_props  : null,
             evaluated_path  : null, // <- move path evaluation to here?
+            link_key        : null,
         }
         node.children.forEach( child => {
             expanded_node.children.push(

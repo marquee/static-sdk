@@ -15,10 +15,11 @@ type ExpandedDescriptorNode = {
     children        : Array<ExpandedDescriptorNode>,
     parent          : ?ExpandedDescriptorNode,
     props           : NodePropsType,
-    gathered_props  : ?Object,
     type            : Object,
-}
-*/
+    evaluated_path  : ?string,
+    link_key        : ?any,
+    gathered_props  : ?Object,
+}*/
 
 function gatherPropsInPlace (node/*: ExpandedDescriptorNode */) {
 

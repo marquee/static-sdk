@@ -20,6 +20,7 @@ Map {
       "slug": "z",
     } => "/a/z/",
   },
+  "raw_html" => "/raw.html",
 }
 `;
 

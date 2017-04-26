@@ -17,6 +17,8 @@ type ExpandedDescriptorNode = {
     props           : NodePropsType,
     type            : Object,
     evaluated_path  : ?string,
+    link_key        : ?any,
+    gathered_props  : ?Object,
 }
 */
 

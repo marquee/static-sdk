@@ -7,6 +7,8 @@ Object {
       "children": Array [],
       "enumeration": undefined,
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -43,6 +45,8 @@ Object {
             "previous": null,
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -80,6 +84,8 @@ Object {
             },
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -115,6 +121,8 @@ Object {
             },
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -149,6 +157,8 @@ Object {
         "previous": null,
       },
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -186,6 +196,8 @@ Object {
             "previous": null,
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -223,6 +235,8 @@ Object {
             },
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -258,6 +272,8 @@ Object {
             },
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -294,6 +310,8 @@ Object {
         },
       },
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -331,6 +349,8 @@ Object {
             "previous": null,
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -368,6 +388,8 @@ Object {
             },
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -403,6 +425,8 @@ Object {
             },
           },
           "evaluated_path": null,
+          "gathered_props": null,
+          "link_key": null,
           "parent": [Circular],
           "props": Object {
             "component": [Function],
@@ -437,6 +461,8 @@ Object {
         },
       },
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -450,6 +476,8 @@ Object {
   ],
   "enumeration": undefined,
   "evaluated_path": null,
+  "gathered_props": null,
+  "link_key": null,
   "parent": undefined,
   "props": Object {
     "component": [Function],
@@ -468,6 +496,8 @@ Object {
       "children": Array [],
       "enumeration": undefined,
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -502,6 +532,8 @@ Object {
         "previous": null,
       },
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -539,6 +571,8 @@ Object {
         },
       },
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -574,6 +608,8 @@ Object {
         },
       },
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -587,6 +623,8 @@ Object {
   ],
   "enumeration": undefined,
   "evaluated_path": null,
+  "gathered_props": null,
+  "link_key": null,
   "parent": undefined,
   "props": Object {
     "component": [Function],
@@ -605,6 +643,8 @@ Object {
       "children": Array [],
       "enumeration": undefined,
       "evaluated_path": null,
+      "gathered_props": null,
+      "link_key": null,
       "parent": [Circular],
       "props": Object {
         "component": [Function],
@@ -617,6 +657,8 @@ Object {
   ],
   "enumeration": undefined,
   "evaluated_path": null,
+  "gathered_props": null,
+  "link_key": null,
   "parent": undefined,
   "props": Object {
     "component": [Function],

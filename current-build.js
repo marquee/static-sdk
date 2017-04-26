@@ -126,50 +126,6 @@ class BuildState {
         return link
     }
 
-    // _makeURL (fully_qualified/*: boolean*/, name/*: string*/, ...args/*: Array<any>*/)/*: string*/ {
-    //     if (null == this._named_links) {
-    //         throw new Error('Site description not yet parsed!')
-    //     }
-    //     const matched_path_to = this._named_links.get(name)
-    //     if (null == matched_path_to) {
-    //         throw new Error(`Unknown link name: ${ name }`)
-    //     }
-    //     let num_consumed_args = 0
-    //     const _rendered_parts = matched_path_to.map( (part, i) => {
-    //         if ('function' === typeof part.path) {
-    //             num_consumed_args += 1
-    //             const part_arg = args.shift()
-    //             if (null == part_arg) {
-    //                 throw new Error(`Missing argument ${ num_consumed_args } for named link '${ name }'`)
-    //             }
-    //             let part_result
-    //             if (null != part.linkKey) {
-    //                 part_result = part.linkKey(part_arg)
-    //             } else if ('function' === typeof part.path) {
-    //                 part_result = part.path(part_arg)
-    //             }
-    //             if (!part_result) {
-    //                 throw new Error(`Link part ${ num_consumed_args } for named link ${ name } did not return a value`)
-    //             }
-    //             return part_result.toString()
-    //         }
-    //         return part.path.toString()
-    //     })
-    //     let link = _rendered_parts.join('/').replace(/\/+/g, '/')
-    //     if (fully_qualified) {
-    //         if (!this._config || !this._config.HOST) {
-    //             throw new Error('No HOST configured!')
-    //         }
-    //         let protocol = 'http'
-    //         if (this._config.HTTPS) {
-    //             protocol = 'https'
-    //         }
-    //         link = `${ protocol }://${ this._config.HOST }${ link }`
-    //     }
-    //     return link
-    // }
-
-
 }
 
 
