@@ -636,11 +636,16 @@ class ContentAPI {
         });
     }
 
-    loadData() {
+    loadData(cb) {
         return new Promise((function(resolve, reject) {
             return Promise.all([
                 this.entries(), this.packages(), this.people(), this.locations(), this.topics()
-            ]).then(normalizeContentData).then(resolve)
+            ]).then(normalizeContentData).then(
+                (data) => {
+                    resolve(data)
+                    (typeof cb === 'function' ? cb(data) : undefined)
+                }
+            )
             .catch(reject);
         }.bind(this)));
     }
