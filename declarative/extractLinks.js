@@ -16,6 +16,7 @@ type ExpandedDescriptorNode = {
     parent          : ?ExpandedDescriptorNode,
     props           : NodePropsType,
     type            : Object,
+    evaluated_path  : ?string,
 }
 type LinkMatch = string | Map<any, string>
 type LinkMap = Map<string, LinkMatch>
@@ -92,6 +93,7 @@ function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: Lin
                     }
                     named_links.set(node_name, this_path)
                 }
+                node.evaluated_path = this_path
             }
         }
         node.children.forEach( c => _traverse(c, this_path))

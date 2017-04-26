@@ -23,12 +23,12 @@ type ExpandedDescriptorNode = {
     parent          : ?ExpandedDescriptorNode,
     props           : NodePropsType,
     type            : Object,
+    evaluated_path  : ?string,
 }
 */
 
 function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedDescriptorNode */, enumeration/*: ?EnumerationItem */)/*: Array<ExpandedDescriptorNode>*/ {
     const to_return = []
-
     if (Enumerate === node.type) {
         let items = node.props.items
         let items_array = []
@@ -61,6 +61,7 @@ function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedD
             props           : node.props,
             children        : [],
             enumeration     : enumeration,
+            evaluated_path  : null, // <- move path evaluation to here?
         }
         node.children.forEach( child => {
             expanded_node.children.push(
