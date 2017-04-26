@@ -639,22 +639,21 @@ class ContentAPI {
     }
 
     loadData(cb) {
-        return new Promise((function(resolve, reject) {
-            return Promise.all([
-                this.entries(), this.packages(), this.people(), this.locations(), this.topics()
-            ]).then(normalizeContentData).then(
-                (data) => {
-                    try {
-                        resolve(data)
-                        (typeof cb === 'function' ? cb(data) : undefined)
-                    } catch (e) {
-                        console.error(e)
-                        throw e
-                    }
+        const _data_promise = Promise.all([
+            this.entries(), this.packages(), this.people(), this.locations(), this.topics()
+        ]).then(normalizeContentData)
+        if (null == cb) {
+            return _data_promise
+        } else {
+            _data_promise.then( (data) => {
+                try {
+                    (typeof cb === 'function' ? cb(data) : undefined)
+                } catch (e) {
+                    console.error(e)
+                    throw e
                 }
-            )
-            .catch(reject);
-        }.bind(this)));
+            })
+        }
     }
 }
 ContentAPI.initClass();
