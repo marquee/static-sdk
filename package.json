@@ -51,10 +51,9 @@
     "uglify-js": "^2.4.15",
     "when": "^3.6.4"
   },
-  "peerDependencies": {
-    "react": "^15.4.2"
-  },
   "devDependencies": {
+    "flow-bin": "^0.44.2",
+    "flow-typed": "^2.1.2",
     "jest": "^19.0.2",
     "jest-cli": "^19.0.2",
     "marked": "^0.3.2",
