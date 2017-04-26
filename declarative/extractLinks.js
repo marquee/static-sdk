@@ -40,9 +40,9 @@ function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: Lin
                     node_path_string = node_path()
                 }
                 if (null == node_path_string) {
-                    throw new Error('path iteratee did not return a string, got null')
+                    throw new Error(`${ node_name } path iteratee did not return a string, got null`)
                 } else if ('string' !== typeof node_path_string) {
-                    throw new Error(`path iteratee did not return a string, got ${ typeof node_path_string }: ${ node_path_string }`)
+                    throw new Error(`${ node_name } path iteratee did not return a string, got ${ typeof node_path_string }: ${ node_path_string }`)
                 }
             } else if ('string' === typeof node_path) {
                 node_path_string = node_path
@@ -50,7 +50,6 @@ function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: Lin
 
             if (null != node_path_string) {
                 this_path = `/${ parent_path }/${ node_path_string }/`.replace(/\/+/g,'/')
-                console.log(this_path)
                 const existing_link_def = named_links.get(node_name)
                 const node_linkKey = node.props.linkKey
                 if (null != node_linkKey) {

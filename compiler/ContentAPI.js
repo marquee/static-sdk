@@ -642,8 +642,13 @@ class ContentAPI {
                 this.entries(), this.packages(), this.people(), this.locations(), this.topics()
             ]).then(normalizeContentData).then(
                 (data) => {
-                    resolve(data)
-                    (typeof cb === 'function' ? cb(data) : undefined)
+                    try {
+                        resolve(data)
+                        (typeof cb === 'function' ? cb(data) : undefined)
+                    } catch (e) {
+                        console.error(e)
+                        throw e
+                    }
                 }
             )
             .catch(reject);

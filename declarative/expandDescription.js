@@ -29,14 +29,6 @@ type ExpandedDescriptorNode = {
 function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedDescriptorNode */, enumeration/*: ?EnumerationItem */)/*: Array<ExpandedDescriptorNode>*/ {
     const to_return = []
 
-    const indent = []
-    let n = node
-    while(null != n) {
-        indent.push('\t')
-        n = n.parent
-    }
-
-    console.log(indent.join(''),node.type.name, Enumerate === node.type)
     if (Enumerate === node.type) {
         let items = node.props.items
         let items_array = []
@@ -44,7 +36,6 @@ function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedD
             throw new Error('Enumerate not given items. Must be an Array or function that returns an Array.')
         }
         if ('function' === typeof items) {
-            console.log(null != enumeration)
             if (null != enumeration) {
                 items_array = items(...enumeration.asIterateeArgs())
             } else {
