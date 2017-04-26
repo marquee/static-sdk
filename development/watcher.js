@@ -4,6 +4,7 @@ const watch           = require('node-watch')
 const SDKError        = require('../compiler/SDKError')
 const compileAssets   = require('../compiler/compileAssets')
 const runCompilation  = require('../compiler')
+const current_build   = require('../current-build')
 
 module.exports = function watcher (project_directory, build_directory, options, project_config) {
     SDKError.log(`Watching for changes: ${ SDKError.formatProjectPath(project_directory) }`)
@@ -12,9 +13,9 @@ module.exports = function watcher (project_directory, build_directory, options, 
     let is_compiling_site = false
 
     // Selectively watch to avoid EMFILE errors.
-    const watch_targets = fs.readdirSync(project_directory).filter( (f) => {
+    const watch_targets = fs.readdirSync(project_directory).filter( (f) => (
         ['assets', 'node_modules'].indexOf(f) === -1 && f[0] !== '.'
-    })
+    ))
 
     function _doAssets (file_name) {
         is_compiling_assets = true
@@ -65,6 +66,7 @@ module.exports = function watcher (project_directory, build_directory, options, 
     watch(watch_targets, (file_name) => {
         if (!is_compiling_assets && !is_compiling_site) {
             _handleChange(file_name)
+            current_build.__reset()
             _doFiles(file_name)
         }
     })

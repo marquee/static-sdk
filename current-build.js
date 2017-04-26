@@ -41,9 +41,7 @@ class BuildState {
 
     constructor () {
 
-        this._config = unsetConfig()
-        this._named_links = null
-        this._is_closed = false
+        this.__reset()
 
         // This is a workaround for flow checking Object.defineProperty using
         // a getter: https://github.com/facebook/flow/issues/285
@@ -58,6 +56,12 @@ class BuildState {
         this.linkTo = this.linkTo.bind(this)
         this.fullLinkTo = this.fullLinkTo.bind(this)
 
+    }
+
+    __reset () {
+        this._config = unsetConfig()
+        this._named_links = null
+        this._is_closed = false
     }
 
     _getConfig ()/*: Object */ {
