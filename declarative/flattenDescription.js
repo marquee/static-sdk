@@ -59,7 +59,7 @@ function _flattenDescription (node/*: DescriptorNodeType */, parent/*: ?Flattene
             throw new Error('Enumerate not given items. Must be an Array or function that returns an Array.')
         }
         if ('function' === typeof items) {
-            if (null != parent && null != enumeration) {
+            if (null != enumeration) {
                 items_array = items(...enumeration.asIterateeArgs())
             } else {
                 items_array = items()
@@ -67,8 +67,8 @@ function _flattenDescription (node/*: DescriptorNodeType */, parent/*: ?Flattene
         } else {
             items_array = items
         }
-        if (!Array.isArray(items_array)) {
-            throw new Error('Enumerate items function did not return an Array.')
+        if (null == items_array || null == items_array.forEach) {
+            throw new Error('Enumerate items function did not return an iterable with a forEach.')
         }
         items_array.forEach( (item, index) => {
             const _e = new EnumerationItem({ items: items_array, index, item })
@@ -77,6 +77,7 @@ function _flattenDescription (node/*: DescriptorNodeType */, parent/*: ?Flattene
             })
         })
     } else {
+
         const flattened_node/*: FlattenedDescriptorNode */= {
             parent          : parent,
             type            : node.type,

@@ -27,7 +27,7 @@ function extractLinks (flattened_description/*: FlattenedDescriptorNode */)/*: L
     function _traverse (node/*: FlattenedDescriptorNode*/, parent_path/*: string */) {
         const node_name = node.props.name
         const node_enumeration = node.enumeration
-        console.log({ node_name, node_enumeration, parent_path })
+
         let this_path = parent_path
         if (null != node_name) {
             const node_path/*: ?(string | Function) */ = node.props.path
@@ -38,8 +38,10 @@ function extractLinks (flattened_description/*: FlattenedDescriptorNode */)/*: L
                 } else {
                     node_path_string = node_path()
                 }
-                if (null == node_path_string || 'string' !== typeof node_path_string) {
-                    throw new Error('path iteratee did not return a string')
+                if (null == node_path_string) {
+                    throw new Error('path iteratee did not return a string, got null')
+                } else if ('string' !== typeof node_path_string) {
+                    throw new Error(`path iteratee did not return a string, got ${ typeof node_path_string }: ${ node_path_string }`)
                 }
             } else if ('string' === typeof node_path) {
                 node_path_string = node_path
