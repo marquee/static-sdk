@@ -16,6 +16,8 @@ module.exports = {
     Sitemap,
     Skip,
     entry: require('./entry'),
+    renderEntryContent: require('./entry/renderEntryContent'),
+    ContentImage: require('./components/ContentImage'),
 }
 
 
