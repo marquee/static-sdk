@@ -195,7 +195,10 @@ exports[`renderEntryContent renders 1`] = `
   <figure
     className={
       Classes {
-        "_groups": Object {},
+        "_groups": Object {
+          "position": "right",
+          "size": "medium",
+        },
         "_initial": Array [
           "Block",
           "ImageBlock",

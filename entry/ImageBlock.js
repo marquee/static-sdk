@@ -55,6 +55,10 @@ const ImageBlock = (props) => {
     const size      = layout.size || 'medium'
     const position  = layout.position || 'center'
     cx = shiny('Block', 'ImageBlock')
+    cx.set({
+        size        : size,
+        position    : position,
+    })
 
     if ('small' === layout.size) {
         sizes.unshift(`(min-width: 360px) 360px`)
