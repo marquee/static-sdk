@@ -12,6 +12,19 @@ type DescriptorNode = {
 */
 
 function makeDescriptionTree (node/*: React.Element<*> */, parent/*: ?DescriptorNode */)/*: ?DescriptorNode */ {
+    if (null == node.type) {
+        let _message = 'Undefined view descriptor type specified. It probably is not exported or imported properly.'
+        if (null != node.props.name) {
+            _message += ` Check the view descriptor for ${ node.props.name }`
+        } else if (null == parent) {
+            _message += ' Check the top-level view descriptors.'
+        } else if (null != parent.props.name) {
+            _message += ` Check the children of ${ parent.props.name }`
+        } else {
+            _message += ` Check the children of ${ parent.type.name }`
+        }
+        throw new Error(_message)
+    }
     if (Skip === node.type) {
         return null
     }

@@ -52,5 +52,16 @@ describe('makeDescriptionTree', () => {
         ).toMatchSnapshot()
     })
 
+    it('should fail when using an undefined view descriptor type', () => {
+        const FakeView = undefined
+        const mock_description = (
+            r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
+                r(FakeView, { props: {}, name: 'about', path: 'about', component: () => r('div') }),
+            )
+        )
+        expect(
+            () => makeDescriptionTree(mock_description)
+        ).toThrow()
+    })
 
 })
