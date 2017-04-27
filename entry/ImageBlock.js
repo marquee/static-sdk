@@ -71,6 +71,7 @@ const ImageBlock = (props) => {
     return r('figure', { id: props.block.id, className: cx },
         r('div', { className: '_Content' },
             r('img', {
+                className       : '_Image',
                 src             : src_640,
                 srcSet          : srcset.join(','),
                 sizes           : sizes.join(','),

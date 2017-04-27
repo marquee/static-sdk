@@ -22,6 +22,7 @@ exports[`ImageBlock renders 1`] = `
   >
     <img
       alt="The spire of the Crysler building in the background, the tops of various skyscrapers in front of it."
+      className="_Image"
       data-src_128="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/saO09kR7TO6Fdkmpdo60_DSC_6110.jpg"
       data-src_1280="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/GLYe0WxSlem5uDSNxJ4M_DSC_6110.jpg"
       data-src_2560="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/jKQgkPtRgSiIUoKbdoIc_DSC_6110.jpg"
