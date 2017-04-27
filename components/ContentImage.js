@@ -51,12 +51,18 @@ const ContentImage = (props/*: { src: ?Object, cover: boolean, max_size: ?number
         sizes.unshift(`(min-width: 2560px) 2560px`)
     }
 
+    const style = {}
+    if (props.cover && null != props.src && null != props.src.focal_point) {
+        style.objectPosition = `${ props.src.focal_point.x * 100 }% ${ props.src.focal_point.y * 100 }%`
+    }
+
     return r('img', {
         className       : cx,
         src             : src_640,
         srcSet          : srcset.join(','),
         sizes           : sizes.join(','),
         alt             : alt_text,
+        style           : style,
         'data-src_128'  : src_128,
         'data-src_640'  : src_640,
         'data-src_1280' : src_1280,
