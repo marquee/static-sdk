@@ -16,12 +16,12 @@ The SDK provides components and tools for building _compilers_ that compile stru
 
 Included in the SDK is a local development server that automatically compiles changes, and an asset pipeline optimized for a [browserify](http://browserify.org/)- and Sass-based workflow that provides minification and hashing in production mode. There is also a set of common components using [React.js](http://facebook.github.io/react/) to generate markup as well as necessary client-side JS and structural styles.
 
-For compilation on content-change, Marquee runs a service that executes per-publication compilers whenever a publication’s content is released. This service also will run a compiler when it receives a git push, providing a way to centralize publication deployments. The Marquee content platform also has a search endpoint that can be used client-side to provide full text search and facilitate more dynamic effects. Additional custom or third party microservices and backends may be used to create a rich, progressively enhanced reader experience.
+For compilation on content-change, Proof runs a service that executes per-publication compilers whenever a publication’s content is released. This service also will run a compiler when it receives a git push, providing a way to centralize publication deployments. The Marquee content platform also has a search endpoint that can be used client-side to provide full text search and facilitate more dynamic effects. Additional custom or third party microservices and backends may be used to create a rich, progressively enhanced reader experience.
 
 
 ## Getting Started
 
-Using the Marquee content platform with an requires a **Publication Token** for the corresponding publication. The best way to begin tinkering on a new SDK project is to clone the [sample static project](https://github.com/marquee/sample-static-project) which includes a token for reading from a sample publication. By swapping this read-only token with another token issued through Marquee, the same SDK project could use another publication's content.
+Using the Proof content platform with an requires a **Publication Token** for the corresponding publication. The best way to begin tinkering on a new SDK project is to clone the [sample static project](https://github.com/marquee/sample-static-project) which includes a token for reading from a sample publication. By swapping this read-only token with another token issued through Proof, the same SDK project could use another publication's content.
 
 _Note:_ the SDK has not been tested on Windows and very likely will not work properly. If Windows support is required, please create an [issue](https://github.com/marquee/static-sdk/issues).
 
@@ -30,12 +30,12 @@ _Note:_ the SDK has not been tested on Windows and very likely will not work pro
 
     ```sh
     $ node --version
-    v4.2.2
+    v7.6.0
     $ git --version
-    git version 2.3.1
+    git version 2.10.1
     ```
 
-    The Static SDK requires at least node `v4.x.x`. If you get a `command not found` error for node, go to [nodejs.org](https://nodejs.org) to download and install node. Generally any version of git should work. If you do not have git, get it [here](http://git-scm.com/).
+    The Static SDK requires at least node `v7.6.x`. If you get a `command not found` error for node, go to [nodejs.org](https://nodejs.org) to download and install node. Generally any version of git should work. If you do not have git, get it [here](http://git-scm.com/).
 
 2.  Create a new directory for your publication and extract the latest release of the sample project:
 
