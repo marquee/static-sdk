@@ -9,7 +9,7 @@ const r = React.createElement
 function parseVideoURL (_url) {
     const parsed_url = url.parse(_url, true)
 
-    if (!parsed_url.hostname) {
+    if (null == parsed_url.hostname) {
         return null
     }
 
@@ -106,7 +106,7 @@ const EmbedBlock = (props) => {
             embed_content = r(EmbedMarkup, { plain: props.plain, markup: props.block.embedly_result.html })
             if (!props.plain) { tag_props.className.set('source', 'embedly_html') }
         } else {
-            embed_content = r(EmbedCard, props.block.embedly_result)
+            embed_content = r(props.link_card, props.block.embedly_result)
             if (!props.plain) { tag_props.className.set('source', 'embedly_link') }
         }
     } else {
@@ -136,7 +136,8 @@ const EmbedBlock = (props) => {
 }
 
 EmbedBlock.defaultProps = {
-    plain: false
+    plain: false,
+    link_card: EmbedCard,
 }
 
 EmbedBlock.parseVideoURL = parseVideoURL
