@@ -269,6 +269,8 @@ Any file that contains JSX or CJSX MUST require React, even if the React
 object is never used directly. The compiled JS that the two output uses
 React.
 
+See [“React must be in scope”](https://facebook.github.io/react/docs/jsx-in-depth.html#react-must-be-in-scope).
+
 
 ### “Compiler timeout. Compiler MUST call done within 30 minutes.”
 
