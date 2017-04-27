@@ -16,6 +16,8 @@ const UglifyJS        = require('uglify-js')
 const walkSync        = require('./walkSync')
 const { formatProjectPath } = SDKError
 
+const ERROR_STYLES = 'display: block; font-family: monospace; border-bottom: 3px solid red; padding: 24px; background-color: white; white-space: pre;'
+
 function compileCoffee (source_path, dest_path, project_directory, cb) {
     SDKError.log(SDKError.colors.grey(`Compiling (coffee): ${ source_path.replace(project_directory, '') }`))
     const b = browserify([source_path])
@@ -24,8 +26,16 @@ function compileCoffee (source_path, dest_path, project_directory, cb) {
     ).transform(
         envify({ NODE_ENV: process.env.NODE_ENV })
     ).transform(brfs).bundle( (err, compiled) => {
+        let compilation_error
         if (err) {
-            throw err 
+            console.log(err)
+            compilation_error = err
+            // console.error(err)
+            compilation_error.formatted = `CoffeeScript compilation error:
+file: ${ err.filename }
+
+${ err.toString() }`
+            compiled = `document.body.innerHTML = '<style>body { ${ ERROR_STYLES } }</style><p>' + decodeURIComponent("${ encodeURIComponent(compilation_error.formatted) }") + '</p>'`
         }
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
@@ -35,7 +45,7 @@ function compileCoffee (source_path, dest_path, project_directory, cb) {
             if (err) {
                 throw err 
             }
-            cb()
+            cb(compilation_error)
         })
     })
 }
@@ -49,10 +59,18 @@ function compileSass (source_path, dest_path, project_directory, cb) {
             path.join(project_directory, 'node_modules', 'proof-sdk', 'stylesheets'),
         ],
     } , (err, compiled) => {
+            let output
+            let sass_error
             if (err) {
-                throw err 
+                sass_error = err
+                let _err_message = err.toString()
+                _err_message += '\\A    file: ' + err.file.replace(project_directory, '')
+                _err_message += '\\A    line: ' + err.line.toString() + ', column: ' + err.column.toString()
+                output = `body::before{ content: '${ _err_message }'; ${ ERROR_STYLES }}`
+            } else {
+                output = compiled.css
             }
-            const _prefixing = postcss([autoprefixer]).process(compiled.css)
+            const _prefixing = postcss([autoprefixer]).process(output)
             _prefixing.then( (result) => {
                 compiled = result.css
                 if ('production' === process.env.NODE_ENV) {
@@ -63,7 +81,7 @@ function compileSass (source_path, dest_path, project_directory, cb) {
                     if (err) {
                         throw err 
                     }
-                    cb()
+                    cb(sass_error)
                 })
             }).catch( (err) => {
                 if (err) {
@@ -90,8 +108,16 @@ function compileJS (source_path, dest_path, project_directory, cb) {
         { global: true },
         envify({ NODE_ENV: process.env.NODE_ENV })
     ).transform(brfs).bundle( (err, compiled) => {
+        let compilation_error
         if (err) {
-            throw err 
+            compilation_error = err
+            // console.error(err)
+            compilation_error.formatted = `JS compilation error:
+file: ${ err.filename }
+line: ${ err.loc.line }, column: ${ err.loc.column }
+
+${ err.toString() }`
+            compiled = `document.body.innerHTML = '<style>body { ${ ERROR_STYLES } }</style><p>' + decodeURIComponent("${ encodeURIComponent(compilation_error.formatted) }") + '</p>'`
         }
         file_data = compiled.toString()
         if ('production' === process.env.NODE_ENV) {
@@ -102,7 +128,7 @@ function compileJS (source_path, dest_path, project_directory, cb) {
             if (err) {
                 throw err 
             }
-            cb()
+            cb(compilation_error)
         })
     })
 }
@@ -159,32 +185,32 @@ function processAsset (opts) {
         case 'coffee':
             path_parts.push('js')
             dest_path = path_parts.join('.')
-            compileCoffee(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
+            compileCoffee(opts.asset, dest_path, opts.project_directory, (err) => {
+                opts.callback(err)
             })
             break
         case 'sass':
         case 'scss':
             path_parts.push('css')
             dest_path = path_parts.join('.')
-            compileSass(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
+            compileSass(opts.asset, dest_path, opts.project_directory, (err) => {
+                opts.callback(err)
             })
             break
         case 'jsx':
             path_parts.push('js')
             dest_path = path_parts.join('.')
-            compileJS(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
+            compileJS(opts.asset, dest_path, opts.project_directory, (err) => {
+                opts.callback(err)
             })
             break
         case 'js':
-            compileJS(opts.asset, dest_path, opts.project_directory, () => {
-                opts.callback()
+            compileJS(opts.asset, dest_path, opts.project_directory, (err) => {
+                opts.callback(err)
             })
             break
         case 'css':
-            copyAndMinifyJS(opts.asset, dest_path, opts.project_directory, () => {
+            copyAndMinifyCSS(opts.asset, dest_path, opts.project_directory, () => {
                 opts.callback()
             })
             break
@@ -231,6 +257,8 @@ function compileAssets (opts) {
         build_cache,
     } = opts
 
+    const { allow_asset_errors } = opts.command_options
+
     if (build_cache && build_cache.get('assets/*')) {
         callback(build_cache.get('assets/*'))
         return
@@ -274,6 +302,7 @@ function compileAssets (opts) {
     // on their own.
     const assets = walkSync(asset_source_dir, ['_','.'])
     let to_process = assets.length
+
     assets.forEach((asset) => {
         processAsset({
             asset_source_dir    : asset_source_dir,
@@ -281,7 +310,15 @@ function compileAssets (opts) {
             asset_dest_dir      : asset_dest_dir,
             asset               : asset,
             project_directory   : project_directory,
-            callback: () => {
+            callback: (compilation_error) => {
+                if (null != compilation_error) {
+                    console.log('\n')
+                    console.error(compilation_error.formatted || compilation_error)
+                    console.log('\n')
+                    if (!allow_asset_errors) {
+                        process.exit(1)
+                    }
+                }
                 to_process -= 1
                 if (0 === to_process) {
                     copyAssetsToBuild(project_directory, asset_cache_dir, asset_dest_dir)

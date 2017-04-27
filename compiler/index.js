@@ -260,8 +260,10 @@ module.exports = function(project_directory, options, onCompile) {
             build_cache,
             project_directory,
             build_directory,
+            allow_asset_errors: options.allow_asset_errors,
             hash_files          : process.env.NODE_ENV === 'production',
             project_config,
+            command_options: options,
             callback(asset_hash) {
                 // Make the config globally available. Yes, globals are Bad(tm), but this
                 // makes for a substantially simpler compiler.

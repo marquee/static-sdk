@@ -72,6 +72,11 @@ if (_command !== 'develop') {
     if (_options.live_reload) {
         throw new Error('--live-reload can only be used for develop command.')
     }
+    // Force the compiler to exit if there is an error during asset
+    // compilation. Only allow graceful failing during development.
+    _options.allow_asset_errors = false
+} else {
+    _options.allow_asset_errors = true
 }
 
 switch (_command) {
