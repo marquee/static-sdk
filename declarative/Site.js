@@ -42,6 +42,12 @@ const AssetPipeline = props => null
 
 const Skip = props => null
 
+AssetPipeline.Skip  = Skip
+Enumerate.Skip      = Skip
+HTMLView.Skip       = Skip
+RSSView.Skip        = Skip
+SitemapView.Skip    = Skip
+
 module.exports = {
     AssetPipeline,
     Enumerate,

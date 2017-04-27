@@ -37,4 +37,20 @@ describe('makeDescriptionTree', () => {
         ).toMatchSnapshot()
     })
 
+
+    it('should skip alternate Skip usage', () => {
+        const mock_description = (
+            r(HTMLView, { props: {}, name: 'home', path: '/', component: () => r('div') },
+                r(HTMLView, { props: {}, name: 'about', path: 'about', component: () => r('div') }),
+                r(Enumerate.Skip, { items: [{slug: 'a'}, {slug: 'b'}, {slug: 'c'}] },
+                    r(HTMLView, { props: s => s, name: 'story_detail', path: s => s.slug, linkKey: s => s, component: () => r('div') })
+                ),
+            )
+        )
+        expect(
+            makeDescriptionTree(mock_description)
+        ).toMatchSnapshot()
+    })
+
+
 })
