@@ -19,9 +19,3 @@ module.exports = {
     renderEntryContent: require('./entry/renderEntryContent'),
     ContentImage: require('./components/ContentImage'),
 }
-
-
-
-
-
-

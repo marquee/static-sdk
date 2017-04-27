@@ -4,9 +4,10 @@
 require('coffee-react/register')
 // Enable support for requiring `.jsx` files.
 const react_preset = require('babel-preset-react')
+const flow_preset = require('babel-preset-flow')
 require('babel-register')({
     ignore: /node_modules/,
-    presets: [react_preset],
+    presets: [flow_preset, react_preset],
 });
 
 
