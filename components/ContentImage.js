@@ -5,10 +5,12 @@ const shiny     = require('shiny')
 
 const r = React.createElement
 
-const ContentImage = (props/*: { src: Object, cover: boolean, max_size: ?number }*/) => {
-    if (null == props.src.content || null == props.src.content['640']) {
+const ContentImage = (props/*: { src: ?Object, cover: boolean, max_size: ?number }*/) => {
+    if (null == props.src || null == props.src.content || null == props.src.content['640']) {
         return null
     }
+
+    const alt_text = props.src.alt_text
 
     if (props.plain) {
         return r('img', { src: props.src.content['640'] && props.src.content['640'].url })
@@ -54,7 +56,7 @@ const ContentImage = (props/*: { src: Object, cover: boolean, max_size: ?number 
         src             : src_640,
         srcSet          : srcset.join(','),
         sizes           : sizes.join(','),
-        alt             : props.src.alt_text,
+        alt             : alt_text,
         'data-src_128'  : src_128,
         'data-src_640'  : src_640,
         'data-src_1280' : src_1280,
