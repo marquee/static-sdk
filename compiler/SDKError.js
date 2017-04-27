@@ -31,6 +31,7 @@ const DOCS = {
     'emitFile.path'         : 'compiler/#-emitfile-',
     'project.react'         : 'compiler/#-referenceerror-react-is-not-defined-',
     files                   : '',
+    'build-cache.nogit'     : 'compiler/',
     'build-cache.dirty'     : 'compiler/',
     'build-cache.develop'   : 'compiler/',
     assets                  : 'assets/',

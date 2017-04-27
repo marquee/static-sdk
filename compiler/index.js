@@ -47,9 +47,15 @@ module.exports = function(project_directory, options, onCompile) {
         let build_cache_file = path.join(build_cache_directory, 'cache-v0.9.2.json');
         let build_cache = null;
         if (options.build_cache) {
+            if (null == commit_sha) {
+                if (!options.force) {
+                    SDKError.throw('build-cache.nogit', 'Project is not a git repository. Cannot use build-cache. Use --force to override.');
+                }
+                SDKError.warn('build-cache.nogit', 'Project is not a git repository. build-cache may produce outdated results!');
+            }
             if (is_dirty) {
                 if (!options.force) {
-                    throw new SDKError.warn('build-cache.dirty', 'Repo has unstaged changes. Cannot use build-cache. Use --force to override.');
+                    SDKError.throw('build-cache.dirty', 'Repo has unstaged changes. Cannot use build-cache. Use --force to override.');
                 }
                 SDKError.warn('build-cache.dirty', 'Repo has unstaged changes. build-cache may produce outdated results!');
             }
@@ -60,7 +66,7 @@ module.exports = function(project_directory, options, onCompile) {
                 let _cache_lock;
                 if (fs.existsSync(cache_commit_lock_file)) {
                     _cache_lock = fs.readFileSync(cache_commit_lock_file).toString();
-                    build_cache_is_valid = (commit_sha.length > 0) && (_cache_lock === commit_sha);
+                    build_cache_is_valid = (_cache_lock === commit_sha);
                 }
                 if (!build_cache_is_valid) {
                     SDKError.log(SDKError.colors.grey(`Resetting build-cache (build-cache@${ _cache_lock }, project@${ commit_sha })...`));
