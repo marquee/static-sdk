@@ -23,6 +23,16 @@ describe('current-build', () => {
             expect(current_build.config.HOST).toEqual('example.com')
         })
 
+        it('should work if imported before set up but accessed after', () => {
+            const { config } = current_build
+            expect( () => config.HOST).toThrow()
+            current_build.__setConfig({
+                HOST: 'example.com',
+                HTTPS: false,
+            })
+            expect(config.HOST).toEqual('example.com')
+        })
+
         it('should fail if write attempted', () => {
             current_build.__setConfig({
                 HOST: 'example.com',
@@ -40,6 +50,14 @@ describe('current-build', () => {
             expect(current_build.config.HOST).toEqual('example.com')
             current_build.__close()
             expect(current_build.config.HOST).toEqual('example.com')
+        })
+
+        it('should fail if unknown property', () => {
+            current_build.__setConfig({
+                HOST: 'example.com',
+                HTTPS: false,
+            })
+            expect( () => current_build.config.TITLE).toThrow()
         })
     })
 

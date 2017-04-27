@@ -5,38 +5,16 @@ type LinkMatch = string | Map<any, string>
 type LinkMap = Map<string, LinkMatch>
 */
 
-
-function unsetConfig ()/*: Object*/ {
-    return new Proxy({}, {
-        get: (target, name) => {
-            throw new Error('Site description not yet parsed')
-        },
-        set: () => {
-            throw new Error('config is not writable')
-        }
-    })
-}
-
-function frozenConfig (config/*: Object*/)/*: Object*/ {
-    return new Proxy(config, {
-        get: (target, name) => {
-            return target[name]
-        },
-        set: (target, name, value) => {
-            throw new Error('config is not writable. Set the appropriate values in package.json.')
-        }
-    })
-}
-
-
 class BuildState {
     /*::
-    config: ?any
-    _config: ?{ HOST: string, HTTPS: ?boolean }
+    config: Object
+    _config: ?Object
     _named_links: ?LinkMap
     _is_closed: boolean
     linkTo: Function
     fullLinkTo: Function
+    _getFromConfig: Function
+    _setFromConfig: Function
     BuildState: any
     */
 
@@ -44,36 +22,26 @@ class BuildState {
 
         this.__reset()
 
-        // This is a workaround for flow checking Object.defineProperty using
-        // a getter: https://github.com/facebook/flow/issues/285
-        const _handlers/*: Object */ = {
-            get             : this._getConfig.bind(this),
-            enumerable      : true,
-            configurable    : true,
-            writeable       : false,
-        }
-        Object.defineProperty(this, 'config', _handlers)
-
         this.linkTo = this.linkTo.bind(this)
         this.fullLinkTo = this.fullLinkTo.bind(this)
-
+        this._getFromConfig = this._getFromConfig.bind(this)
+        this._setFromConfig = this._setFromConfig.bind(this)
+        // Need to keep this the same Proxy instance the whole time
+        // so it can be imported using destructuring.
+        this.config = new Proxy({}, {
+            get: this._getFromConfig,
+            set: this._setFromConfig,
+        })
     }
 
     __reset () {
-        this._config = unsetConfig()
+        this._config = null
         this._named_links = null
         this._is_closed = false
     }
 
-    _getConfig ()/*: Object */ {
-        if (null == this._config) {
-            throw new Error('Site description not yet parsed!')
-        }
-        return this._config
-    }
-
     __setConfig (new_config/*: Object */) {
-        this._config = frozenConfig(new_config)
+        this._config = Object.freeze(new_config)
     }
 
     __setLinks (new_links/*: LinkMap */) {
@@ -125,6 +93,21 @@ class BuildState {
         const protocol = this._config.HTTPS ? 'https': 'http'
         link = `${ protocol }://${ this._config.HOST }${ link }`
         return link
+    }
+
+    _getFromConfig (target/*: Object */, name/*: string */) {
+        if (null == this._config) {
+            throw new Error('Site description not parsed yet! config properties cannot be accessed until after the main function begins execution.')
+        }
+        if (undefined === this._config[name]) {
+            throw new Error(`Unknown config property: ${ name }`)
+        }
+
+        return this._config[name]
+    }
+
+    _setFromConfig (target/*: Object */, name/*: string */) {
+        throw new Error(`config is not writable. Set "${ name }" in package.json.`)
     }
 
 }
