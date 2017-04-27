@@ -650,7 +650,7 @@ class ContentAPI {
                     (typeof cb === 'function' ? cb(data) : undefined)
                 } catch (e) {
                     console.error(e)
-                    throw e
+                    process.exit(1)
                 }
             })
         }
