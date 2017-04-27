@@ -26,7 +26,7 @@ function compileCoffee (source_path, dest_path, project_directory, cb) {
     ).transform(
         envify({ NODE_ENV: process.env.NODE_ENV })
     ).transform(brfs).bundle( (err, compiled) => {
-        let compilation_error
+        let compilation_error = null
         if (err) {
             console.log(err)
             compilation_error = err
@@ -60,9 +60,9 @@ function compileSass (source_path, dest_path, project_directory, cb) {
         ],
     } , (err, compiled) => {
             let output
-            let sass_error
+            let compilation_error = null
             if (err) {
-                sass_error = err
+                compilation_error = err
                 let _err_message = err.toString()
                 _err_message += '\\A    file: ' + err.file.replace(project_directory, '')
                 _err_message += '\\A    line: ' + err.line.toString() + ', column: ' + err.column.toString()
@@ -81,7 +81,7 @@ function compileSass (source_path, dest_path, project_directory, cb) {
                     if (err) {
                         throw err 
                     }
-                    cb(sass_error)
+                    cb(compilation_error)
                 })
             }).catch( (err) => {
                 if (err) {
@@ -108,7 +108,7 @@ function compileJS (source_path, dest_path, project_directory, cb) {
         { global: true },
         envify({ NODE_ENV: process.env.NODE_ENV })
     ).transform(brfs).bundle( (err, compiled) => {
-        let compilation_error
+        let compilation_error = null
         if (err) {
             compilation_error = err
             // console.error(err)
