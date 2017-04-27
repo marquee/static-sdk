@@ -1,9 +1,11 @@
+// @flow
+
 const React     = require('react')
 const shiny     = require('shiny')
 
 const r = React.createElement
 
-const ContentImage = (props) => {
+const ContentImage = (props/*: { src: Object, cover: boolean, max_size: ?number }*/) => {
     if (null == props.src.content || null == props.src.content['640']) {
         return null
     }
@@ -12,24 +14,40 @@ const ContentImage = (props) => {
         return r('img', { src: props.src.content['640'] && props.src.content['640'].url })
     }
 
+    const srcset = []
+
     const src_128     = props.src.content['128'] ? props.src.content['128'].url : null
     const src_640     = props.src.content['640'] ? props.src.content['640'].url : null
     const src_1280    = props.src.content['1280'] ? props.src.content['1280'].url : null
     const src_2560    = props.src.content['2560'] ? props.src.content['2560'].url : null
 
-    const srcset = [
-        `${ src_128 } 128w`,
-        `${ src_640 } 640w`,
-        `${ src_1280 } 1280w`,
-        `${ src_2560 } 2560w`,
-    ]
+    if (null != src_128) {
+        srcset.unshift(`${ src_128 } 128w`)
+    }
+    if (null != src_640) {
+        srcset.unshift(`${ src_640 } 640w`)
+    }
+    if (null != src_1280) {
+        srcset.unshift(`${ src_1280 } 1280w`)
+    }
+    if (null != src_2560) {
+        srcset.unshift(`${ src_2560 } 2560w`)
+    }
 
-    cx = shiny('ContentImage')
+    const cx = shiny('ContentImage')
     cx.add('cover', props.cover)
     const sizes = ['100vw']
-    sizes.unshift(`(min-width: 360px) 360px`)
-    sizes.unshift(`(min-width: 720px) 720px`)
-    sizes.unshift(`(min-width: 1440px) 1440px`)
+    if (null == props.max_size || props.max_size >= 640) {
+        sizes.unshift(`(min-width: 640px) 640px`)
+    }
+    
+    if (null == props.max_size || props.max_size >= 1280) {
+        sizes.unshift(`(min-width: 1280px) 1280px`)
+    }
+
+    if (null == props.max_size || props.max_size >= 2560) {
+        sizes.unshift(`(min-width: 2560px) 2560px`)
+    }
 
     return r('img', {
         className       : cx,
@@ -47,6 +65,7 @@ const ContentImage = (props) => {
 ContentImage.defaultProps = {
     plain: false,
     cover: false,
+    max_size: null,
 }
 
 module.exports = ContentImage
