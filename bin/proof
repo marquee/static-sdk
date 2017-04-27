@@ -24,6 +24,8 @@ program
     .option('--smart-cache', 'Use modified_date to only fetch content modified since last build')
     .option('--stale-after <number>', 'Consider smart-cache stale after n hours (default `1`)')
     .option('--build-cache', 'Skip emits unchanged since previous build [experimental]')
+    .option('--live-reload', 'Start a live reload server for use with a live-reload-compatible browser extension or script tag')
+    .option('--inject-live-reload', 'Inject live reload script into React-based emits.')
     .parse(process.argv);
 
 if (program.production) {
@@ -59,6 +61,17 @@ var _options = {
     smart_cache: program.smartCache || false,
     stale_after: program.staleAfter || 1,
     build_cache: program.buildCache || false,
+    live_reload: program.liveReload || program.injectLiveReload || false,
+    inject_live_reload: program.injectLiveReload || false,
+}
+
+if (_command !== 'develop') {
+    if (_options.inject_live_reload) {
+        throw new Error('--inject-live-reload can only be used for develop command.')
+    }
+    if (_options.live_reload) {
+        throw new Error('--live-reload can only be used for develop command.')
+    }
 }
 
 switch (_command) {

@@ -5,9 +5,20 @@ const SDKError        = require('../compiler/SDKError')
 const compileAssets   = require('../compiler/compileAssets')
 const runCompilation  = require('../compiler')
 const current_build   = require('../current-build')
+const livereload      = require('livereload')
 
 module.exports = function watcher (project_directory, build_directory, options, project_config) {
     SDKError.log(`Watching for changes: ${ SDKError.formatProjectPath(project_directory) }`)
+
+    let live_server
+    if (options.live_reload) {
+        live_server = livereload.createServer();
+        // No live_server.watch(…) because we are already watching and know
+        // what changes when, and can specifically trigger the appropriate
+        // kind of refreshes directly.
+        SDKError.log(`Live-reload server started`)
+    }
+
 
     let is_compiling_assets = false
     let is_compiling_site = false
@@ -26,6 +37,10 @@ module.exports = function watcher (project_directory, build_directory, options, 
             command_options     : options,
             project_config      : project_config,
             callback: () => {
+                if (null != live_server) {
+                    // The client script doesn't recognize sass files so give it some help.
+                    live_server.refresh( file_name.replace(/\.scss$/,'.css').replace(/\.sass$/,'.css'))
+                }
                 const file_counts = SDKError.colors.green(`${ compileAssets.files_emitted.length } assets`)
                 SDKError.log(`${ file_counts } generated in ${ SDKError.formatProjectPath(project_directory, build_directory) }`)
                 is_compiling_assets = false
@@ -38,6 +53,9 @@ module.exports = function watcher (project_directory, build_directory, options, 
         if (['js', 'jsx', 'cjsx', 'coffee', 'html'].indexOf(ext)) {
             is_compiling_site = true
             runCompilation(project_directory, options, (files, assets) => {
+                if (null != live_server) {
+                    live_server.refresh(file_name)
+                }
                 const file_counts = SDKError.colors.green(`${ files.length } files, ${ assets.length } assets`)
                 SDKError.log(`${ file_counts } generated in ${ SDKError.formatProjectPath(project_directory, build_directory) }`)
                 is_compiling_site = false
@@ -70,4 +88,5 @@ module.exports = function watcher (project_directory, build_directory, options, 
             _doFiles(file_name)
         }
     })
+
 }

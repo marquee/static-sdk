@@ -17,6 +17,15 @@ let emit_cache = new Map();
 const circularJSONStringify = require('./circularJSONStringify')
 
 
+const LIVE_RELOAD_TAG = `<script>document.write('<script src="http://'
++ (window.location.host || 'localhost').split(':')[0]
++ ':35729/livereload.js?snipver=1"></'
++ 'script>')</script>`
+function injectLiveReloadTag (markup) {
+    SDKError.log(SDKError.colors.grey(`Injecting live reload script...`));
+    return markup.replace(/\<\/body\>\<\/html\>$/, LIVE_RELOAD_TAG + '</body></html>')
+}
+
 
 let getContentChecksum = function(content) {
     let hashed_content = crypto.createHash('md5').update(
@@ -35,7 +44,7 @@ let getReactChecksum = function(element) {
 let getCacheKey = filepath => crypto.createHash('md5').update(filepath).digest('hex');
 
 
-module.exports = function({ project_directory, project, config, writeFile, exportMetadata, defer_emits, build_cache }) {
+module.exports = function({ project_directory, project, config, writeFile, exportMetadata, defer_emits, build_cache, inject_live_reload }) {
 
     // Require the project's copy of React so that the below validation and
     // rendering will work. Fails silently since React is not required at this
@@ -54,6 +63,9 @@ module.exports = function({ project_directory, project, config, writeFile, expor
             case 'object':
                 if (React.isValidElement(file_content)) {
                     output_content = ReactDOMServer.renderToStaticMarkup(file_content);
+                    if (inject_live_reload) {
+                        output_content = injectLiveReloadTag(output_content)
+                    }
                     if (!options.fragment) { output_content = `<!doctype html>${ output_content }`; }
                     return ['text/html', output_content];
                 }

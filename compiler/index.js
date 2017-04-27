@@ -190,6 +190,7 @@ module.exports = function(project_directory, options, onCompile) {
             writeFile           : _writeFile,
             exportMetadata      : _exportMetadata,
             defer_emits         : options._defer_emits,
+            inject_live_reload  : options.inject_live_reload,
             build_cache
         });
         let _emitRedirect = require('./emitRedirect')(_emitFile);
