@@ -11,7 +11,7 @@ describe('current-build', () => {
 
     describe('config', () => {
         it('should fail if used before set up', () => {
-            current_build.config // should work
+            current_build.config // should do nothing (be importable)
             expect( () => current_build.config.HOST).toThrow()
         })
 
@@ -23,7 +23,15 @@ describe('current-build', () => {
             expect(current_build.config.HOST).toEqual('example.com')
         })
 
-        it('should fail if used after close up', () => {
+        it('should fail if write attempted', () => {
+            current_build.__setConfig({
+                HOST: 'example.com',
+                HTTPS: false,
+            })
+            expect( () => current_build.config.HOST = 'baz.bar').toThrow()
+        })
+
+        it('should work if used after close up', () => {
             expect( () => current_build.config.HOST).toThrow()
             current_build.__setConfig({
                 HOST: 'example.com',
@@ -31,7 +39,7 @@ describe('current-build', () => {
             })
             expect(current_build.config.HOST).toEqual('example.com')
             current_build.__close()
-            expect( () => current_build.config.HOST).toThrow()
+            expect(current_build.config.HOST).toEqual('example.com')
         })
     })
 

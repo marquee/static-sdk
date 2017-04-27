@@ -17,16 +17,17 @@ function unsetConfig ()/*: Object*/ {
     })
 }
 
-function closedConfig ()/*: Object*/ {
-    return new Proxy({}, {
+function frozenConfig (config/*: Object*/)/*: Object*/ {
+    return new Proxy(config, {
         get: (target, name) => {
-            throw new Error('BuildState closed! config must be accessed before renders begin.')
+            return target[name]
         },
-        set: () => {
-            throw new Error('config is not writable')
+        set: (target, name, value) => {
+            throw new Error('config is not writable. Set the appropriate values in package.json.')
         }
     })
 }
+
 
 class BuildState {
     /*::
@@ -68,14 +69,11 @@ class BuildState {
         if (null == this._config) {
             throw new Error('Site description not yet parsed!')
         }
-        if (this._is_closed) {
-            throw new Error('BuildState closed! config must be accessed before renders begin.')
-        }
         return this._config
     }
 
     __setConfig (new_config/*: Object */) {
-        this._config = Object.freeze(new_config)
+        this._config = frozenConfig(new_config)
     }
 
     __setLinks (new_links/*: LinkMap */) {
@@ -90,7 +88,6 @@ class BuildState {
             throw new Error('BuildState already closed!')
         }
         this._is_closed = true
-        this._config = closedConfig()
     }
 
     linkTo (name/*:string*/, key/*:?Object*/)/*: string*/ {
