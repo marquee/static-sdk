@@ -5,7 +5,9 @@ const ReactDOMServer = require('react-dom/server')
 const HTMLView = props => null
 HTMLView['Content-Type'] = 'text/html'
 HTMLView.is_compressable = true
-HTMLView.makeEmit = descriptor => React.createElement(descriptor.props.component, descriptor.gathered_props)
+HTMLView.makeEmit = ({ descriptor }) => (
+    React.createElement(descriptor.props.component, descriptor.gathered_props)
+)
 
 const SitemapView = props => null
 SitemapView['Content-Type'] = 'text/plain'
@@ -15,7 +17,7 @@ SitemapView.default_props = {
 }
 const r = React.createElement
 const ONE_MONTH = 1000 * 60 * 60 * 24 * 30
-SitemapView.makeEmit = (descriptor, { all_descriptors, config }) => {
+SitemapView.makeEmit = ({ descriptor, all_descriptors, config }) => {
 
     const links = new Set()
     all_descriptors.forEach( d => {
@@ -33,7 +35,9 @@ SitemapView.makeEmit = (descriptor, { all_descriptors, config }) => {
 const RSSView = props => null
 RSSView['Content-Type'] = 'application/rss+xml'
 RSSView.is_compressable = true
-RSSView.renderOutput = (input) => '<xml> RSS!'
+RSSView.makeEmit = ({ descriptor }) => (
+    React.createElement(descriptor.props.component, descriptor.gathered_props)
+)
 
 const Enumerate = props => null
 Enumerate.Log = props => null

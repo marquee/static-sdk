@@ -5,7 +5,9 @@ const flattenDescription    = require('./flattenDescription')
 const gatherPropsInPlace    = require('./gatherPropsInPlace')
 const makeDescriptionTree   = require('./makeDescriptionTree')
 const React                 = require('react')
+const SDKError              = require('../compiler/SDKError')
 const { Enumerate, SitemapView } = require('./Site')
+
 
 function processSiteDescription (kwargs) {
     const {
@@ -15,31 +17,53 @@ function processSiteDescription (kwargs) {
         emitFile
     } = kwargs
     return function (site_description) {
+        SDKError.log('Processing declarative site description...')
+
+        // Parse the given site description, dropping any subtrees marked
+        // by a Skip.
         const description_tree = makeDescriptionTree(site_description)
+        // Evaluate any Enumerate descriptors, creating new descriptors for
+        // each child of the Enumerate. At this point any lazy iterables
+        // used in an Enumerate will be evaluated.
         const expanded_description = expandDescription(
             description_tree
         )
         // Evaluate links in place and extract a link map:
         const path_links = extractLinks(expanded_description)
-
         current_build.__setLinks(path_links)
         current_build.__setConfig(config)
+        // The props functions of each descriptor are evaluated. At this point
+        // any lazy querysets in mapDataToProps functions will be evaluated.
         gatherPropsInPlace(expanded_description)
+        // The build state can no longer be modified, and information that
+        // would inhibit parallelization can no longer be accessed.
+        // (As of now this is only linkTo/fullLinkTo functions since they
+        // require knowing the whole site structure and having the same
+        // object instances available.)
         current_build.__close()
 
+        // Flatten the tree to create an Array of every descriptor in the
+        // site.
         const all_descriptors = flattenDescription(expanded_description)
+        SDKError.log(`${ all_descriptors.length } views found in declarative description.`)
 
         all_descriptors.forEach( descriptor => {
+            // SitemapView is special and gets all_descriptors to do its thing.
             if (SitemapView === descriptor.type) {
                 emitFile(
                     descriptor.evaluated_path,
-                    SitemapView.makeEmit(descriptor, { all_descriptors, config }),
+                    SitemapView.makeEmit({ descriptor, config, all_descriptors }),
                     { 'Content-Type': SitemapView['Content-Type']}
                 )
             } else if (null != descriptor.evaluated_path && null != descriptor.type.makeEmit) {
+                // <--- This would be a fantastic point to fire off emit
+                //      action objects to something like a DynamoDB-based
+                //      Lambda queue, if the `descriptor.type` had a
+                //      `__filename` property exported.
                 emitFile(
                     descriptor.evaluated_path,
-                    descriptor.type.makeEmit(descriptor)
+                    descriptor.type.makeEmit({ descriptor, config }),
+                    { 'Content-Type': descriptor.type['Content-Type'] }
                 )
             }
         })
