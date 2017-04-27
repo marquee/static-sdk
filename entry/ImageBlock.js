@@ -68,7 +68,7 @@ const ImageBlock = (props) => {
         sizes.unshift(`(min-width: 1440px) 1440px`)
     }
 
-    return r('figure', { className: cx },
+    return r('figure', { id: props.block.id, className: cx },
         r('div', { className: '_Content' },
             r('img', {
                 src             : src_640,
