@@ -24,7 +24,7 @@ type LinkMatch = string | Map<any, string>
 type LinkMap = Map<string, LinkMatch>
 */
 
-function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: LinkMap*/ {
+function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: LinkMap */ {
 
     const named_links = new Map()
 
@@ -61,7 +61,7 @@ function extractLinks (expanded_description/*: ExpandedDescriptorNode */)/*: Lin
             if (-1 === node_path_string.split('/').pop().indexOf('.')) {
                 node_path_string = `${ node_path_string }/`
             }
-            this_path = `/${ parent_path }/${ node_path_string }`.replace(/\/+/g,'/')
+            this_path = `/${ parent_path }/${ node_path_string }`.replace(/\/{2,}/g,'/')
         }
 
         if (null != node_name) {

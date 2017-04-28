@@ -1,5 +1,6 @@
 const current_build         = require('../current-build')
 const extractLinks          = require('./extractLinks')
+const extractPaths          = require('./extractPaths')
 const expandDescription     = require('./expandDescription')
 const flattenDescription    = require('./flattenDescription')
 const gatherPropsInPlace    = require('./gatherPropsInPlace')
@@ -19,19 +20,28 @@ function processSiteDescription (kwargs) {
     return function (site_description) {
         SDKError.log('Processing declarative site description...')
 
+        current_build.__setConfig(config)
+
         // Parse the given site description, dropping any subtrees marked
         // by a Skip.
         const description_tree = makeDescriptionTree(site_description)
+
+        // Gather the path functions and extract a path map to each descriptor:
+        // This is done before expansion because it's gathering unevaluated
+        // path functions, and there is only one name per route possible.
+        const named_paths = extractPaths(description_tree)
+        current_build.__setPaths(named_paths)
+
         // Evaluate any Enumerate descriptors, creating new descriptors for
         // each child of the Enumerate. At this point any lazy iterables
         // used in an Enumerate will be evaluated.
-        const expanded_description = expandDescription(
-            description_tree
-        )
-        // Evaluate links in place and extract a link map:
-        const path_links = extractLinks(expanded_description)
-        current_build.__setLinks(path_links)
-        current_build.__setConfig(config)
+        const expanded_description = expandDescription(description_tree)
+
+        // Evaluate links and extract a link map. This attaches an
+        // `evaluated_path` to each descriptor in place.
+        const named_links = extractLinks(expanded_description)
+        current_build.__setLinks(named_links)
+
         // The props functions of each descriptor are evaluated. At this point
         // any lazy querysets in mapDataToProps functions will be evaluated.
         gatherPropsInPlace(expanded_description)

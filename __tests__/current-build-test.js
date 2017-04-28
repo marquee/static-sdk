@@ -73,6 +73,13 @@ describe('current-build', () => {
             expect(current_build.linkTo('view')).toEqual('/baz/')
         })
 
+        it('should fail for unknown links', () => {
+            const site_links = new Map()
+            site_links.set('view', '/baz/')
+            current_build.__setLinks(site_links)
+            expect(() => current_build.linkTo('view2')).toThrow()
+        })
+
         it('should work with key objects', () => {
             const site_links = new Map()
             const view_links = new Map()
@@ -98,6 +105,46 @@ describe('current-build', () => {
             current_build.__setLinks(site_links)
             current_build.__close()
             expect( () => current_build.linkTo('view')).toThrow()
+        })
+    })
+
+
+    describe('linkToPath', () => {
+        it('should fail if used before set up', () => {
+            expect( () => current_build.linkToPath('view')).toThrow()
+        })
+
+        it('should work for basic paths', () => {
+            const site_paths = new Map()
+            site_paths.set('view', ['/','baz'])
+            current_build.__setPaths(site_paths)
+            expect(current_build.linkToPath('view')).toEqual('/baz/')
+        })
+
+        it('should fail for unknown paths', () => {
+            const site_paths = new Map()
+            site_paths.set('view', ['/','baz'])
+            current_build.__setLinks(site_paths)
+            expect(() => current_build.linkToPath('view2')).toThrow()
+        })
+
+        it('should work for complex paths', () => {
+            const site_paths = new Map()
+            site_paths.set('view', ['/', 'collections', c => c.slug, 'stories', ({ s, c }) => s.slug])
+            current_build.__setPaths(site_paths)
+            const mock_story = { slug: 'bar' }
+            const mock_collection = { slug: 'foo' }
+            expect(
+                current_build.linkToPath('view', mock_collection, { s: mock_story, c: mock_collection } )
+            ).toEqual('/collections/foo/stories/bar/')
+        })
+
+        it('should fail if used after close up', () => {
+            const site_paths = new Map()
+            site_paths.set('view', ['/','baz'])
+            current_build.__setPaths(site_paths)
+            current_build.__close()
+            expect( () => current_build.linkToPath('view')).toThrow()
         })
     })
 
