@@ -330,3 +330,8 @@ If `git status` shows no changes, you can probably safely run
 
 Note: future versions of the SDK may also block deploys if run from a
 non-master branch.
+
+### “Error: Command failed: git diff-index HEAD…”
+
+If the project is a git repository without any commits, the SDK will fail.
+Make a commit (even an empty one with `--allow-empty`) to resolve.
