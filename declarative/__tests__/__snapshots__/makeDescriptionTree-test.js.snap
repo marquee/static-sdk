@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`makeDescriptionTree should parse the description 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "name": "about",
+        "path": "about",
+        "props": Object {},
+      },
+      "type": [Function],
+    },
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [],
+          "parent": [Circular],
+          "props": Object {
+            "component": [Function],
+            "linkKey": [Function],
+            "name": "story_detail",
+            "path": [Function],
+            "props": [Function],
+          },
+          "type": [Function],
+        },
+      ],
+      "parent": [Circular],
+      "props": Object {
+        "items": Array [
+          Object {
+            "slug": "a",
+          },
+          Object {
+            "slug": "b",
+          },
+          Object {
+            "slug": "c",
+          },
+        ],
+      },
+      "type": [Function],
+    },
+  ],
+  "parent": undefined,
+  "props": Object {
+    "component": [Function],
+    "name": "home",
+    "path": "/",
+    "props": Object {},
+  },
+  "type": [Function],
+}
+`;
+
+exports[`makeDescriptionTree should skip Skips 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "name": "about",
+        "path": "about",
+        "props": Object {},
+      },
+      "type": [Function],
+    },
+  ],
+  "parent": undefined,
+  "props": Object {
+    "component": [Function],
+    "name": "home",
+    "path": "/",
+    "props": Object {},
+  },
+  "type": [Function],
+}
+`;
+
+exports[`makeDescriptionTree should skip alternate Skip usage 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "parent": [Circular],
+      "props": Object {
+        "component": [Function],
+        "name": "about",
+        "path": "about",
+        "props": Object {},
+      },
+      "type": [Function],
+    },
+  ],
+  "parent": undefined,
+  "props": Object {
+    "component": [Function],
+    "name": "home",
+    "path": "/",
+    "props": Object {},
+  },
+  "type": [Function],
+}
+`;

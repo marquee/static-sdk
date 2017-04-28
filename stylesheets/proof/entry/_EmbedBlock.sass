@@ -1,44 +1,64 @@
-@import "../_partials.sass"
-
+@import "../default_config"
 
 .EmbedBlock
-    $_small_width: $Block-column_width--main / 4 - $Block-body_padding
-
-    +layer(images)
 
     clear: both
-    max-width: $Block-column_width--main
+    max-width: $proof-entry-column_width--main
     width: 100%
 
     &.-column_position--inset
-        max-width: $Block-column_width--text
+        max-width: $proof-entry-column_width--text
     &.-column_position--outset
         &.-size--small
             ._Content
-                width: calc((100% - #{ $Block-column_width--text }) / 2 )
+                width: calc((100% - #{ $proof-entry-column_width--text }) / 2 )
 
-    +viewport-width-gt-extra_small
+    ._Content
+        width           : 100%
+        float           : none
+        margin-left     : 0
+        margin-right    : 0
+        margin-bottom   : $proof-entry-margin
+        max-width       : none
 
+    ._EmbedWrapper
+        position        : relative
+        height          : 0
+        padding-bottom  : percentage(1 / (16/9))
+        iframe
+            position        : absolute
+            top             : 0
+            left            : 0
+            width           : 100%
+            height          : 100% !important
+
+    ._CaptionText
+        display: block
+    ._Credit
+        display: block
+
+@media (min-width: $break-extra_small + 1)
+    .EmbedBlock
         &.-position--left
             ._Content
                 float: left
-                margin-right: $Block-margin
+                margin-right: $proof-entry-margin
 
         &.-position--right
             ._Content
                 float: right
-                margin-left: $Block-margin
+                margin-left: $proof-entry-margin
     
         &.-size--small
             &.-position--center,
             ._Content
-                max-width: $_small_width
+                max-width: $proof-entry-column_width--main / 4 - $proof-entry-body_padding
 
         &.-size--medium
             &.-position--center
-                max-width: $Block-column_width--text
+                max-width: $proof-entry-column_width--text
             ._Content
-                max-width: $Block-column_width--text
+                max-width: $proof-entry-column_width--text
             &.-position--right
                 ._Content
                     width: 51%
@@ -52,15 +72,15 @@
             &.-position--left
                 ._Content
                     width: 100%
-                    max-width: $Block-column_width--main / 4 * 3
+                    max-width: $proof-entry-column_width--main / 4 * 3
             &.-position--right
                 ._Content
                     width: 100%
-                    max-width: $Block-column_width--main / 4 * 3
+                    max-width: $proof-entry-column_width--main / 4 * 3
             &.-position--center
                 ._Content
                     width: 100%
-                    max-width: $Block-column_width--main
+                    max-width: $proof-entry-column_width--main
 
         &.-size--full
             max-width: none
@@ -68,22 +88,24 @@
                 width: 100%
                 max-width: none
 
-    ._Content
-        width           : 100%
-        float           : none
-        margin-left     : 0
-        margin-right    : 0
-        margin-bottom   : $Block-margin
-        max-width       : none
-
-    ._EmbedWrapper
-        +intrinsic_ratio_wrapper
-        iframe
-            +intrinsic_ratio_content
-
-    ._CaptionText
+.EmbedCard
+    text-align: left
+    display: block
+    padding: 1em
+    border: 1px solid #ccc
+    text-decoration: none
+    color: inherit
+    max-width: 620px
+    &::after
+        content: ''
         display: block
-    ._Credit
-        display: block
+        clear: both
+    img
+        width: 200px
+        float: right
+        margin-bottom: 1em
+        margin-left: 1em
 
-
+    h1
+        font-size: 1em
+        margin-top: 0

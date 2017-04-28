@@ -1,0 +1,1583 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renderEntryContent renders 1`] = `
+<div>
+  <p
+    className={
+      Classes {
+        "_groups": Object {
+          "align": "left",
+          "role": "paragraph",
+        },
+        "_initial": Array [
+          "Block",
+          "TextBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Nullam quis <strong class=\\"Annotation -strong\\">risus</strong> eget urna mollis ornare vel eu leo. Donec sed odio dui. Sed posuere <em class=\\"Annotation -emphasis\\">consectetur</em> est at lobortis. Cum sociis natoque <strong class=\\"Annotation -strong\\">penatibus <em class=\\"Annotation -emphasis\\">et magnis</em></strong><em class=\\"Annotation -emphasis\\"> dis</em> parturient montes, nascetur ridiculus mus.",
+      }
+    }
+    id="text_7d112f487ec748c99aa022c7298c6965"
+  />
+  <div
+    className={
+      Classes {
+        "_groups": Object {
+          "size": "full",
+        },
+        "_initial": Array [
+          "Block",
+          "GalleryBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    data-images="[{\\"urls\\":{\\"128\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/RhXbcnHqRTis4rRYh7zi_casbah.jpg\\",\\"640\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XwQqlD5gQ8ONN7IhqDAj_casbah.jpg\\",\\"1280\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PjqA5y0KQ22sZTRt61xJ_casbah.jpg\\",\\"2560\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/v7GsMybcST2bA9iqThym_casbah.jpg\\"},\\"credit\\":\\"Me\\",\\"caption\\":\\"Oh hai\\",\\"alt_text\\":\\"A dog lies down.\\",\\"aspect_ratio\\":1.3333333333333333},{\\"urls\\":{\\"128\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/KEDsGNwQdCfsTqqj25jx_3-original.jpg\\",\\"640\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Y9dGs9Z2RjalBC5s1y2l_3-original.jpg\\",\\"1280\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/eYDtg85TuGWdAecAkWby_3-original.jpg\\",\\"2560\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/2KCZptimSqyyDtzMSjMN_3-original.jpg\\"},\\"credit\\":\\"\\",\\"caption\\":\\"caption\\",\\"alt_text\\":\\"\\",\\"aspect_ratio\\":0.7499181669394436},{\\"urls\\":{\\"128\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/btz4fTLQLC9bafyfo8Ca_19-original.jpg\\",\\"640\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/HEbcIUEWTYCziZ5yoMW7_19-original.jpg\\",\\"1280\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/6MUTJ4hsTxuRhH6aDWa3_19-original.jpg\\",\\"2560\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/dgaBWaZaTY2LJEDMv91I_19-original.jpg\\"},\\"aspect_ratio\\":1.5026178010471205},{\\"urls\\":{\\"128\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/c2OjmsXRKixvFlKQwKQN_32-original.jpg\\",\\"640\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg\\",\\"1280\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/AFDh62GuQgeJoUsqE22P_32-original.jpg\\",\\"2560\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/4ilWlT9YQSSF3bBbxXCw_32-original.jpg\\"},\\"aspect_ratio\\":0.75},{\\"urls\\":{\\"128\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/tl1LEvQOQDWSucaQgezg_orly.jpg\\",\\"640\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PbliJcdSQ6u3gbr16AwY_orly.jpg\\",\\"1280\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/3mEm0WoQPe41LaiBwbYB_orly.jpg\\",\\"2560\\":\\"https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/D7YLrbixRjihwnybE9WH_orly.jpg\\"},\\"aspect_ratio\\":1.0755208333333333}]"
+    data-inline={undefined}
+    id="gallery_dfda4dd7fd5d445292f3d0d75ff462d3"
+  >
+    <noscript>
+      <figure>
+        <img
+          alt="A dog lies down."
+          src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XwQqlD5gQ8ONN7IhqDAj_casbah.jpg"
+        />
+        <figcaption>
+          <p>
+            Oh hai
+          </p>
+          <p>
+            Me
+          </p>
+        </figcaption>
+      </figure>
+      <figure>
+        <img
+          alt=""
+          src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Y9dGs9Z2RjalBC5s1y2l_3-original.jpg"
+        />
+        <figcaption>
+          <p>
+            caption
+          </p>
+          <p>
+            
+          </p>
+        </figcaption>
+      </figure>
+      <figure>
+        <img
+          alt={undefined}
+          src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/HEbcIUEWTYCziZ5yoMW7_19-original.jpg"
+        />
+        <figcaption>
+          <p />
+          <p />
+        </figcaption>
+      </figure>
+      <figure>
+        <img
+          alt={undefined}
+          src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg"
+        />
+        <figcaption>
+          <p />
+          <p />
+        </figcaption>
+      </figure>
+      <figure>
+        <img
+          alt={undefined}
+          src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PbliJcdSQ6u3gbr16AwY_orly.jpg"
+        />
+        <figcaption>
+          <p />
+          <p />
+        </figcaption>
+      </figure>
+    </noscript>
+  </div>
+  <p
+    className={
+      Classes {
+        "_groups": Object {
+          "align": "left",
+          "effect": "dropcaps",
+          "role": "paragraph",
+        },
+        "_initial": Array [
+          "Block",
+          "TextBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor <a href=\\"http://example.com\\" data-external=\\"true\\" class=\\"Annotation -link\\">mauris</a> condimentum nibh, ut fermentum massa justo sit amet risus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor<sup class=\\"Annotation -superscript\\">2</sup> mauris condimentum<sub class=\\"Annotation -subscript\\">2</sub> nibh, ut <i class=\\"Annotation -small_caps\\">fermentum</i> massa justo sit amet risus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+      }
+    }
+    id="text_b457982144134dc8ba7fdcb9fac13300"
+  />
+  <ul
+    className={
+      Classes {
+        "_groups": Object {
+          "role": "unordered",
+        },
+        "_initial": Array [
+          "Block",
+          "ListBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    id="list_efaa9d57ab614e6e88e9448a9cc7336e"
+  >
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [
+              Object {
+                "attrs": Object {
+                  "class": "Annotation -strong",
+                },
+                "end": 10,
+                "start": 6,
+                "tag": "strong",
+              },
+            ],
+            "text": "First item",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "second",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "third?",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "fourth!",
+          },
+        }
+      }
+    />
+  </ul>
+  <figure
+    className={
+      Classes {
+        "_groups": Object {
+          "position": "right",
+          "size": "medium",
+        },
+        "_initial": Array [
+          "Block",
+          "ImageBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    id="image_fe7b8a48f94b4ccb95a38beb91d00ff7"
+  >
+    <div
+      className="_Content"
+    >
+      <img
+        alt="The spire of the Crysler building in the background, the tops of various skyscrapers in front of it."
+        className="_Image"
+        data-src_128="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/saO09kR7TO6Fdkmpdo60_DSC_6110.jpg"
+        data-src_1280="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/GLYe0WxSlem5uDSNxJ4M_DSC_6110.jpg"
+        data-src_2560="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/jKQgkPtRgSiIUoKbdoIc_DSC_6110.jpg"
+        data-src_640="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg"
+        sizes="(min-width: 720px) 720px,100vw"
+        src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg"
+        srcSet="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/saO09kR7TO6Fdkmpdo60_DSC_6110.jpg 128w,https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg 640w,https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/GLYe0WxSlem5uDSNxJ4M_DSC_6110.jpg 1280w,https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/jKQgkPtRgSiIUoKbdoIc_DSC_6110.jpg 2560w"
+      />
+      <figcaption
+        className="_Caption"
+      >
+        <p
+          className="_CaptionText"
+        >
+          The Crysler building.
+        </p>
+        <p
+          className="_Credit"
+        >
+          Alec Perkins
+        </p>
+      </figcaption>
+    </div>
+  </figure>
+  <p
+    className={
+      Classes {
+        "_groups": Object {
+          "align": "left",
+          "role": "paragraph",
+        },
+        "_initial": Array [
+          "Block",
+          "TextBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+      }
+    }
+    id="text_62fdba4ae6374c00971e3d1c20a35ae0"
+  />
+  <ol
+    className={
+      Classes {
+        "_groups": Object {
+          "role": "ordered",
+        },
+        "_initial": Array [
+          "Block",
+          "ListBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    id="list_d00ef341f3c54e9a94cd76750cd81e0b"
+  >
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "A",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "B",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [
+              Object {
+                "attrs": Object {
+                  "class": "Annotation -emphasis",
+                },
+                "end": 1,
+                "start": 0,
+                "tag": "em",
+              },
+            ],
+            "text": "C",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [
+              Object {
+                "attrs": Object {
+                  "class": "Annotation -superscript",
+                },
+                "end": 1,
+                "start": 0,
+                "tag": "sup",
+              },
+            ],
+            "text": "D",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "E",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "F",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "G",
+          },
+        }
+      }
+    />
+  </ol>
+  <figure
+    className={
+      Classes {
+        "_groups": Object {
+          "position": "center",
+          "size": "medium",
+          "source": "embedly_html",
+        },
+        "_initial": Array [
+          "Block",
+          "EmbedBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    id="embed_47506d9d71e94c1b864d0f8b3b332b0b"
+  >
+    <div
+      className="_Content"
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<blockquote class=\\"twitter-tweet\\"><a href=\\"https://twitter.com/marquee/status/832694046069960704\\"></a></blockquote><script async src=\\"//platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script>",
+          }
+        }
+      />
+      <figcaption
+        className="_Caption"
+      >
+        <p
+          className="_CaptionText"
+        />
+        <p
+          className="_Credit"
+        />
+      </figcaption>
+    </div>
+  </figure>
+  <p
+    className={
+      Classes {
+        "_groups": Object {
+          "align": "left",
+          "role": "paragraph",
+        },
+        "_initial": Array [
+          "Block",
+          "TextBlock",
+        ],
+        "_switches": Object {},
+      }
+    }
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Curabitur blandit tempus porttitor. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.",
+      }
+    }
+    id="text_48063095ee214ca898cff298b42d7c29"
+  />
+</div>
+`;
+
+exports[`renderEntryContent renders plain 1`] = `
+<div>
+  <p
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Nullam quis <strong>risus</strong> eget urna mollis ornare vel eu leo. Donec sed odio dui. Sed posuere <em>consectetur</em> est at lobortis. Cum sociis natoque <strong>penatibus <em>et magnis</em></strong><em> dis</em> parturient montes, nascetur ridiculus mus.",
+      }
+    }
+  />
+  <div
+    $$typeof={Symbol(react.element)}
+    _owner={
+      ReactCompositeComponentWrapper {
+        "_calledComponentWillUnmount": false,
+        "_compositeType": 2,
+        "_context": Object {},
+        "_currentElement": <GalleryBlock
+          block={
+              Object {
+                  "content": Array [
+                    Object {
+                      "alt_text": "A dog lies down.",
+                      "caption": "Oh hai",
+                      "content": Object {
+                        "128": Object {
+                          "height": 96,
+                          "s3_key": "RhXbcnHqRTis4rRYh7zi_casbah.jpg",
+                          "size": 7207,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/RhXbcnHqRTis4rRYh7zi_casbah.jpg",
+                          "width": 128,
+                        },
+                        "1280": Object {
+                          "height": 960,
+                          "s3_key": "PjqA5y0KQ22sZTRt61xJ_casbah.jpg",
+                          "size": 120803,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PjqA5y0KQ22sZTRt61xJ_casbah.jpg",
+                          "width": 1280,
+                        },
+                        "2560": Object {
+                          "height": 1920,
+                          "s3_key": "v7GsMybcST2bA9iqThym_casbah.jpg",
+                          "size": 309740,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/v7GsMybcST2bA9iqThym_casbah.jpg",
+                          "width": 2560,
+                        },
+                        "640": Object {
+                          "height": 480,
+                          "s3_key": "XwQqlD5gQ8ONN7IhqDAj_casbah.jpg",
+                          "size": 43670,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XwQqlD5gQ8ONN7IhqDAj_casbah.jpg",
+                          "width": 640,
+                        },
+                      },
+                      "credit": "Me",
+                      "id": "_image_fd8da7e377924184816b13a5c9b9371a",
+                      "original": Object {
+                        "filename": "casbah.jpg",
+                        "height": 768,
+                        "mimetype": "image/jpeg",
+                        "s3_key": "xETyG7tQRju06M11YiSm_casbah.jpg",
+                        "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/xETyG7tQRju06M11YiSm_casbah.jpg",
+                        "width": 1024,
+                      },
+                    },
+                    Object {
+                      "alt_text": "",
+                      "caption": "caption",
+                      "content": Object {
+                        "128": Object {
+                          "height": 170,
+                          "s3_key": "KEDsGNwQdCfsTqqj25jx_3-original.jpg",
+                          "size": 6133,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/KEDsGNwQdCfsTqqj25jx_3-original.jpg",
+                          "width": 128,
+                        },
+                        "1280": Object {
+                          "height": 1706,
+                          "s3_key": "eYDtg85TuGWdAecAkWby_3-original.jpg",
+                          "size": 280125,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/eYDtg85TuGWdAecAkWby_3-original.jpg",
+                          "width": 1280,
+                        },
+                        "2560": Object {
+                          "height": 3413,
+                          "s3_key": "2KCZptimSqyyDtzMSjMN_3-original.jpg",
+                          "size": 909881,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/2KCZptimSqyyDtzMSjMN_3-original.jpg",
+                          "width": 2560,
+                        },
+                        "640": Object {
+                          "height": 853,
+                          "s3_key": "Y9dGs9Z2RjalBC5s1y2l_3-original.jpg",
+                          "size": 82915,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Y9dGs9Z2RjalBC5s1y2l_3-original.jpg",
+                          "width": 640,
+                        },
+                      },
+                      "credit": "",
+                      "id": "_image_f0409a244c56418fabe6434d930f005a",
+                      "original": Object {
+                        "filename": "3-original.jpg",
+                        "height": 3055,
+                        "mimetype": "image/jpeg",
+                        "s3_key": "Jnt3qyKQAyLt38eVEMZm_3-original.jpg",
+                        "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Jnt3qyKQAyLt38eVEMZm_3-original.jpg",
+                        "width": 2291,
+                      },
+                    },
+                    Object {
+                      "content": Object {
+                        "128": Object {
+                          "height": 85,
+                          "s3_key": "btz4fTLQLC9bafyfo8Ca_19-original.jpg",
+                          "size": 3492,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/btz4fTLQLC9bafyfo8Ca_19-original.jpg",
+                          "width": 128,
+                        },
+                        "1280": Object {
+                          "height": 851,
+                          "s3_key": "6MUTJ4hsTxuRhH6aDWa3_19-original.jpg",
+                          "size": 118155,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/6MUTJ4hsTxuRhH6aDWa3_19-original.jpg",
+                          "width": 1280,
+                        },
+                        "2560": Object {
+                          "height": 1703,
+                          "s3_key": "dgaBWaZaTY2LJEDMv91I_19-original.jpg",
+                          "size": 407926,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/dgaBWaZaTY2LJEDMv91I_19-original.jpg",
+                          "width": 2560,
+                        },
+                        "640": Object {
+                          "height": 425,
+                          "s3_key": "HEbcIUEWTYCziZ5yoMW7_19-original.jpg",
+                          "size": 41585,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/HEbcIUEWTYCziZ5yoMW7_19-original.jpg",
+                          "width": 640,
+                        },
+                      },
+                      "id": "_image_ee63e2fb646e4434b7d6b0683d3567bf",
+                      "original": Object {
+                        "filename": "19-original.jpg",
+                        "height": 3056,
+                        "mimetype": "image/jpeg",
+                        "s3_key": "nUAxOW3RtODPSuOH7N1W_19-original.jpg",
+                        "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/nUAxOW3RtODPSuOH7N1W_19-original.jpg",
+                        "width": 4592,
+                      },
+                    },
+                    Object {
+                      "content": Object {
+                        "128": Object {
+                          "height": 170,
+                          "s3_key": "c2OjmsXRKixvFlKQwKQN_32-original.jpg",
+                          "size": 7863,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/c2OjmsXRKixvFlKQwKQN_32-original.jpg",
+                          "width": 128,
+                        },
+                        "1280": Object {
+                          "height": 1706,
+                          "s3_key": "AFDh62GuQgeJoUsqE22P_32-original.jpg",
+                          "size": 384111,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/AFDh62GuQgeJoUsqE22P_32-original.jpg",
+                          "width": 1280,
+                        },
+                        "2560": Object {
+                          "height": 3413,
+                          "s3_key": "4ilWlT9YQSSF3bBbxXCw_32-original.jpg",
+                          "size": 1154690,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/4ilWlT9YQSSF3bBbxXCw_32-original.jpg",
+                          "width": 2560,
+                        },
+                        "640": Object {
+                          "height": 853,
+                          "s3_key": "Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg",
+                          "size": 112882,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg",
+                          "width": 640,
+                        },
+                      },
+                      "id": "_image_93c04c4ec20a47759e0a42e6b66a5c22",
+                      "original": Object {
+                        "filename": "32-original.jpg",
+                        "height": 3264,
+                        "mimetype": "image/jpeg",
+                        "s3_key": "rUpYutYlSKyjkfJl9njp_32-original.jpg",
+                        "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/rUpYutYlSKyjkfJl9njp_32-original.jpg",
+                        "width": 2448,
+                      },
+                    },
+                    Object {
+                      "content": Object {
+                        "128": Object {
+                          "height": 119.01210653753027,
+                          "mimetype": "image/jpeg",
+                          "s3_key": "tl1LEvQOQDWSucaQgezg_orly.jpg",
+                          "size": 3332,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/tl1LEvQOQDWSucaQgezg_orly.jpg",
+                          "width": 128,
+                        },
+                        "1280": Object {
+                          "height": 1190.1210653753028,
+                          "mimetype": "image/jpeg",
+                          "s3_key": "3mEm0WoQPe41LaiBwbYB_orly.jpg",
+                          "size": 82766,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/3mEm0WoQPe41LaiBwbYB_orly.jpg",
+                          "width": 1280,
+                        },
+                        "2560": Object {
+                          "height": 2380.2421307506056,
+                          "mimetype": "image/jpeg",
+                          "s3_key": "D7YLrbixRjihwnybE9WH_orly.jpg",
+                          "size": 209281,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/D7YLrbixRjihwnybE9WH_orly.jpg",
+                          "width": 2560,
+                        },
+                        "640": Object {
+                          "height": 595.0605326876514,
+                          "mimetype": "image/jpeg",
+                          "s3_key": "PbliJcdSQ6u3gbr16AwY_orly.jpg",
+                          "size": 33619,
+                          "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PbliJcdSQ6u3gbr16AwY_orly.jpg",
+                          "width": 640,
+                        },
+                      },
+                      "id": "image_0a3f8da7d8eb4df6b7e60c90144b91df",
+                      "original": Object {
+                        "height": 384,
+                        "mimetype": "image/jpeg",
+                        "s3_key": "XTFJQtFBQYSItL6NnEz7_orly.jpg",
+                        "size": 21646,
+                        "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XTFJQtFBQYSItL6NnEz7_orly.jpg",
+                        "width": 413,
+                      },
+                      "type": "image",
+                    },
+                  ],
+                  "created_date": "2016-03-08T21:06:52.157000",
+                  "id": "gallery_dfda4dd7fd5d445292f3d0d75ff462d3",
+                  "key": "gallery_dfda4dd7fd5d445292f3d0d75ff462d3",
+                  "layout": Object {
+                    "position": "center",
+                    "size": "full",
+                  },
+                  "modified_date": "2017-03-02T18:53:02.075000",
+                  "publication_id": 3,
+                  "type": "gallery",
+                  "url": "//api.proof.pub/content/gallery_dfda4dd7fd5d445292f3d0d75ff462d3/",
+                }
+          }
+          plain={true}
+      />,
+        "_debugID": 78,
+        "_hostContainerInfo": Object {
+          "createNodeMock": [Function],
+        },
+        "_hostParent": <div>
+          <p
+              dangerouslySetInnerHTML={
+                  Object {
+                      "__html": "Nullam quis <strong>risus</strong> eget urna mollis ornare vel eu leo. Donec sed odio dui. Sed posuere <em>consectetur</em> est at lobortis. Cum sociis natoque <strong>penatibus <em>et magnis</em></strong><em> dis</em> parturient montes, nascetur ridiculus mus.",
+                    }
+              }
+          />
+          <div
+              $$typeof={Symbol(react.element)}
+              _owner={[Circular]}
+              _store={Object {}}
+              props={
+                  Object {
+                      "children": Array [
+                        <img
+                          alt="A dog lies down."
+                          src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XwQqlD5gQ8ONN7IhqDAj_casbah.jpg"
+                  />,
+                        <figcaption>
+                          <p>
+                                  Oh hai
+                          </p>
+                          <p>
+                                  Me
+                          </p>
+                  </figcaption>,
+                      ],
+                    }
+              }
+              type="figure"
+          >
+              <figure>
+                  <img
+                      alt=""
+                      src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Y9dGs9Z2RjalBC5s1y2l_3-original.jpg"
+                  />
+                  <figcaption>
+                      <p>
+                          caption
+                      </p>
+                      <p>
+                          
+                      </p>
+                  </figcaption>
+              </figure>
+              <figure>
+                  <img
+                      alt={undefined}
+                      src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/HEbcIUEWTYCziZ5yoMW7_19-original.jpg"
+                  />
+                  <figcaption>
+                      <p />
+                      <p />
+                  </figcaption>
+              </figure>
+              <figure>
+                  <img
+                      alt={undefined}
+                      src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg"
+                  />
+                  <figcaption>
+                      <p />
+                      <p />
+                  </figcaption>
+              </figure>
+              <figure>
+                  <img
+                      alt={undefined}
+                      src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PbliJcdSQ6u3gbr16AwY_orly.jpg"
+                  />
+                  <figcaption>
+                      <p />
+                      <p />
+                  </figcaption>
+              </figure>
+          </div>
+          <p
+              dangerouslySetInnerHTML={
+                  Object {
+                      "__html": "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor <a href=\\"http://example.com\\">mauris</a> condimentum nibh, ut fermentum massa justo sit amet risus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor<sup>2</sup> mauris condimentum<sub>2</sub> nibh, ut fermentum massa justo sit amet risus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+                    }
+              }
+          />
+          <ul>
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [
+                              Object {
+                                "attrs": Object {},
+                                "end": 10,
+                                "start": 6,
+                                "tag": "strong",
+                              },
+                            ],
+                            "text": "First item",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "second",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "third?",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "fourth!",
+                          },
+                        }
+                  }
+              />
+          </ul>
+          <figure>
+              <img
+                  src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg"
+              />
+              <figcaption
+                  className={null}
+              >
+                  <p
+                      className={null}
+                  >
+                      The Crysler building.
+                  </p>
+                  <p
+                      className={null}
+                  >
+                      Alec Perkins
+                  </p>
+              </figcaption>
+          </figure>
+          <p
+              dangerouslySetInnerHTML={
+                  Object {
+                      "__html": "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+                    }
+              }
+          />
+          <ol>
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "A",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "B",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [
+                              Object {
+                                "attrs": Object {},
+                                "end": 1,
+                                "start": 0,
+                                "tag": "em",
+                              },
+                            ],
+                            "text": "C",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [
+                              Object {
+                                "attrs": Object {},
+                                "end": 1,
+                                "start": 0,
+                                "tag": "sup",
+                              },
+                            ],
+                            "text": "D",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "E",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "F",
+                          },
+                        }
+                  }
+              />
+              <li
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": NOAT {
+                            "_markup": null,
+                            "annotations": Array [],
+                            "text": "G",
+                          },
+                        }
+                  }
+              />
+          </ol>
+          <figure>
+              <div
+                  dangerouslySetInnerHTML={
+                      Object {
+                          "__html": "<blockquote class=\\"twitter-tweet\\"><a href=\\"https://twitter.com/marquee/status/832694046069960704\\"></a></blockquote><script async src=\\"//platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script>",
+                        }
+                  }
+              />
+              <figcaption
+                  className={null}
+              >
+                  <p
+                      className={null}
+                  />
+                  <p
+                      className={null}
+                  />
+              </figcaption>
+          </figure>
+          <p
+              dangerouslySetInnerHTML={
+                  Object {
+                      "__html": "Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Curabitur blandit tempus porttitor. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.",
+                    }
+              }
+          />
+      </div>,
+        "_instance": StatelessComponent {
+          "_reactInternalInstance": [Circular],
+          "context": Object {},
+          "props": Object {
+            "block": Object {
+              "content": Array [
+                Object {
+                  "alt_text": "A dog lies down.",
+                  "caption": "Oh hai",
+                  "content": Object {
+                    "128": Object {
+                      "height": 96,
+                      "s3_key": "RhXbcnHqRTis4rRYh7zi_casbah.jpg",
+                      "size": 7207,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/RhXbcnHqRTis4rRYh7zi_casbah.jpg",
+                      "width": 128,
+                    },
+                    "1280": Object {
+                      "height": 960,
+                      "s3_key": "PjqA5y0KQ22sZTRt61xJ_casbah.jpg",
+                      "size": 120803,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PjqA5y0KQ22sZTRt61xJ_casbah.jpg",
+                      "width": 1280,
+                    },
+                    "2560": Object {
+                      "height": 1920,
+                      "s3_key": "v7GsMybcST2bA9iqThym_casbah.jpg",
+                      "size": 309740,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/v7GsMybcST2bA9iqThym_casbah.jpg",
+                      "width": 2560,
+                    },
+                    "640": Object {
+                      "height": 480,
+                      "s3_key": "XwQqlD5gQ8ONN7IhqDAj_casbah.jpg",
+                      "size": 43670,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XwQqlD5gQ8ONN7IhqDAj_casbah.jpg",
+                      "width": 640,
+                    },
+                  },
+                  "credit": "Me",
+                  "id": "_image_fd8da7e377924184816b13a5c9b9371a",
+                  "original": Object {
+                    "filename": "casbah.jpg",
+                    "height": 768,
+                    "mimetype": "image/jpeg",
+                    "s3_key": "xETyG7tQRju06M11YiSm_casbah.jpg",
+                    "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/xETyG7tQRju06M11YiSm_casbah.jpg",
+                    "width": 1024,
+                  },
+                },
+                Object {
+                  "alt_text": "",
+                  "caption": "caption",
+                  "content": Object {
+                    "128": Object {
+                      "height": 170,
+                      "s3_key": "KEDsGNwQdCfsTqqj25jx_3-original.jpg",
+                      "size": 6133,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/KEDsGNwQdCfsTqqj25jx_3-original.jpg",
+                      "width": 128,
+                    },
+                    "1280": Object {
+                      "height": 1706,
+                      "s3_key": "eYDtg85TuGWdAecAkWby_3-original.jpg",
+                      "size": 280125,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/eYDtg85TuGWdAecAkWby_3-original.jpg",
+                      "width": 1280,
+                    },
+                    "2560": Object {
+                      "height": 3413,
+                      "s3_key": "2KCZptimSqyyDtzMSjMN_3-original.jpg",
+                      "size": 909881,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/2KCZptimSqyyDtzMSjMN_3-original.jpg",
+                      "width": 2560,
+                    },
+                    "640": Object {
+                      "height": 853,
+                      "s3_key": "Y9dGs9Z2RjalBC5s1y2l_3-original.jpg",
+                      "size": 82915,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Y9dGs9Z2RjalBC5s1y2l_3-original.jpg",
+                      "width": 640,
+                    },
+                  },
+                  "credit": "",
+                  "id": "_image_f0409a244c56418fabe6434d930f005a",
+                  "original": Object {
+                    "filename": "3-original.jpg",
+                    "height": 3055,
+                    "mimetype": "image/jpeg",
+                    "s3_key": "Jnt3qyKQAyLt38eVEMZm_3-original.jpg",
+                    "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Jnt3qyKQAyLt38eVEMZm_3-original.jpg",
+                    "width": 2291,
+                  },
+                },
+                Object {
+                  "content": Object {
+                    "128": Object {
+                      "height": 85,
+                      "s3_key": "btz4fTLQLC9bafyfo8Ca_19-original.jpg",
+                      "size": 3492,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/btz4fTLQLC9bafyfo8Ca_19-original.jpg",
+                      "width": 128,
+                    },
+                    "1280": Object {
+                      "height": 851,
+                      "s3_key": "6MUTJ4hsTxuRhH6aDWa3_19-original.jpg",
+                      "size": 118155,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/6MUTJ4hsTxuRhH6aDWa3_19-original.jpg",
+                      "width": 1280,
+                    },
+                    "2560": Object {
+                      "height": 1703,
+                      "s3_key": "dgaBWaZaTY2LJEDMv91I_19-original.jpg",
+                      "size": 407926,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/dgaBWaZaTY2LJEDMv91I_19-original.jpg",
+                      "width": 2560,
+                    },
+                    "640": Object {
+                      "height": 425,
+                      "s3_key": "HEbcIUEWTYCziZ5yoMW7_19-original.jpg",
+                      "size": 41585,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/HEbcIUEWTYCziZ5yoMW7_19-original.jpg",
+                      "width": 640,
+                    },
+                  },
+                  "id": "_image_ee63e2fb646e4434b7d6b0683d3567bf",
+                  "original": Object {
+                    "filename": "19-original.jpg",
+                    "height": 3056,
+                    "mimetype": "image/jpeg",
+                    "s3_key": "nUAxOW3RtODPSuOH7N1W_19-original.jpg",
+                    "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/nUAxOW3RtODPSuOH7N1W_19-original.jpg",
+                    "width": 4592,
+                  },
+                },
+                Object {
+                  "content": Object {
+                    "128": Object {
+                      "height": 170,
+                      "s3_key": "c2OjmsXRKixvFlKQwKQN_32-original.jpg",
+                      "size": 7863,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/c2OjmsXRKixvFlKQwKQN_32-original.jpg",
+                      "width": 128,
+                    },
+                    "1280": Object {
+                      "height": 1706,
+                      "s3_key": "AFDh62GuQgeJoUsqE22P_32-original.jpg",
+                      "size": 384111,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/AFDh62GuQgeJoUsqE22P_32-original.jpg",
+                      "width": 1280,
+                    },
+                    "2560": Object {
+                      "height": 3413,
+                      "s3_key": "4ilWlT9YQSSF3bBbxXCw_32-original.jpg",
+                      "size": 1154690,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/4ilWlT9YQSSF3bBbxXCw_32-original.jpg",
+                      "width": 2560,
+                    },
+                    "640": Object {
+                      "height": 853,
+                      "s3_key": "Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg",
+                      "size": 112882,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg",
+                      "width": 640,
+                    },
+                  },
+                  "id": "_image_93c04c4ec20a47759e0a42e6b66a5c22",
+                  "original": Object {
+                    "filename": "32-original.jpg",
+                    "height": 3264,
+                    "mimetype": "image/jpeg",
+                    "s3_key": "rUpYutYlSKyjkfJl9njp_32-original.jpg",
+                    "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/rUpYutYlSKyjkfJl9njp_32-original.jpg",
+                    "width": 2448,
+                  },
+                },
+                Object {
+                  "content": Object {
+                    "128": Object {
+                      "height": 119.01210653753027,
+                      "mimetype": "image/jpeg",
+                      "s3_key": "tl1LEvQOQDWSucaQgezg_orly.jpg",
+                      "size": 3332,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/tl1LEvQOQDWSucaQgezg_orly.jpg",
+                      "width": 128,
+                    },
+                    "1280": Object {
+                      "height": 1190.1210653753028,
+                      "mimetype": "image/jpeg",
+                      "s3_key": "3mEm0WoQPe41LaiBwbYB_orly.jpg",
+                      "size": 82766,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/3mEm0WoQPe41LaiBwbYB_orly.jpg",
+                      "width": 1280,
+                    },
+                    "2560": Object {
+                      "height": 2380.2421307506056,
+                      "mimetype": "image/jpeg",
+                      "s3_key": "D7YLrbixRjihwnybE9WH_orly.jpg",
+                      "size": 209281,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/D7YLrbixRjihwnybE9WH_orly.jpg",
+                      "width": 2560,
+                    },
+                    "640": Object {
+                      "height": 595.0605326876514,
+                      "mimetype": "image/jpeg",
+                      "s3_key": "PbliJcdSQ6u3gbr16AwY_orly.jpg",
+                      "size": 33619,
+                      "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PbliJcdSQ6u3gbr16AwY_orly.jpg",
+                      "width": 640,
+                    },
+                  },
+                  "id": "image_0a3f8da7d8eb4df6b7e60c90144b91df",
+                  "original": Object {
+                    "height": 384,
+                    "mimetype": "image/jpeg",
+                    "s3_key": "XTFJQtFBQYSItL6NnEz7_orly.jpg",
+                    "size": 21646,
+                    "url": "https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XTFJQtFBQYSItL6NnEz7_orly.jpg",
+                    "width": 413,
+                  },
+                  "type": "image",
+                },
+              ],
+              "created_date": "2016-03-08T21:06:52.157000",
+              "id": "gallery_dfda4dd7fd5d445292f3d0d75ff462d3",
+              "key": "gallery_dfda4dd7fd5d445292f3d0d75ff462d3",
+              "layout": Object {
+                "position": "center",
+                "size": "full",
+              },
+              "modified_date": "2017-03-02T18:53:02.075000",
+              "publication_id": 3,
+              "type": "gallery",
+              "url": "//api.proof.pub/content/gallery_dfda4dd7fd5d445292f3d0d75ff462d3/",
+            },
+            "plain": true,
+          },
+          "refs": Object {},
+          "state": null,
+          "updater": Object {
+            "enqueueCallback": [Function],
+            "enqueueCallbackInternal": [Function],
+            "enqueueElementInternal": [Function],
+            "enqueueForceUpdate": [Function],
+            "enqueueReplaceState": [Function],
+            "enqueueSetState": [Function],
+            "isMounted": [Function],
+            "validateCallback": [Function],
+          },
+        },
+        "_mountImage": null,
+        "_mountIndex": 1,
+        "_mountOrder": 16,
+        "_pendingCallbacks": null,
+        "_pendingElement": null,
+        "_pendingForceUpdate": false,
+        "_pendingReplaceState": false,
+        "_pendingStateQueue": null,
+        "_renderedComponent": <div
+          $$typeof={Symbol(react.element)}
+          _owner={[Circular]}
+          _store={Object {}}
+          props={
+              Object {
+                  "children": Array [
+                    <img
+                      alt="A dog lies down."
+                      src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XwQqlD5gQ8ONN7IhqDAj_casbah.jpg"
+              />,
+                    <figcaption>
+                      <p>
+                              Oh hai
+                      </p>
+                      <p>
+                              Me
+                      </p>
+              </figcaption>,
+                  ],
+                }
+          }
+          type="figure"
+      >
+          <figure>
+              <img
+                  alt=""
+                  src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Y9dGs9Z2RjalBC5s1y2l_3-original.jpg"
+              />
+              <figcaption>
+                  <p>
+                      caption
+                  </p>
+                  <p>
+                      
+                  </p>
+              </figcaption>
+          </figure>
+          <figure>
+              <img
+                  alt={undefined}
+                  src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/HEbcIUEWTYCziZ5yoMW7_19-original.jpg"
+              />
+              <figcaption>
+                  <p />
+                  <p />
+              </figcaption>
+          </figure>
+          <figure>
+              <img
+                  alt={undefined}
+                  src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg"
+              />
+              <figcaption>
+                  <p />
+                  <p />
+              </figcaption>
+          </figure>
+          <figure>
+              <img
+                  alt={undefined}
+                  src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PbliJcdSQ6u3gbr16AwY_orly.jpg"
+              />
+              <figcaption>
+                  <p />
+                  <p />
+              </figcaption>
+          </figure>
+      </div>,
+        "_renderedNodeType": 0,
+        "_rootNodeID": 0,
+        "_topLevelWrapper": null,
+        "_updateBatchNumber": null,
+        "_warnedAboutRefsInRender": false,
+      }
+    }
+    _store={Object {}}
+    props={
+      Object {
+        "children": Array [
+          <img
+            alt="A dog lies down."
+            src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/XwQqlD5gQ8ONN7IhqDAj_casbah.jpg"
+      />,
+          <figcaption>
+            <p>
+                  Oh hai
+            </p>
+            <p>
+                  Me
+            </p>
+      </figcaption>,
+        ],
+      }
+    }
+    type="figure"
+  >
+    <figure>
+      <img
+        alt=""
+        src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Y9dGs9Z2RjalBC5s1y2l_3-original.jpg"
+      />
+      <figcaption>
+        <p>
+          caption
+        </p>
+        <p>
+          
+        </p>
+      </figcaption>
+    </figure>
+    <figure>
+      <img
+        alt={undefined}
+        src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/HEbcIUEWTYCziZ5yoMW7_19-original.jpg"
+      />
+      <figcaption>
+        <p />
+        <p />
+      </figcaption>
+    </figure>
+    <figure>
+      <img
+        alt={undefined}
+        src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Fe6jovYLQ52a2t8MJ9ZU_32-original.jpg"
+      />
+      <figcaption>
+        <p />
+        <p />
+      </figcaption>
+    </figure>
+    <figure>
+      <img
+        alt={undefined}
+        src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/PbliJcdSQ6u3gbr16AwY_orly.jpg"
+      />
+      <figcaption>
+        <p />
+        <p />
+      </figcaption>
+    </figure>
+  </div>
+  <p
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor <a href=\\"http://example.com\\">mauris</a> condimentum nibh, ut fermentum massa justo sit amet risus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor<sup>2</sup> mauris condimentum<sub>2</sub> nibh, ut fermentum massa justo sit amet risus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+      }
+    }
+  />
+  <ul>
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [
+              Object {
+                "attrs": Object {},
+                "end": 10,
+                "start": 6,
+                "tag": "strong",
+              },
+            ],
+            "text": "First item",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "second",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "third?",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "fourth!",
+          },
+        }
+      }
+    />
+  </ul>
+  <figure>
+    <img
+      src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg"
+    />
+    <figcaption
+      className={null}
+    >
+      <p
+        className={null}
+      >
+        The Crysler building.
+      </p>
+      <p
+        className={null}
+      >
+        Alec Perkins
+      </p>
+    </figcaption>
+  </figure>
+  <p
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+      }
+    }
+  />
+  <ol>
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "A",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "B",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [
+              Object {
+                "attrs": Object {},
+                "end": 1,
+                "start": 0,
+                "tag": "em",
+              },
+            ],
+            "text": "C",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [
+              Object {
+                "attrs": Object {},
+                "end": 1,
+                "start": 0,
+                "tag": "sup",
+              },
+            ],
+            "text": "D",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "E",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "F",
+          },
+        }
+      }
+    />
+    <li
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": NOAT {
+            "_markup": null,
+            "annotations": Array [],
+            "text": "G",
+          },
+        }
+      }
+    />
+  </ol>
+  <figure>
+    <div
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "<blockquote class=\\"twitter-tweet\\"><a href=\\"https://twitter.com/marquee/status/832694046069960704\\"></a></blockquote><script async src=\\"//platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script>",
+        }
+      }
+    />
+    <figcaption
+      className={null}
+    >
+      <p
+        className={null}
+      />
+      <p
+        className={null}
+      />
+    </figcaption>
+  </figure>
+  <p
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Curabitur blandit tempus porttitor. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`renderEntryContent renders plain 2`] = `<div />`;

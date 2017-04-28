@@ -165,5 +165,19 @@ will invalidate the cache.
 
 To reset, run `proof clearcache:build` or delete the `.build-cache` folder.
 
+### `--live-reload`
 
+Start a [LiveReload](http://livereload.com/)-compatible server. You must
+use one of the compatible [browser extensions](http://livereload.com/extensions/)
+for the changes to be reflected automatically in the browser. Or, use
+`--inject-live-reload` instead, which will inject the necessary script
+into the page.
+
+
+### `--inject-live-reload`
+
+Start a live reload server and inject the necessary script tag into the
+output markup of React-based views. The script will adjust the hostname
+appropriately so it can be used with `--host` for testing on other
+devices on the network.
 

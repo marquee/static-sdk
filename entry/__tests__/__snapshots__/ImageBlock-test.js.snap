@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImageBlock renders 1`] = `
+<figure
+  className={
+    Classes {
+      "_groups": Object {
+        "position": "right",
+        "size": "medium",
+      },
+      "_initial": Array [
+        "Block",
+        "ImageBlock",
+      ],
+      "_switches": Object {},
+    }
+  }
+  id="image_fe7b8a48f94b4ccb95a38beb91d00ff7"
+>
+  <div
+    className="_Content"
+  >
+    <img
+      alt="The spire of the Crysler building in the background, the tops of various skyscrapers in front of it."
+      className="_Image"
+      data-src_128="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/saO09kR7TO6Fdkmpdo60_DSC_6110.jpg"
+      data-src_1280="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/GLYe0WxSlem5uDSNxJ4M_DSC_6110.jpg"
+      data-src_2560="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/jKQgkPtRgSiIUoKbdoIc_DSC_6110.jpg"
+      data-src_640="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg"
+      sizes="(min-width: 720px) 720px,100vw"
+      src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg"
+      srcSet="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/saO09kR7TO6Fdkmpdo60_DSC_6110.jpg 128w,https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg 640w,https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/GLYe0WxSlem5uDSNxJ4M_DSC_6110.jpg 1280w,https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/jKQgkPtRgSiIUoKbdoIc_DSC_6110.jpg 2560w"
+    />
+    <figcaption
+      className="_Caption"
+    >
+      <p
+        className="_CaptionText"
+      >
+        The Crysler building.
+      </p>
+      <p
+        className="_Credit"
+      >
+        Alec Perkins
+      </p>
+    </figcaption>
+  </div>
+</figure>
+`;
+
+exports[`ImageBlock renders plain 1`] = `
+<figure>
+  <img
+    src="https://s3.amazonaws.com/marquee-test-akiaisur2rgicbmpehea/Z4y6OgMSyK0fVGNQNcSn_DSC_6110.jpg"
+  />
+  <figcaption
+    className={null}
+  >
+    <p
+      className={null}
+    >
+      The Crysler building.
+    </p>
+    <p
+      className={null}
+    >
+      Alec Perkins
+    </p>
+  </figcaption>
+</figure>
+`;

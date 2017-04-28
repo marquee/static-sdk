@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`extractLinks should extract links 1`] = `
+Array [
+  Array [
+    "home",
+    "/",
+  ],
+  Array [
+    "about",
+    "/about/",
+  ],
+  Array [
+    "collection_detail",
+    Array [
+      Array [
+        Object {
+          "slug": "a",
+        },
+        "/a/",
+      ],
+    ],
+  ],
+  Array [
+    "story_detail",
+    Array [
+      Array [
+        Object {
+          "slug": "x",
+        },
+        "/a/x/",
+      ],
+      Array [
+        Object {
+          "slug": "y",
+        },
+        "/a/y/",
+      ],
+      Array [
+        Object {
+          "slug": "z",
+        },
+        "/a/z/",
+      ],
+    ],
+  ],
+  Array [
+    "raw_html",
+    "/raw.html",
+  ],
+]
+`;
+
+exports[`extractLinks should handle Enumerates with paths 1`] = `
+Array [
+  Array [
+    "home",
+    "/",
+  ],
+  Array [
+    "story_detail",
+    Array [
+      Array [
+        Object {
+          "slug": "x",
+        },
+        "/stories/x/",
+      ],
+      Array [
+        Object {
+          "slug": "y",
+        },
+        "/stories/y/",
+      ],
+      Array [
+        Object {
+          "slug": "z",
+        },
+        "/stories/z/",
+      ],
+    ],
+  ],
+]
+`;

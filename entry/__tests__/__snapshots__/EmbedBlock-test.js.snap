@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmbedBlock renders 1`] = `
+<figure
+  className={
+    Classes {
+      "_groups": Object {
+        "position": "center",
+        "size": "medium",
+        "source": "embedly_html",
+      },
+      "_initial": Array [
+        "Block",
+        "EmbedBlock",
+      ],
+      "_switches": Object {},
+    }
+  }
+  id="embed_47506d9d71e94c1b864d0f8b3b332b0b"
+>
+  <div
+    className="_Content"
+  >
+    <div
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "<blockquote class=\\"twitter-tweet\\"><a href=\\"https://twitter.com/marquee/status/832694046069960704\\"></a></blockquote><script async src=\\"//platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script>",
+        }
+      }
+    />
+    <figcaption
+      className="_Caption"
+    >
+      <p
+        className="_CaptionText"
+      />
+      <p
+        className="_Credit"
+      />
+    </figcaption>
+  </div>
+</figure>
+`;
+
+exports[`EmbedBlock renders plain 1`] = `
+<figure>
+  <div
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<blockquote class=\\"twitter-tweet\\"><a href=\\"https://twitter.com/marquee/status/832694046069960704\\"></a></blockquote><script async src=\\"//platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script>",
+      }
+    }
+  />
+  <figcaption
+    className={null}
+  >
+    <p
+      className={null}
+    />
+    <p
+      className={null}
+    />
+  </figcaption>
+</figure>
+`;

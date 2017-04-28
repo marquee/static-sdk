@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextBlock renders 1`] = `
+<p
+  className={
+    Classes {
+      "_groups": Object {
+        "align": "left",
+        "role": "paragraph",
+      },
+      "_initial": Array [
+        "Block",
+        "TextBlock",
+      ],
+      "_switches": Object {},
+    }
+  }
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "Nullam quis <strong class=\\"Annotation -strong\\">risus</strong> eget urna mollis ornare vel eu leo. Donec sed odio dui. Sed posuere <em class=\\"Annotation -emphasis\\">consectetur</em> est at lobortis. Cum sociis natoque <strong class=\\"Annotation -strong\\">penatibus <em class=\\"Annotation -emphasis\\">et magnis</em></strong><em class=\\"Annotation -emphasis\\"> dis</em> parturient montes, nascetur ridiculus mus.",
+    }
+  }
+  id="text_7d112f487ec748c99aa022c7298c6965"
+/>
+`;
+
+exports[`TextBlock renders plain 1`] = `
+<p
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "Nullam quis <strong>risus</strong> eget urna mollis ornare vel eu leo. Donec sed odio dui. Sed posuere <em>consectetur</em> est at lobortis. Cum sociis natoque <strong>penatibus <em>et magnis</em></strong><em> dis</em> parturient montes, nascetur ridiculus mus.",
+    }
+  }
+/>
+`;

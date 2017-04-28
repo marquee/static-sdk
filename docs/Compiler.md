@@ -2,42 +2,46 @@
 
 The compiler is a set of functions that compile pure content into markup, or
 some other format, for presentation. It is provided with means for accessing
-the Marquee Content API, and is executed to generate files to be deployed on
+the Proof Content API, and is executed to generate files to be deployed on
 a static site.
 
 
 ## Main
 
 The main compiler function, specified by the `package.main`, is invoked by the
-SDK to compile the publication.
+SDK to compile the publication. This function constructs a _site description_
+that use used by the SDK to generate the markup files. Preferably, the
+description is defined in a declarative manner using JSX syntax, though
+imperative functions are available.
 
 The bare minimum for a compiler is the following:
 
 ```javascript
-module.exports = async function ({ emitFile }) {
-    emitFile('/', 'Hello, world!')
+const { HTMLView } = require('proof-sdk')
+
+module.exports = async function () {
+    return (
+        <HTMLView
+            component   = { () => <div>Hello, world!</div> }
+            path        = '/'
+        />
+    )
 }
 ```
 
 Compilers are “just” JavaScript running on a node platform, and are thus free
 to do mostly whatever they need to. However, they SHOULD NOT rely on state
 persisted to disk, as they MAY be executed in fresh contexts at arbitrary
-times. They MAY make requests to the Marquee Content API, as well as any other
+times. They MAY make requests to the Proof Content API, as well as any other
 available service.
 
 The main function is given an object as an argument that has various functions
 and other information it can use to generate the website.
 
-    api             : api
-    emitFile        : _emitFile
-    emitRedirect    : _emitRedirect
-    emitRSS         : _emitRSS
-    emitAssets      : _emitAssets
-    config          : project_config
-    project         : project_package
-    payload         : options.payload
-    done            : _done
-    info            : build_info
+```javascript
+module.exports = async function ({ api, config, project }) { }
+```
+
 
 ### `api`
 
@@ -83,7 +87,7 @@ api.entries((entries) => {
 
 The `config` object contains the active configuration for the current build,
 including environment, key information, and other project-specific properties.
-It is based on, but may vary slightly from, the `marquee` property in the
+It is based on, but may vary slightly from, the `proof` property in the
 project’s `package.json` file. See [Configuration](../configuration/) for more
 information about how this works.
 
@@ -94,9 +98,13 @@ If using the `async` keyword is undesired or impossible, the `done` callback
 can be used instead:
 
 ```javascript
-module.exports = function ({ emitFile, done }) {
-    emitFile('/', 'Hello, world!')
-    done()
+module.exports = function ({ done }) {
+    done(
+        <HTMLView
+            component   = { () => <div>Hello, world!</div> }
+            path        = '/'
+        />
+    )
 }
 ```
 
@@ -269,6 +277,8 @@ Any file that contains JSX or CJSX MUST require React, even if the React
 object is never used directly. The compiled JS that the two output uses
 React.
 
+See [“React must be in scope”](https://facebook.github.io/react/docs/jsx-in-depth.html#react-must-be-in-scope).
+
 
 ### “Compiler timeout. Compiler MUST call done within 30 minutes.”
 
@@ -292,15 +302,15 @@ misspelled.
 This will throw a `Object has no method apply` error when `<Asset>` is used:
 
 ```javascript
-const Asset = require('proof-sdk/base')
+const Asset = require('proof-contrib')
 ```
 
 vs destructuring or specific require:
 
 ```javascript
-const { Asset } = require('proof-sdk/base')
+const { Asset } = require('proof-contrib')
 // or
-const Asset = require('proof-sdk/base/Asset')
+const Asset = require('proof-contrib/Asset')
 ```
 
 ### Uncommitted changes detected, but no changes apparent
@@ -309,11 +319,11 @@ The compiler will halt if uncommitted changes are detected during a deploy, or
 only warn if the `--force` flag is used. Sometimes this will happen even when
 there aren’t any changes apparent in the project. Make sure there are no
 untracked files, and that files such as `.DS_Store` are properly ignored.
-(GitX apparently does not show OS X system files like that, even if not
+(GitX apparently does not show macOS system files like that, even if not
 blacklisted by the `.gitignore`.)
 
 Running `git diff-index HEAD && git ls-files --exclude-standard --others` in
-the project will show the changes the compiler is seeing.
+the project will show the changes the SDK is seeing.
 
 If `git status` shows no changes, you can probably safely run
 `git reset --hard HEAD` to clear this error.

@@ -9,11 +9,11 @@ program
     .option('-c, --configuration <name>', 'A configuration to use')
     .option('--host <host>', 'Set the development server host, eg 0.0.0.0 for external access (default `localhost`)')
     .option('--port <port>', 'Set the development server port (default `5000`)')
-    .option('--use-cache', 'Cache API responses (for development) [Deprecated, use --api-cache]')
     .option('--api-cache', 'Cache API responses (for development)')
     .option('--verbose', 'Show non-error info messages')
     .option('--deploy-stats <file>', 'Write deploy stats to the given file (JSON formatted)')
-    .option('--fake-deploy', 'Run through the deploy process but do not actually upload or delete data')
+    .option('--fake-deploy', 'Run through the deploy process but do not actually upload or delete data [Deprecated, use --fake]')
+    .option('--fake', 'Run through the deploy process but do not actually upload or delete data')
     .option('--batch-size <number>', 'Number of simultaneous uploads during deployments (default `5`)')
     .option('--no-delete', 'Skip deleting old remote files')
     .option('--skip-upload-errors', 'Only log errors on deploy upload instead of halting')
@@ -24,6 +24,8 @@ program
     .option('--smart-cache', 'Use modified_date to only fetch content modified since last build')
     .option('--stale-after <number>', 'Consider smart-cache stale after n hours (default `1`)')
     .option('--build-cache', 'Skip emits unchanged since previous build [experimental]')
+    .option('--live-reload', 'Start a live reload server for use with a live-reload-compatible browser extension or script tag')
+    .option('--inject-live-reload', 'Inject live reload script into React-based emits.')
     .parse(process.argv);
 
 if (program.production) {
@@ -38,21 +40,17 @@ if (program.verbose) {
     global.VERBOSE = false;
 }
 
-if (program.useCache) {
-    console.warn('The --use-cache option is deprecated. Please use --api-cache.')
-}
-
 var _command = program.args[0];
 var _options = {
     force: program.force || false,
     configuration: program.configuration || null,
     production: program.production || false,
-    use_cache: program.apiCache || program.useCache || false,
+    use_cache: program.apiCache || false,
     host: program.host || 'localhost',
     port: program.port || '5000',
     verbose: program.verbose || false,
     deploy_stats: program.deployStats || null,
-    fake_deploy: program.fakeDeploy || false,
+    fake_deploy: program.fake || program.fakeDeploy || false,
     batch_size: program.batchSize || 5,
     no_delete: program.noDelete || (program.priority !== null && program.priority !== undefined) || program.buildCache || false,
     priority: program.priority || Infinity,
@@ -63,6 +61,22 @@ var _options = {
     smart_cache: program.smartCache || false,
     stale_after: program.staleAfter || 1,
     build_cache: program.buildCache || false,
+    live_reload: program.liveReload || program.injectLiveReload || false,
+    inject_live_reload: program.injectLiveReload || false,
+}
+
+if (_command !== 'develop') {
+    if (_options.inject_live_reload) {
+        throw new Error('--inject-live-reload can only be used for develop command.')
+    }
+    if (_options.live_reload) {
+        throw new Error('--live-reload can only be used for develop command.')
+    }
+    // Force the compiler to exit if there is an error during asset
+    // compilation. Only allow graceful failing during development.
+    _options.allow_asset_errors = false
+} else {
+    _options.allow_asset_errors = true
 }
 
 switch (_command) {

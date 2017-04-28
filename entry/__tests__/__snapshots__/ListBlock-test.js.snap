@@ -1,0 +1,339 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListBlock renders 1`] = `
+<ul
+  className={
+    Classes {
+      "_groups": Object {
+        "role": "unordered",
+      },
+      "_initial": Array [
+        "Block",
+        "ListBlock",
+      ],
+      "_switches": Object {},
+    }
+  }
+  id="list_efaa9d57ab614e6e88e9448a9cc7336e"
+>
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [
+            Object {
+              "attrs": Object {
+                "class": "Annotation -strong",
+              },
+              "end": 10,
+              "start": 6,
+              "tag": "strong",
+            },
+          ],
+          "text": "First item",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "second",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "third?",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "fourth!",
+        },
+      }
+    }
+  />
+</ul>
+`;
+
+exports[`ListBlock renders 2`] = `
+<ol
+  className={
+    Classes {
+      "_groups": Object {
+        "role": "ordered",
+      },
+      "_initial": Array [
+        "Block",
+        "ListBlock",
+      ],
+      "_switches": Object {},
+    }
+  }
+  id="list_d00ef341f3c54e9a94cd76750cd81e0b"
+>
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "A",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "B",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [
+            Object {
+              "attrs": Object {
+                "class": "Annotation -emphasis",
+              },
+              "end": 1,
+              "start": 0,
+              "tag": "em",
+            },
+          ],
+          "text": "C",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [
+            Object {
+              "attrs": Object {
+                "class": "Annotation -superscript",
+              },
+              "end": 1,
+              "start": 0,
+              "tag": "sup",
+            },
+          ],
+          "text": "D",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "E",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "F",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "G",
+        },
+      }
+    }
+  />
+</ol>
+`;
+
+exports[`ListBlock renders plain 1`] = `
+<ul>
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [
+            Object {
+              "attrs": Object {},
+              "end": 10,
+              "start": 6,
+              "tag": "strong",
+            },
+          ],
+          "text": "First item",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "second",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "third?",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "fourth!",
+        },
+      }
+    }
+  />
+</ul>
+`;
+
+exports[`ListBlock renders plain 2`] = `
+<ol>
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "A",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "B",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [
+            Object {
+              "attrs": Object {},
+              "end": 1,
+              "start": 0,
+              "tag": "em",
+            },
+          ],
+          "text": "C",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [
+            Object {
+              "attrs": Object {},
+              "end": 1,
+              "start": 0,
+              "tag": "sup",
+            },
+          ],
+          "text": "D",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "E",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "F",
+        },
+      }
+    }
+  />
+  <li
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": NOAT {
+          "_markup": null,
+          "annotations": Array [],
+          "text": "G",
+        },
+      }
+    }
+  />
+</ol>
+`;
