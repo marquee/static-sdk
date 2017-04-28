@@ -34,7 +34,7 @@ const EmbedCard = (props) => (
     r('a', { className: props.plain ? null : 'EmbedCard', href: props.url },
         r('img', { src: props.thumbnail_url }),
         r('h1', null, props.title),
-        r('p', null, props.description),
+        r('p', null, props.description)
     )
 )
 
@@ -130,7 +130,7 @@ const EmbedBlock = (props) => {
     return r('figure', tag_props,
         r('div', { className: '_Content' },
             embed_content,
-            r(BlockCaption, { plain: props.plain, caption: caption, credit: credit }),
+            r(BlockCaption, { plain: props.plain, caption: caption, credit: credit })
         )
     )
 }
