@@ -26,7 +26,7 @@ module.exports = function getCurrentCommit (directory, callback) {
                         } else {
                             const sha = stdout.split('\n').join('')
                             const commit = `${ sha }${ is_dirty ? '-dirty' : '' }`
-                            callback({ commit, is_dirty })
+                            callback(commit, is_dirty)
                         }
                     }
                 )

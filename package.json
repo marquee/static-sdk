@@ -1,6 +1,6 @@
 {
   "name": "proof-sdk",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "scripts": {
     "test": "flow && jest",
     "prepublish": "npm run test",
