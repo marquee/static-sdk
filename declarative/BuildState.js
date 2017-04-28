@@ -166,6 +166,4 @@ class BuildState {
 
 }
 
-
-module.exports = new BuildState()
-module.exports.BuildState = BuildState
+module.exports = BuildState

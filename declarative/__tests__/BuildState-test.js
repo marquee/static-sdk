@@ -1,9 +1,9 @@
 jest.autoMockOff()
 
-describe('current-build', () => {
+describe('BuildState', () => {
     let current_build
 
-    const { BuildState } = require('../current-build')
+    const BuildState = require('../BuildState')
 
     beforeEach( () => {
         current_build = new BuildState()

@@ -1,4 +1,4 @@
-const current_build         = require('../current-build')
+const current_build         = require('../CURRENT-BUILD')
 const extractLinks          = require('./extractLinks')
 const extractPaths          = require('./extractPaths')
 const expandDescription     = require('./expandDescription')

@@ -4,7 +4,7 @@ const watch           = require('node-watch')
 const SDKError        = require('../compiler/SDKError')
 const compileAssets   = require('../compiler/compileAssets')
 const runCompilation  = require('../compiler')
-const current_build   = require('../current-build')
+const current_build   = require('../CURRENT-BUILD')
 const livereload      = require('livereload')
 
 module.exports = function watcher (project_directory, build_directory, options, project_config) {
