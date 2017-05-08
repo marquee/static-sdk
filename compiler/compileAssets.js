@@ -113,8 +113,8 @@ function compileJS (source_path, dest_path, project_directory, cb) {
             compilation_error = err
             // console.error(err)
             compilation_error.formatted = `JS compilation error:
-file: ${ err.filename }
-line: ${ err.loc.line }, column: ${ err.loc.column }
+file: ${ err.filename ? err.filename : '?' }
+line: ${ err.loc ? err.loc.line : '?' }, column: ${ err.loc ? err.loc.column : '?' }
 
 ${ err.toString() }`
             compiled = `document.body.innerHTML = '<style>body { ${ ERROR_STYLES } }</style><p>' + decodeURIComponent("${ encodeURIComponent(compilation_error.formatted) }") + '</p>'`
