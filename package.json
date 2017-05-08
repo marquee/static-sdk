@@ -35,8 +35,6 @@
     "html": "0.0.7",
     "livereload": "^0.6.2",
     "lodash": "4.13.1",
-    "mime": "^1.2.11",
-    "moment": "^2.8.3",
     "node-sass": "^3.7.0",
     "node-watch": "^0.3.4",
     "optimize-js": "^1.0.1",
