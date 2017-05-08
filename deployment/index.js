@@ -20,7 +20,7 @@ module.exports = function(project_directory, options) {
 
     SDKError.log(SDKError.colors.grey(`${ options.fake_deploy ? '(fake) ' : '' }Attempting to deploy: ${ project_directory }`));
 
-    return getCurrentCommit(project_directory, function(commit_sha) {
+    return getCurrentCommit(project_directory, function(commit_sha, is_dirty, dirty_files) {
 
         // Require deploying from a clean working directory of a version
         // controlled project. Allow for override.
@@ -32,8 +32,8 @@ module.exports = function(project_directory, options) {
             }
             SDKError.warn('deploy.repo', _repo_message);
 
-        } else if (commit_sha.split('-').pop() === 'dirty') {
-            _repo_message = `Uncommitted changes detected. It is ${ SDKError.colors.bold('strongly') } recommended to only deploy from a clean working directory.`;
+        } else if (is_dirty) {
+            _repo_message = `Uncommitted changes detected. It is ${ SDKError.colors.bold('strongly') } recommended to only deploy from a clean working directory.\n${ dirty_files }`;
             if (!options.force) {
                 throw new SDKError('deploy.repo', `${ _repo_message }\nUse \`${ SDKError.colors.magenta('proof deploy --force') }\` to override.`);
             }
