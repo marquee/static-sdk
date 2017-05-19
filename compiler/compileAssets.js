@@ -39,7 +39,7 @@ ${ err.toString() }`
         }
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-            compiled = UglifyJS.minify(compiled.toString(), { fromString: true }).code
+            compiled = UglifyJS.minify(compiled.toString()).code
         }
         fs.writeFile(dest_path, compiled, (err) => {
             if (err) {
@@ -123,7 +123,7 @@ ${ err.toString() }`
         file_data = compiled.toString()
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-            file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
+            file_data = UglifyJS.minify(file_data.toString()).code
         }
         fs.writeFile(dest_path, file_data, (err) => {
             if (err) {
@@ -141,7 +141,7 @@ function copyAndMinifyJS (source, destination, project_directory, callback) {
         }
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
-            file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
+            file_data = UglifyJS.minify(file_data.toString()).code
         }
         fs.writeFile(destination, file_data, (err) => {
             if (err) {
