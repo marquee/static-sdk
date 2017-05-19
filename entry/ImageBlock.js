@@ -68,19 +68,26 @@ const ImageBlock = (props) => {
         sizes.unshift(`(min-width: 1440px) 1440px`)
     }
 
+    let image_el = r('img', {
+        className       : '_Image',
+        src             : src_640,
+        srcSet          : srcset.join(','),
+        sizes           : sizes.join(','),
+        alt             : props.block.alt_text,
+    })
+
+    if (null != props.block.link && props.block.link.length > 0) {
+        cx.add('link')
+        image_el = r('a', {
+            style: { display: 'block' },
+            href: props.block.link,
+            className: '_Link',
+        }, image_el)
+    }
+
     return r('figure', { id: props.block.id, className: cx },
-        r('div', { className: '_Content' },
-            r('img', {
-                className       : '_Image',
-                src             : src_640,
-                srcSet          : srcset.join(','),
-                sizes           : sizes.join(','),
-                alt             : props.block.alt_text,
-                'data-src_128'  : src_128,
-                'data-src_640'  : src_640,
-                'data-src_1280' : src_1280,
-                'data-src_2560' : src_2560,
-            }),
+        r('div', { className: '_Content', href: props.block.link },
+            image_el,
             r(BlockCaption, { caption, credit, plain: false })
         )
     )
