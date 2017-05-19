@@ -2,6 +2,8 @@
 
 const React = require('react')
 const EnumerationItem = require('./EnumerationItem')
+const SDKError = require('../compiler/SDKError')
+
 /*::
 type NodePropsType = {
     props           : ?(Object | Function),
@@ -40,6 +42,9 @@ function gatherPropsInPlace (node/*: ExpandedDescriptorNode */) {
         }
     } else {
         gathered_props = {}
+        if (null != node.props.component && node.props.component.length) {
+            SDKError.throw(`${ null != node.props.component && null != node.props.component.name ? node.props.component.name : 'Component' } takes props but 'props' not defined on descriptor${ null != node.props.name ? " '" + node.props.name + "'" : '' }.`)
+        }
     }
 
     node.gathered_props = gathered_props
