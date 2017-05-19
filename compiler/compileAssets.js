@@ -57,6 +57,7 @@ function compileSass (source_path, dest_path, project_directory, cb) {
         includePaths: [
             project_directory,
             path.join(project_directory, 'node_modules', 'proof-sdk', 'stylesheets'),
+            path.join(project_directory, 'node_modules', 'proof-contrib', 'stylesheets'),
         ],
     } , (err, compiled) => {
             let output
