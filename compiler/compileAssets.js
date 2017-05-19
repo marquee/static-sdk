@@ -39,7 +39,7 @@ ${ err.toString() }`
         }
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-            compiled = UglifyJS.minify(compiled.toString(), { fromString: true }).code
+            compiled = UglifyJS.minify(compiled.toString()).code
         }
         fs.writeFile(dest_path, compiled, (err) => {
             if (err) {
@@ -57,6 +57,7 @@ function compileSass (source_path, dest_path, project_directory, cb) {
         includePaths: [
             project_directory,
             path.join(project_directory, 'node_modules', 'proof-sdk', 'stylesheets'),
+            path.join(project_directory, 'node_modules', 'proof-contrib', 'stylesheets'),
         ],
     } , (err, compiled) => {
             let output
@@ -113,8 +114,8 @@ function compileJS (source_path, dest_path, project_directory, cb) {
             compilation_error = err
             // console.error(err)
             compilation_error.formatted = `JS compilation error:
-file: ${ err.filename }
-line: ${ err.loc.line }, column: ${ err.loc.column }
+file: ${ err.filename ? err.filename : '?' }
+line: ${ err.loc ? err.loc.line : '?' }, column: ${ err.loc ? err.loc.column : '?' }
 
 ${ err.toString() }`
             compiled = `document.body.innerHTML = '<style>body { ${ ERROR_STYLES } }</style><p>' + decodeURIComponent("${ encodeURIComponent(compilation_error.formatted) }") + '</p>'`
@@ -122,7 +123,7 @@ ${ err.toString() }`
         file_data = compiled.toString()
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-            file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
+            file_data = UglifyJS.minify(file_data.toString()).code
         }
         fs.writeFile(dest_path, file_data, (err) => {
             if (err) {
@@ -140,7 +141,7 @@ function copyAndMinifyJS (source, destination, project_directory, callback) {
         }
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
-            file_data = UglifyJS.minify(file_data.toString(), { fromString: true }).code
+            file_data = UglifyJS.minify(file_data.toString()).code
         }
         fs.writeFile(destination, file_data, (err) => {
             if (err) {

@@ -73,7 +73,7 @@ const EmbedVideo = (props) => {
                             }
                         });
                     })(window);
-                `, { fromString: true }).code
+                `).code
             }
         })
     )

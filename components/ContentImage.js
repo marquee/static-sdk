@@ -63,10 +63,6 @@ const ContentImage = (props/*: { src: ?Object, cover: boolean, max_size: ?number
         sizes           : sizes.join(','),
         alt             : alt_text,
         style           : style,
-        'data-src_128'  : src_128,
-        'data-src_640'  : src_640,
-        'data-src_1280' : src_1280,
-        'data-src_2560' : src_2560,
     })
 }
 

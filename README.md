@@ -12,7 +12,27 @@ This package requires [node](https://nodejs.org/) and is distributed through [np
 
 ## Technical Overview
 
-The SDK provides components and tools for building _compilers_ that compile structured content and code into HTML, JavaScript, and CSS for front-end presentation of a publication. While not required, the SDK facilitates using [CoffeeScript](http://coffeescript.org/) (specifically [CJSX](https://github.com/jsdf/coffee-react)) and [Sass](http://sass-lang.com/). The compiled output can then be deployed to scalable static hosting providers such as [Amazon S3](http://aws.amazon.com/s3/) and distributed across a content delivery network.
+The SDK provides components and tools for building _compilers_ that compile structured content and code into HTML, JavaScript, and CSS for front-end presentation of a publication. While not required, the SDK facilitates using [JSX](http://buildwithreact.com/tutorial/jsx) and [Sass](http://sass-lang.com/). The compiled output can then be deployed to scalable static hosting providers such as [Amazon S3](http://aws.amazon.com/s3/) and distributed across a content delivery network.
+
+
+
+The SDK includes a React-based framework for declaratively describing the high level structure of the site. This technique allows even large sites with tens of thousands of entries, complex content groupings, and related metadata entities to be deployed in a static fashion. It looks something like this:
+
+```jsx
+<HTMLView
+    component   = { CollectionDetail }
+    props       = { CollectionDetail.mapDataToProps(collection) }
+    path        = { collection.slug }
+>
+    <Enumerate items={ data.stories } path='stories'>
+        <HTMLView
+            component   = { StoryDetail }
+            props       = { StoryDetail.mapDataToProps }
+            path        = { story => story.slug }
+        />
+    </Enumerate>
+</HTMLView>
+```
 
 Included in the SDK is a local development server that automatically compiles changes, and an asset pipeline optimized for a [browserify](http://browserify.org/)- and Sass-based workflow that provides minification and hashing in production mode. There is also a set of common components using [React.js](http://facebook.github.io/react/) to generate markup as well as necessary client-side JS and structural styles.
 

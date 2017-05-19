@@ -127,17 +127,16 @@ module.exports = function(options, build_directory, local_files, project_config,
             }
         });
 
-        for (let k in local_map) {
-            let v = local_map[k];
-            if (!remote_map.has(k)) {
+        local_map.forEach( local_file => {
+            if (!remote_map.has(local_file.key)) {
                 // Files that exist locally but not remotely and definitely need
                 // to be uploaded.
                 changed.push({
-                    local: v,
+                    local: local_file,
                     remote: null
                 });
             }
-        }
+        })
 
         unknown.forEach(function(f) {
             if (getEtagFor(f) !== JSON.parse(f.remote.ETag)) {

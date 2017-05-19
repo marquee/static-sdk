@@ -1,6 +1,6 @@
 {
   "name": "proof-sdk",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "scripts": {
     "test": "flow && jest",
     "prepublish": "npm run test",
@@ -35,8 +35,6 @@
     "html": "0.0.7",
     "livereload": "^0.6.2",
     "lodash": "4.13.1",
-    "mime": "^1.2.11",
-    "moment": "^2.8.3",
     "node-sass": "^3.7.0",
     "node-watch": "^0.3.4",
     "optimize-js": "^1.0.1",
@@ -50,7 +48,7 @@
     "shiny": "^1.0.0",
     "sqwish": "^0.2.2",
     "temp": "^0.8.1",
-    "uglify-js": "^2.4.15",
+    "uglify-js": "^3.0.1",
     "when": "^3.6.4"
   },
   "devDependencies": {
