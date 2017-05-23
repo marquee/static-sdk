@@ -8,6 +8,9 @@ HTMLView.is_compressable = true
 HTMLView.makeEmit = ({ descriptor }) => (
     React.createElement(descriptor.props.component, descriptor.gathered_props)
 )
+HTMLView.default_props = {
+    fragment: false
+}
 
 const SitemapView = props => null
 SitemapView['Content-Type'] = 'text/plain'

@@ -12,6 +12,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "name": "about",
         "path": "about",
         "props": Object {},
@@ -50,6 +51,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -89,6 +91,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -126,6 +129,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -162,6 +166,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "linkKey": [Function],
         "name": "collection_detail",
         "path": [Function],
@@ -201,6 +206,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -240,6 +246,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -277,6 +284,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -315,6 +323,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "linkKey": [Function],
         "name": "collection_detail",
         "path": [Function],
@@ -354,6 +363,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -393,6 +403,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -430,6 +441,7 @@ Object {
           "parent": [Circular],
           "props": Object {
             "component": [Function],
+            "fragment": false,
             "linkKey": [Function],
             "name": "story_detail",
             "path": [Function],
@@ -466,6 +478,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "linkKey": [Function],
         "name": "collection_detail",
         "path": [Function],
@@ -481,6 +494,7 @@ Object {
   "parent": undefined,
   "props": Object {
     "component": [Function],
+    "fragment": false,
     "name": "home",
     "path": "/",
     "props": Object {},
@@ -501,6 +515,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "name": "about",
         "path": "about",
         "props": Object {},
@@ -537,6 +552,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "linkKey": [Function],
         "name": "story_detail",
         "path": [Function],
@@ -576,6 +592,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "linkKey": [Function],
         "name": "story_detail",
         "path": [Function],
@@ -613,6 +630,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "linkKey": [Function],
         "name": "story_detail",
         "path": [Function],
@@ -628,6 +646,7 @@ Object {
   "parent": undefined,
   "props": Object {
     "component": [Function],
+    "fragment": false,
     "name": "home",
     "path": "/",
     "props": Object {},
@@ -648,6 +667,7 @@ Object {
       "parent": [Circular],
       "props": Object {
         "component": [Function],
+        "fragment": false,
         "name": "about",
         "path": "about",
         "props": Object {},
@@ -662,6 +682,7 @@ Object {
   "parent": undefined,
   "props": Object {
     "component": [Function],
+    "fragment": false,
     "name": "home",
     "path": "/",
     "props": Object {},

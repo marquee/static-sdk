@@ -63,7 +63,7 @@ function processSiteDescription (kwargs) {
                 emitFile(
                     descriptor.evaluated_path,
                     SitemapView.makeEmit({ descriptor, config, all_descriptors }),
-                    { 'Content-Type': SitemapView['Content-Type']}
+                    { 'Content-Type': SitemapView['Content-Type'] }
                 )
             } else if (null != descriptor.evaluated_path && null != descriptor.type.makeEmit) {
                 // <--- This would be a fantastic point to fire off emit
@@ -73,7 +73,10 @@ function processSiteDescription (kwargs) {
                 emitFile(
                     descriptor.evaluated_path,
                     descriptor.type.makeEmit({ descriptor, config }),
-                    { 'Content-Type': descriptor.type['Content-Type'] }
+                    {
+                        'Content-Type': descriptor.type['Content-Type'],
+                        fragment: descriptor.props.fragment,
+                    }
                 )
             }
         })
