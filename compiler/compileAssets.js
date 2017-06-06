@@ -101,6 +101,7 @@ function compileJS (source_path, dest_path, project_directory, cb) {
             presets: [
                 // Require these directly so they can be properly
                 // discovered by babel.
+                require('babel-preset-flow'),
                 require('babel-preset-react'),
                 require('babel-preset-env'),
             ]
