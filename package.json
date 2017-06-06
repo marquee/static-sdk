@@ -48,7 +48,7 @@
     "shiny": "^1.0.0",
     "sqwish": "^0.2.2",
     "temp": "^0.8.1",
-    "uglify-js": "^3.0.1",
+    "uglify-es": "^3.0.15",
     "when": "^3.6.4"
   },
   "devDependencies": {
