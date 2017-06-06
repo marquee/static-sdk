@@ -12,7 +12,7 @@ const Sass            = require('node-sass')
 const SDKError        = require('./SDKError')
 const sqwish          = require('sqwish')
 const sys             = require('sys')
-const UglifyJS        = require('uglify-js')
+const UglifyJS        = require('uglify-es')
 const walkSync        = require('./walkSync')
 const { formatProjectPath } = SDKError
 
@@ -28,7 +28,7 @@ function compileCoffee (source_path, dest_path, project_directory, cb) {
     ).transform(brfs).bundle( (err, compiled) => {
         let compilation_error = null
         if (err) {
-            console.log(err)
+            console.error(err)
             compilation_error = err
             // console.error(err)
             compilation_error.formatted = `CoffeeScript compilation error:
@@ -101,6 +101,7 @@ function compileJS (source_path, dest_path, project_directory, cb) {
             presets: [
                 // Require these directly so they can be properly
                 // discovered by babel.
+                require('babel-preset-flow'),
                 require('babel-preset-react'),
                 require('babel-preset-env'),
             ]
@@ -111,6 +112,7 @@ function compileJS (source_path, dest_path, project_directory, cb) {
     ).transform(brfs).bundle( (err, compiled) => {
         let compilation_error = null
         if (err) {
+            console.error(err)
             compilation_error = err
             // console.error(err)
             compilation_error.formatted = `JS compilation error:
@@ -120,14 +122,28 @@ line: ${ err.loc ? err.loc.line : '?' }, column: ${ err.loc ? err.loc.column : '
 ${ err.toString() }`
             compiled = `document.body.innerHTML = '<style>body { ${ ERROR_STYLES } }</style><p>' + decodeURIComponent("${ encodeURIComponent(compilation_error.formatted) }") + '</p>'`
         }
-        file_data = compiled.toString()
-        if ('production' === process.env.NODE_ENV) {
+        let file_data = compiled.toString()
+
+        if ('production' === process.env.NODE_ENV && null == compilation_error) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source_path.replace(project_directory,'') }`))
-            file_data = UglifyJS.minify(file_data.toString()).code
+            file_data = UglifyJS.minify(file_data)
+            if (null != file_data.error) {
+                console.error(err)
+                err = file_data.error
+                compilation_error = file_data.error
+                compilation_error.formatted = `JS compilation error:
+file: ${ err.filename ? err.filename : '?' }
+line: ${ err.loc ? err.loc.line : '?' }, column: ${ err.loc ? err.loc.column : '?' }
+
+${ err.toString() }`
+                file_data = `document.body.innerHTML = '<style>body { ${ ERROR_STYLES } }</style><p>' + decodeURIComponent("${ encodeURIComponent(compilation_error.formatted) }") + '</p>'`
+            } else {
+                file_data = file_data.code
+            }
         }
-        fs.writeFile(dest_path, file_data, (err) => {
-            if (err) {
-                throw err 
+        fs.writeFile(dest_path, file_data, (_err) => {
+            if (_err) {
+                throw _err 
             }
             cb(compilation_error)
         })

@@ -1,7 +1,7 @@
 const BlockCaption  = require('./BlockCaption')
 const React         = require('react')
 const shiny         = require('shiny')
-const UglifyJS      = require('uglify-js')
+const UglifyJS      = require('uglify-es')
 const url           = require('url')
 
 const r = React.createElement
