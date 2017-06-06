@@ -28,7 +28,7 @@ function compileCoffee (source_path, dest_path, project_directory, cb) {
     ).transform(brfs).bundle( (err, compiled) => {
         let compilation_error = null
         if (err) {
-            console.log(err)
+            console.error(err)
             compilation_error = err
             // console.error(err)
             compilation_error.formatted = `CoffeeScript compilation error:
@@ -111,6 +111,7 @@ function compileJS (source_path, dest_path, project_directory, cb) {
     ).transform(brfs).bundle( (err, compiled) => {
         let compilation_error = null
         if (err) {
+            console.error(err)
             compilation_error = err
             // console.error(err)
             compilation_error.formatted = `JS compilation error:
