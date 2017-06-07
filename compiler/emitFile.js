@@ -16,6 +16,34 @@ let emit_cache = new Map();
 
 const circularJSONStringify = require('./circularJSONStringify')
 
+const ERROR_STYLES = 'display: block; font-family: monospace; border-bottom: 3px solid red; padding: 24px; background-color: white; white-space: pre;'
+
+function renderJSErrorMessage (err, project_directory) {
+    const formatted_error = `Server-side compilation error:
+file: ${ err.filename ? err.filename : '?' }
+line: ${ err.loc ? err.loc.line : '?' }, column: ${ err.loc ? err.loc.column : '?' }
+
+${ err.toString().replace(project_directory, '') }
+
+${ err.stack.toString() }
+`
+    return `<!doctype html><html>
+<head>
+    <style>body { ${ ERROR_STYLES } }</style>
+</head>
+<body>
+<script>
+    document.write(
+        decodeURIComponent(
+            "${ encodeURIComponent(formatted_error) }"
+        )
+    )
+</script>
+${ LIVE_RELOAD_TAG }
+</body>
+<html>
+`
+}
 
 const LIVE_RELOAD_TAG = `<script>document.write('<script src="http://'
 + (window.location.host || 'localhost').split(':')[0]
@@ -205,3 +233,20 @@ module.exports = function({ project_directory, project, config, writeFile, expor
     return emitFile;
 };
 
+function setBuildError (error, project_directory) {
+    console.log('\n')
+    console.error(error)
+    console.log('\n')
+    require('../development/current_error').error = renderJSErrorMessage(error, project_directory)
+}
+
+module.exports.setBuildError = setBuildError
+
+module.exports.clearBuildError = () => {
+    require('../development/current_error').error = null
+}
+
+module.exports.errors_enabled = false
+module.exports.enableErrors = () => {
+    module.exports.errors_enabled = true
+}

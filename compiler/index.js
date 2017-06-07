@@ -125,9 +125,22 @@ module.exports = function(project_directory, options, onCompile) {
                 throw new SDKError('configuration', `Project missing \`package.proof.${ prop }\`.${ _config_notice }`);
             }
         });
-
+        const emitFile = require('./emitFile')
         // Load the project compiler entrypoint.
-        let buildFn = require(project_main);
+        let buildFn
+        try {
+            buildFn = require(project_main)
+        } catch (e) {
+            if (emitFile.errors_enabled && (options.live_reload || options.inject_live_reload)) {
+                emitFile.setBuildError(e, project_directory)
+                onCompile([], [], project_package, project_config)
+                return
+            } else {
+                throw e
+            }
+        }
+
+        emitFile.clearBuildError()
         if (typeof buildFn !== 'function') {
             throw new SDKError('entrypoint', `Project main MUST export a function. Got ${ SDKError.colors.underline(typeof buildFn) }.`);
         }
@@ -183,7 +196,7 @@ module.exports = function(project_directory, options, onCompile) {
 
         // Create the file handling functions for the project.
         let _writeFile = require('./writeFile')(build_directory);
-        let _emitFile = require('./emitFile')({
+        let _emitFile = emitFile({
             project_directory,
             project             : project_package,
             config              : project_config,
@@ -253,6 +266,7 @@ module.exports = function(project_directory, options, onCompile) {
             if (num_indexed !== num_emitted) {
                 SDKError.warn('files', `${ num_emitted - num_indexed } too many emits. Check for multiple emits of the same file.`);
             }
+            emitFile.enableErrors()
             return (typeof onCompile === 'function' ? onCompile(_emitFile.files_emitted, compileAssets.files_emitted, project_package, project_config) : undefined);
         };
 

@@ -19,11 +19,21 @@ function returnFile (target_file, req, res, code=200) {
     fs.createReadStream(target_file).pipe(res)
 }
 
+const current_error = require('../development/current_error')
 
 
 module.exports = function (host, port, directory, file_set) {
 
     function _router (req,res) {
+
+        if (null != current_error.error) {
+            res.writeHead(500, {
+                'Content-Type': 'text/html'
+            })
+            res.end(current_error.error)
+            return
+        }
+
         const parsed_url = url.parse(req.url)
 
         let target_file = parsed_url.pathname
