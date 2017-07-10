@@ -23,7 +23,7 @@ const DEFAULT_BLOCK_TYPE_MAP = {
 
 function renderEntryContent (content/*: Array<Object> */, options/*: { plain: boolean, intercept: { text?: Function, image?: Function, embed?: Function, list?: Function, gallery?: Function } } */={ plain: false, intercept: {} })/* Array<React.Element<*>> */ {
     if (null == content) {
-        return null
+        return []
     }
 
     const block_type_map = Object.assign({}, DEFAULT_BLOCK_TYPE_MAP, options.intercept)
