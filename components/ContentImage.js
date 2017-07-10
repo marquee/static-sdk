@@ -5,7 +5,7 @@ const shiny     = require('shiny')
 
 const r = React.createElement
 
-const ContentImage = (props/*: { src: ?Object, cover: boolean, max_size: ?number }*/) => {
+const ContentImage = (props/*: { src: ?Object, cover: boolean, sizes: ?string }*/) => {
     if (null == props.src || null == props.src.content || null == props.src.content['640']) {
         return null
     }
@@ -38,18 +38,6 @@ const ContentImage = (props/*: { src: ?Object, cover: boolean, max_size: ?number
 
     const cx = shiny('ContentImage')
     cx.add('cover', props.cover)
-    const sizes = ['100vw']
-    if (null == props.max_size || props.max_size >= 640) {
-        sizes.unshift(`(min-width: 640px) 640px`)
-    }
-    
-    if (null == props.max_size || props.max_size >= 1280) {
-        sizes.unshift(`(min-width: 1280px) 1280px`)
-    }
-
-    if (null == props.max_size || props.max_size >= 2560) {
-        sizes.unshift(`(min-width: 2560px) 2560px`)
-    }
 
     const style = {}
     if (props.cover && null != props.src && null != props.src.focal_point) {
@@ -60,7 +48,7 @@ const ContentImage = (props/*: { src: ?Object, cover: boolean, max_size: ?number
         className       : cx,
         src             : src_640,
         srcSet          : srcset.join(','),
-        sizes           : sizes.join(','),
+        sizes           : props.sizes,
         alt             : alt_text,
         style           : style,
     })
@@ -69,7 +57,6 @@ const ContentImage = (props/*: { src: ?Object, cover: boolean, max_size: ?number
 ContentImage.defaultProps = {
     plain: false,
     cover: false,
-    max_size: null,
 }
 
 module.exports = ContentImage
