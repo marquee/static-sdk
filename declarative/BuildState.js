@@ -1,5 +1,25 @@
 // @flow
 
+/*
+
+The BuildState contains state for a build (shocking). When a build starts,
+the state is accessible through `proof-sdk/CURRENT-BUILD` (deliberately
+awkward). This state object provides functions for generating links and
+reading the configuration.
+
+By working with the state in this managed way, boundaries necessary for
+optimization can be enforced. For example, after a certain point, link
+reversal is not available because it would require global knowledge, not
+something that can be parallelized easily. The BuildState closing allows
+enforcing the use of global knowledge operations while that information
+is still available. Managing config this way also provides an interface
+for accessing the config that can be duplicated in a parallelized context,
+whereas exposing information through `process.global` would be fragile.
+
+*/
+
+
+
 /*::
 type LinkMatch = string | Map<any, string>
 type LinkMap = Map<string, LinkMatch>

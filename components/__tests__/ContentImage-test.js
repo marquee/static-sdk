@@ -21,4 +21,12 @@ describe('ContentImage', () => {
             component.toJSON()
         ).toMatchSnapshot()
     })
+    it('takes sizes', () => {
+        const component = renderer.create(
+            React.createElement(ContentImage, { src: SAMPLE_BLOCK, sizes: '(min-width: 2560px) 2560px,(min-width: 1280px) 1280px,(min-width: 640px) 640px,100vw' })
+        )
+        expect(
+            component.toJSON()
+        ).toMatchSnapshot()
+    })
 })

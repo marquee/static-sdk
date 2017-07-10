@@ -23,7 +23,7 @@ const DEFAULT_BLOCK_TYPE_MAP = {
 
 function renderEntryContent (content/*: Array<Object> */, options/*: { plain: boolean, intercept: { text?: Function, image?: Function, embed?: Function, list?: Function, gallery?: Function } } */={ plain: false, intercept: {} })/* Array<React.Element<*>> */ {
     if (null == content) {
-        return null
+        return []
     }
 
     const block_type_map = Object.assign({}, DEFAULT_BLOCK_TYPE_MAP, options.intercept)
@@ -36,8 +36,14 @@ function renderEntryContent (content/*: Array<Object> */, options/*: { plain: bo
         }
         const block_type = block_type_map[block.type]
         if (null == block_type) {
-            // Console instead of SDKError so this is client-safe.
-            console.warn(`renderEntryContent got unknown block type: ${ block.type }`)
+            const _msg = `renderEntryContent got unknown block type: ${ block.type } (${ block.id })`
+            if (process.env.NODE_ENV === 'production') {
+                // Console instead of SDKError so this is client-safe.
+                console.warn(_msg)
+                return null
+            } else {
+                throw new Error(_msg)
+            }
         }
         return React.createElement(block_type, block_props)
     })
