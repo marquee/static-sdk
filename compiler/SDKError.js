@@ -65,7 +65,7 @@ for (let k in DOCS) {
     }
 }
 
-SDKError = (subject, message, code=null) => {
+function SDKError (subject, message, code=null) {
     if (1 === arguments.length) {
         return new Error(_prefix + colors.error(subject))
     }
