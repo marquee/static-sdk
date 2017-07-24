@@ -6,19 +6,22 @@ const ImageBlock        = require('./ImageBlock')
 const ListBlock         = require('./ListBlock')
 const TextBlock         = require('./TextBlock')
 const GalleryBlock      = require('./GalleryBlock')
+const SectionBreakBlock = require('./SectionBreakBlock')
 
 const TEXT              = 'text'
 const IMAGE             = 'image'
 const EMBED             = 'embed'
 const LIST              = 'list'
 const GALLERY           = 'gallery'
+const SECTIONBREAK      = 'sectionbreak'
 
 const DEFAULT_BLOCK_TYPE_MAP = {
-    [TEXT]      : TextBlock,
-    [IMAGE]     : ImageBlock,
-    [EMBED]     : EmbedBlock,
-    [LIST]      : ListBlock,
-    [GALLERY]   : GalleryBlock,
+    [TEXT]          : TextBlock,
+    [IMAGE]         : ImageBlock,
+    [EMBED]         : EmbedBlock,
+    [LIST]          : ListBlock,
+    [GALLERY]       : GalleryBlock,
+    [SECTIONBREAK]  : SectionBreakBlock,
 }
 
 function renderEntryContent (content/*: Array<Object> */, options/*: { plain: boolean, intercept: { text?: Function, image?: Function, embed?: Function, list?: Function, gallery?: Function } } */={ plain: false, intercept: {} })/* Array<React.Element<*>> */ {
@@ -52,4 +55,3 @@ function renderEntryContent (content/*: Array<Object> */, options/*: { plain: bo
 }
 
 module.exports = renderEntryContent
-
