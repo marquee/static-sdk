@@ -120,8 +120,8 @@ const TextBlock = (props) => {
         if (null != props.block.layout.effect) {
             cx.add('effect', props.block.layout.effect)
         }
-        if (null != props.block.layout.highlight) {
-            cx.add('highlight', props.block.layout.highlight)
+        if (null != props.block.highlight) {
+            cx.add('highlight', props.block.highlight)
         }
     }
 
