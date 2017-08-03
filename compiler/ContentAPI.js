@@ -31,7 +31,7 @@ class Model {
         this._keys = [];
         this._configureProperties();
     }
-        
+
 
     _configureProperties() {
         return (() => {
@@ -208,7 +208,7 @@ APIResults.defaultLinker = function(n) {
 // Wraps object in models that provide _date helpers, etc
 class ContentAPI {
     static initClass() {
-    
+
         this.prototype.ENTRY        = ENTRY;
         this.prototype.PACKAGE      = PACKAGE;
         this.prototype.POST         = POST;
@@ -684,19 +684,19 @@ var normalizeContentData = function(all_collections) {
 
                 if (['content', 'entities', 'entity'].includes(_type) && !((model.type === ENTRY) && (key === 'content'))) {
                     if (Array.isArray(model[key])) {
-                        return model[key] = model[key].map(_getFromIndex);
+                        model[key] = model[key].map(_getFromIndex);
                     } else if (typeof model[key] === 'object') {
                         if (model[key].id) {
-                            if (object_index[model[key].id]) {
-                                return model[key] = object_index.get(model[key].id);
+                            if ( object_index.has(model[key].id) ) {
+                                model[key] = object_index.get(model[key].id);
                             } else {
-                                return console.warn('UNKNOWN?', key, model[key]);
+                                console.warn(`${key} not found in Index`);
                             }
                         } else {
-                            return Object.keys(model[key]).forEach(k => model[key][k] = _getFromIndex(model[key][k]));
+                            Object.keys(model[key]).forEach(k => model[key][k] = _getFromIndex(model[key][k]));
                         }
                     } else if ((typeof model[key] === 'string') && object_index.get(model[key])) {
-                        return model[key] = object_index.get(model[key]);
+                        model[key] = object_index.get(model[key]);
                     }
                 }
             })
