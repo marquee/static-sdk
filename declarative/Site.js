@@ -8,6 +8,7 @@ HTMLView.is_compressable = true
 HTMLView.makeEmit = ({ descriptor }) => (
     React.createElement(descriptor.props.component, descriptor.gathered_props)
 )
+HTMLView.doctype = '<!doctype html>'
 HTMLView.default_props = {
     fragment: false
 }
@@ -18,8 +19,7 @@ SitemapView.is_compressable = true
 SitemapView.default_props = {
     path: 'sitemap.txt'
 }
-const r = React.createElement
-const ONE_MONTH = 1000 * 60 * 60 * 24 * 30
+SitemapView.doctype = false
 SitemapView.makeEmit = ({ descriptor, all_descriptors, config }) => {
 
     const links = new Set()
@@ -41,6 +41,7 @@ RSSView.is_compressable = true
 RSSView.makeEmit = ({ descriptor }) => (
     React.createElement(descriptor.props.component, descriptor.gathered_props)
 )
+RSSView.doctype = '<?xml version="1.0"?>'
 
 const Enumerate = props => null
 Enumerate.Log = props => null
