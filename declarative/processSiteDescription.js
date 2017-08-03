@@ -76,6 +76,7 @@ function processSiteDescription (kwargs) {
                     {
                         'Content-Type': descriptor.type['Content-Type'],
                         fragment: descriptor.props.fragment,
+                        doctype: null != descriptor.props.doctype ? descriptor.props.doctype : descriptor.type.doctype,
                     }
                 )
             }

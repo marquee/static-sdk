@@ -138,11 +138,17 @@ emitFile('404.html', <NotFound />)
 ```
 
 Because React cannot represent the doctype, the output string will have
-`<!doctype html>` prepended to it. To emit only a fragment, without the
+`<!doctype html>` prepended to it. To emit an HTML fragment, without the
 doctype, set the option `fragment` to `true`:
 
 ```jsx
 emitFile('fragments/call-to-action.html', <CallToAction />, { fragment: true })
+```
+
+The doctype can also be overridden using the `doctype` option:
+
+```jsx
+emitFile('feed.xml', <RSSFeed items={ items } />, { doctype: '<?xml version="1.0"?>' })
 ```
 
 For clean URLs, any path that does not end in an extension will output the

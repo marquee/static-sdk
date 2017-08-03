@@ -94,7 +94,16 @@ module.exports = function({ project_directory, project, config, writeFile, expor
                     if (inject_live_reload) {
                         output_content = injectLiveReloadTag(output_content)
                     }
-                    if (!options.fragment) { output_content = `<!doctype html>${ output_content }`; }
+                    if (!options.fragment) {
+                        // Allow overriding of doctype appending.
+                        if (false !== options.doctype) {
+                            if (null != options.doctype) {
+                                output_content = `${ options.doctype }${ output_content }`;
+                            } else {
+                                output_content = `<!doctype html>${ output_content }`;
+                            }
+                        }
+                    }
                     return ['text/html', output_content];
                 }
 
