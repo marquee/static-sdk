@@ -57,7 +57,7 @@ function renderText (text, annotations, plain=false) {
             if (null != tag_map[anno.type]) {
                 [tag, ...classes] = tag_map[anno.type].split('.')
                 if (classes.length > 0 && !plain) {
-                    attrs['class'] = classes.join(' ') 
+                    attrs['class'] = classes.join(' ')
                 }
                 text.add(tag, anno.start, anno.end, attrs)
             }
@@ -119,6 +119,9 @@ const TextBlock = (props) => {
         }
         if (null != props.block.layout.effect) {
             cx.add('effect', props.block.layout.effect)
+        }
+        if (null != props.block.layout.highlight) {
+            cx.add('highlight', props.block.layout.highlight)
         }
     }
 
