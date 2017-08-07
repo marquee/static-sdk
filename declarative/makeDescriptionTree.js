@@ -26,6 +26,7 @@ function makeDescriptionTree (node/*: React.Element<*> */, parent/*: ?Descriptor
         throw new Error(_message)
     }
     if (Skip === node.type) {
+        // console.log(node.type.props)
         return null
     }
     const props = {}

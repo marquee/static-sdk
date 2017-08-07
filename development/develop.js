@@ -1,10 +1,10 @@
-
+// @flow
 const runCompilation  = require('../compiler')
 const startServer     = require('./server')
 const startWatcher    = require('./watcher')
 const SDKError        = require('../compiler/SDKError')
 
-module.exports = function (project_directory, options) {
+module.exports = function (project_directory , options) {
     if (options.use_react_cache) {
         throw new SDKError('react-cache.develop', '--react-cache is an invalid option for develop (it would make development impossible!)')
     }

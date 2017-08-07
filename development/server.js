@@ -1,3 +1,5 @@
+// @flow
+
 const http    = require('http')
 const fs      = require('fs')
 const mime    = require('mime')
@@ -12,6 +14,8 @@ function notFoundHandler (req, res) {
     res.end('404 Not Found')
 }
 
+
+
 function returnFile (target_file, req, res, code=200) {
     res.writeHead(code, {
         'Content-Type': mime.lookup(target_file)
@@ -22,8 +26,8 @@ function returnFile (target_file, req, res, code=200) {
 const current_error = require('../development/current_error')
 
 
-module.exports = function (host, port, directory, file_set) {
-
+module.exports = function (host : string, port : number, directory : string, file_set) {
+    // console.log('file_set', file_set)
     function _router (req,res) {
 
         if (null != current_error.error) {
@@ -42,7 +46,7 @@ module.exports = function (host, port, directory, file_set) {
         }
 
         target_file = target_file.replace(/\/\//g,'/')
-        target_file_full_path = path.join(directory, target_file)
+        let target_file_full_path = path.join(directory, target_file)
 
         if (file_set.get(target_file)) {
             const [_type, _content] = file_set.get(target_file).render()
@@ -56,7 +60,7 @@ module.exports = function (host, port, directory, file_set) {
             returnFile(target_file_full_path, req, res)
         } else {
             util.log(SDKError.colors.yellow(`[404] ${ req.method }: ${ req.url } `) + SDKError.colors.grey(target_file))
-            not_found_file = path.join(directory, '404.html')
+            const not_found_file = path.join(directory, '404.html')
             if (fs.existsSync(not_found_file)) {
                 returnFile(not_found_file, req, res, 404)
             } else {
@@ -66,6 +70,6 @@ module.exports = function (host, port, directory, file_set) {
     }
 
     http.createServer(_router).listen(port, host)
-    server_url = `http://${ host }:${ port }`
+    const server_url = `http://${ host }:${ port }`
     util.log(`Development server running at ${ SDKError.colors.cyan.underline(server_url) }`)
 }

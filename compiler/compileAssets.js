@@ -1,3 +1,5 @@
+// @flow
+
 const autoprefixer    = require('autoprefixer')
 const babelify        = require('babelify')
 const brfs            = require('brfs')
@@ -18,7 +20,7 @@ const { formatProjectPath } = SDKError
 
 const ERROR_STYLES = 'display: block; font-family: monospace; border-bottom: 3px solid red; padding: 24px; background-color: white; white-space: pre;'
 
-function compileCoffee (source_path, dest_path, project_directory, cb) {
+function compileCoffee (source_path : string, dest_path, project_directory, cb) {
     SDKError.log(SDKError.colors.grey(`Compiling (coffee): ${ source_path.replace(project_directory, '') }`))
     const b = browserify([source_path])
     const compiled = b.transform(
@@ -43,7 +45,7 @@ ${ err.toString() }`
         }
         fs.writeFile(dest_path, compiled, (err) => {
             if (err) {
-                throw err 
+                throw err
             }
             cb(compilation_error)
         })
@@ -80,19 +82,19 @@ function compileSass (source_path, dest_path, project_directory, cb) {
                 }
                 fs.writeFile(dest_path, compiled, (err) => {
                     if (err) {
-                        throw err 
+                        throw err
                     }
                     cb(compilation_error)
                 })
             }).catch( (err) => {
                 if (err) {
-                    throw err 
+                    throw err
                 }
             })
     })
 }
 
-function compileJS (source_path, dest_path, project_directory, cb) {
+function compileJS (source_path : string, dest_path, project_directory, cb) {
     SDKError.log(SDKError.colors.grey(`Compiling (js/x): ${ source_path.replace(project_directory, '') }`))
     const b = browserify([source_path], { extensions: ['.js', '.jsx', '.es', '.es6']})
     const compiled = b.transform(
@@ -104,6 +106,11 @@ function compileJS (source_path, dest_path, project_directory, cb) {
                 require('babel-preset-flow'),
                 require('babel-preset-react'),
                 require('babel-preset-env'),
+            ],
+            plugins : [
+                  require('babel-plugin-transform-object-rest-spread')
+                , require('babel-plugin-transform-decorators-legacy').default
+                , require('babel-plugin-transform-flow-strip-types')
             ]
         }
     ).transform(
@@ -143,7 +150,7 @@ ${ err.toString() }`
         }
         fs.writeFile(dest_path, file_data, (_err) => {
             if (_err) {
-                throw _err 
+                throw _err
             }
             cb(compilation_error)
         })
@@ -153,7 +160,7 @@ ${ err.toString() }`
 function copyAndMinifyJS (source, destination, project_directory, callback) {
     fs.readFile(source, (err, file_data) => {
         if (err) {
-            throw err 
+            throw err
         }
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
@@ -161,7 +168,7 @@ function copyAndMinifyJS (source, destination, project_directory, callback) {
         }
         fs.writeFile(destination, file_data, (err) => {
             if (err) {
-                throw err 
+                throw err
             }
             callback()
         })
@@ -171,7 +178,7 @@ function copyAndMinifyJS (source, destination, project_directory, callback) {
 function copyAndMinifyCSS (source, destination, project_directory, callback) {
     fs.readFile(source, (err, file_data) => {
         if (err) {
-            throw err 
+            throw err
         }
         if ('production' === process.env.NODE_ENV) {
             SDKError.log(SDKError.colors.grey(`Minifying ${ source.replace(project_directory,'') }`))
@@ -179,7 +186,7 @@ function copyAndMinifyCSS (source, destination, project_directory, callback) {
         }
         fs.writeFile(destination, file_data, (err) => {
             if (err) {
-                throw err 
+                throw err
             }
             callback()
         })
@@ -248,7 +255,7 @@ function copyAssetsToBuild (project_directory, asset_cache_dir, asset_dest_dir) 
             _to_copy.push({ source: f, destination: dest_path })
         }
     })
-    
+
     SDKError.log(`Copying ${ SDKError.colors.green(_to_copy.length) } assets to build: ${ formatProjectPath(project_directory, asset_dest_dir) }`)
 
     _to_copy.forEach( (f) => {
@@ -283,6 +290,7 @@ function compileAssets (opts) {
 
     const asset_source_dir    = path.join(project_directory, 'assets')
     const asset_cache_dir     = path.join(project_directory, '.asset-cache')
+    let asset_dest_dir;
     if (project_config.ROOT_PREFIX) {
         asset_dest_dir = path.join(build_directory, project_config.ROOT_PREFIX, 'assets')
     } else {
