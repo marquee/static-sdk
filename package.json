@@ -3,7 +3,6 @@
   "version": "0.10.12",
   "scripts": {
     "test": "jest",
-    "prepublish": "npm run test",
     "flow": "flow"
   },
   "engines": {
