@@ -9,7 +9,7 @@ const gatherPropsInPlace    = require('./gatherPropsInPlace')
 const makeDescriptionTree   = require('./makeDescriptionTree')
 const React                 = require('react')
 const SDKError              = require('../compiler/SDKError')
-const { Enumerate, SitemapView } = require('./Site')
+const { Enumerate, SitemapView, Publication } = require('./Site')
 
 
 type Kwargs = {
@@ -34,14 +34,22 @@ function processSiteDescription (kwargs : Kwargs) {
 
         // Parse the given site description, dropping any subtrees marked
         // by a Skip.
-        const description_tree = makeDescriptionTree(site_description)
 
+        if(Publication !== site_description.type){
+            throw new Error("Your site description must be wrapped with <Publication />")
+        }
+        
+        const apiData = site_description.props.data
+        const actual_site_description = React.Children.toArray(site_description.props.children)[0]
+
+        const description_tree = makeDescriptionTree(actual_site_description, null, apiData)
+        // console.log('DO WE GET EHRE?', description_tree)
         // Gather the path functions and extract a path map to each descriptor:
         // This is done before expansion because it's gathering unevaluated
         // path functions, and there is only one name per route possible.
         const named_paths = extractPaths(description_tree)
-        console.log('named_paths', named_paths)
         current_build.__setPaths(named_paths)
+
 
         // Evaluate any Enumerate descriptors, creating new descriptors for
         // each child of the Enumerate. At this point any lazy iterables
@@ -51,7 +59,7 @@ function processSiteDescription (kwargs : Kwargs) {
         // Evaluate links and extract a link map. This attaches an
         // `evaluated_path` to each descriptor in place.
         const named_links = extractLinks(expanded_description)
-        // console.log(named_links)
+
         current_build.__setLinks(named_links)
 
         // The props functions of each descriptor are evaluated. At this point
@@ -84,16 +92,23 @@ function processSiteDescription (kwargs : Kwargs) {
                 //      action objects to something like a DynamoDB-based
                 //      Lambda queue, if the `descriptor.type` had a
                 //      `__filename` property exported.
-                // console.log("descriptor", descriptor)
-                emitFile(
-                    descriptor.evaluated_path,
-                    descriptor.type.makeEmit({ descriptor, config }),
-                    {
-                        'Content-Type'  : descriptor.type['Content-Type'],
-                        fragment        : descriptor.props.fragment,
-                        doctype         : null != descriptor.props.doctype ? descriptor.props.doctype : descriptor.type.doctype,
-                    }
-                )
+
+                const emitFileJobs = descriptor.type.makeEmitFileArgs(config, descriptor)
+                emitFileJobs.forEach((jobArgs) => {
+                    const {evaluated_path, viewElement, options} = jobArgs
+                    emitFile(evaluated_path, viewElement, options)
+                })
+
+
+                // emitFile(
+                //     descriptor.evaluated_path,
+                //     descriptor.type.makeEmit({ descriptor, config }),
+                //     {
+                //         'Content-Type'  : descriptor.type['Content-Type'],
+                //         fragment        : descriptor.props.fragment,
+                //         doctype         : null != descriptor.props.doctype ? descriptor.props.doctype : descriptor.type.doctype,
+                //     }
+                // )
             }
         })
     }

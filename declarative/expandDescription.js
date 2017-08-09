@@ -52,12 +52,11 @@ function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedD
         items_array.forEach( (item, index) => {
             const _e = new EnumerationItem({ items: items_array, index, item, path: node.props.path })
             node.children.forEach( child => {
-                // console.log("enumeration child?", child)
                 to_return.push(..._expandDescription(child, parent, _e))
             })
         })
-    } else {
 
+    } else {
         const expanded_node/*: ExpandedDescriptorNode */= {
             parent          : parent,
             type            : node.type,

@@ -53,8 +53,9 @@ module.exports = function(project_directory, options, onCompile) {
 
         // Set up or invalidate React cache if necessary
         let build_cache_directory = path.join(project_directory, '.build-cache');
-        let build_cache_file = path.join(build_cache_directory, 'cache-v0.9.2.json');
-        let build_cache = null;
+        let build_cache_file      = path.join(build_cache_directory, 'cache-v0.9.2.json');
+        let build_cache           = null;
+
         if (options.build_cache) {
             if (null == commit_sha) {
                 if (!options.force) {
@@ -152,7 +153,6 @@ module.exports = function(project_directory, options, onCompile) {
         if (typeof buildFn !== 'function') {
             throw new SDKError('entrypoint', `Project main MUST export a function. Got ${ SDKError.colors.underline(typeof buildFn) }.`);
         }
-
 
         // Set up metadata exporting function.
         let metadata_for_s3 = new Map();
