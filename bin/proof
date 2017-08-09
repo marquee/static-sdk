@@ -65,7 +65,7 @@ var _options = {
     inject_live_reload: program.injectLiveReload || false,
 }
 
-if (_command !== 'develop') {
+if (_command !== 'develop' && _command !== 'develop-budo') {
     if (_options.inject_live_reload) {
         throw new Error('--inject-live-reload can only be used for develop command.')
     }
@@ -89,6 +89,9 @@ switch (_command) {
         break;
     case 'develop':
         require('../development/develop')(process.cwd(), _options);
+        break;
+    case 'develop-budo':
+        require('../development/develop-budo')(process.cwd(), _options);
         break;
     case 'setup':
         require('../development/setup')(process.cwd(), _options);

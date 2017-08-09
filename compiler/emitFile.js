@@ -40,6 +40,7 @@ ${ err.stack.toString() }
     )
 </script>
 ${ LIVE_RELOAD_TAG }
+${ LIVE_BUDO_RELOAD_TAG }
 </body>
 <html>
 `
@@ -49,9 +50,16 @@ const LIVE_RELOAD_TAG = `<script>document.write('<script src="http://'
 + (window.location.host || 'localhost').split(':')[0]
 + ':35729/livereload.js?snipver=1"></'
 + 'script>')</script>`
+
+const LIVE_BUDO_RELOAD_TAG = `<script>document.write('<script src="http://'
++ (window.location.host || 'localhost').split(':')[0]
++ ':5000/budo/livereload.js"></'
++ 'script>')</script>
+`
+
 function injectLiveReloadTag (markup) {
     SDKError.log(SDKError.colors.grey(`Injecting live reload script...`));
-    return markup.replace(/\<\/body\>\<\/html\>$/, LIVE_RELOAD_TAG + '</body></html>')
+    return markup.replace(/\<\/body\>\<\/html\>$/, LIVE_RELOAD_TAG  + LIVE_BUDO_RELOAD_TAG + '</body></html>')
 }
 
 

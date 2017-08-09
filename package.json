@@ -26,6 +26,7 @@
     "babelify": "^7.3.0",
     "brfs": "^1.4.1",
     "browserify": "^11.0.1",
+    "budo": "^10.0.4",
     "coffee-react": "^5.0.0",
     "coffee-react-transform": "^4.0.0",
     "coffee-reactify": "^4.0.0",
