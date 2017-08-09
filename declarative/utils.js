@@ -5,21 +5,20 @@ const _      = require("lodash")
 
 // Use this on the root component of a HTMLView to inject
 // the API data into the context
-const provideAPIData = (dataRequirements) => (Component) => {
+const provideAPIData = (data) => (Component) => {
 
     class DataProvider extends React.Component {
 
         getChildContext() {
-            return _.pick( this.props, _.keys(dataRequirements) )
+            return _.pick( this.props, _.keys(data) )
         }
 
         render () {
             return React.createElement(Component, this.props)
-            // return <Component {...this.props} />
         }
     }
 
-    const ctx = _.mapValues(dataRequirements, (value, key, object) => {
+    const ctx = _.mapValues(data, (value, key, object) => {
                     return React.PropTypes.array
                 })
     DataProvider.childContextTypes = ctx
@@ -44,8 +43,8 @@ const requiresAPIData = (contextTypes) => (Komponent) => {
 }
 
 
-const reallyMapDataToProps = (data, dataRequirements) => {
-    const {entries, topics, packages, people, locations} = data
+const reallyMapDataToProps = (apiData, dataRequirements) => {
+    const {entries, topics, packages, people, locations} = apiData
 
     // TODO: This is will amount to a lot of unnecessary computation
     // this needs to be memoized.

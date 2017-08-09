@@ -6,17 +6,24 @@ const ReactDOMServer = require('react-dom/server')
 const {provideAPIData, reallyMapDataToProps} = require("./utils.js")
 const _ = require("lodash")
 
-const HTMLView = props => null
+// const HTMLView = props => null
+class HTMLView extends React.Component {
+    render () {
+        return null
+    }
+}
+
 HTMLView['Content-Type'] = 'text/html'
 HTMLView.is_compressable = true
 
 HTMLView.makeEmit = ({ descriptor }) => {
     let component      = descriptor.props.component;
     let gathered_props = descriptor.gathered_props;
-    if(null != descriptor.props.data && null != descriptor.props.dataRequirements){
-        const {data, dataRequirements} = descriptor.props
-        component          = provideAPIData(dataRequirements)(component)
-        const apiDataProps = reallyMapDataToProps(data, dataRequirements)
+    if(null != descriptor.props.apiData && null != descriptor.props.data){
+        const {apiData, data} = descriptor.props
+        component          = provideAPIData(data)(component)
+
+        const apiDataProps = reallyMapDataToProps(apiData, data)
         gathered_props     = Object.assign({}, gathered_props, apiDataProps)
     }
 
@@ -74,11 +81,14 @@ RSSView.doctype = '<?xml version="1.0"?>'
 const Enumerate = props => null
 Enumerate.Log = props => null
 
+const EnumerateViews = props => null
+EnumerateViews.Log = props => null
+
 const Publication = props => null
 
 
 /*
-    <Enumerate
+    <EnumerateViews
         items         = {{type: "entry"}}
         path          = {'/entries/:slug/'} // this must be a property on the underlying object. schemas yo!
         component     = {EntryDetail}
@@ -100,10 +110,10 @@ const Skip = props => null
 
 AssetPipeline.Skip  = Skip
 Enumerate.Skip      = Skip
+EnumerateViews.Skip = Skip
 HTMLView.Skip       = Skip
 RSSView.Skip        = Skip
 SitemapView.Skip    = Skip
-
 Publication.Skip    = Skip
 
 module.exports = {
@@ -113,5 +123,6 @@ module.exports = {
     RSSView,
     SitemapView,
     Skip,
-    Publication
+    Publication,
+    EnumerateViews
 }

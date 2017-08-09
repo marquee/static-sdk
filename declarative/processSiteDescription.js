@@ -38,8 +38,8 @@ function processSiteDescription (kwargs : Kwargs) {
         if(Publication !== site_description.type){
             throw new Error("Your site description must be wrapped with <Publication />")
         }
-        
-        const apiData = site_description.props.data
+
+        const apiData = site_description.props.apiData
         const actual_site_description = React.Children.toArray(site_description.props.children)[0]
 
         const description_tree = makeDescriptionTree(actual_site_description, null, apiData)
