@@ -14,6 +14,8 @@ const {
 } = require("./declarative/utils.js")
 
 
+console.log('YO WHAT UP')
+
 module.exports = {
     AssetPipeline,
     Enumerate,
