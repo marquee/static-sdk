@@ -26,7 +26,7 @@ function returnFile (target_file, req, res, code=200) {
 const current_error = require('../development/current_error')
 
 
-module.exports = function (host : string, port : number, directory : string, file_set) {
+module.exports = function (host, port, directory, file_set) {
     // console.log('file_set', file_set)
     function _router (req,res) {
 
