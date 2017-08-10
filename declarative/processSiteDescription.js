@@ -12,14 +12,14 @@ const SDKError              = require('../compiler/SDKError')
 const { Enumerate, SitemapView, Publication } = require('./Site')
 
 
-type Kwargs = {
-    project_directory : string,
-    project : any,
-    config : Object,
-    emitFile : Function
-}
+// type Kwargs = {
+//     project_directory,
+//     project : any,
+//     config : Object,
+//     emitFile : Function
+// }
 
-function processSiteDescription (kwargs : Kwargs) {
+function processSiteDescription (kwargs) {
     const {
         project_directory,
         project,
