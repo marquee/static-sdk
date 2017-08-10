@@ -20,7 +20,7 @@ const { formatProjectPath } = SDKError
 
 const ERROR_STYLES = 'display: block; font-family: monospace; border-bottom: 3px solid red; padding: 24px; background-color: white; white-space: pre;'
 
-function compileCoffee (source_path : string, dest_path, project_directory, cb) {
+function compileCoffee (source_path, dest_path, project_directory, cb) {
     SDKError.log(SDKError.colors.grey(`Compiling (coffee): ${ source_path.replace(project_directory, '') }`))
     const b = browserify([source_path])
     const compiled = b.transform(
