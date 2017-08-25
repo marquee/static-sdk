@@ -84,7 +84,16 @@ const EmbedBlock = (props) => {
 
     const tag_props = {}
 
-    const { credit, caption } = props.block
+    const { credit } = props.block
+
+    let {caption} = props.block
+
+    if(null == caption && null != props.block.annotations){
+        const maybe_captions_list = props.block.annotations.filter((a) => a.type === 'caption')
+        if(maybe_captions_list.length > 0){
+            caption = maybe_captions_list[0].content
+        }
+    }
 
     if (!props.plain) {
         const layout    = props.block.layout || {}
