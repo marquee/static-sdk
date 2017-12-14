@@ -78,11 +78,11 @@ const ImageBlock = (props) => {
         alt             : props.block.alt_text,
     })
 
-    if (null != props.block.link && props.block.link.length > 0) {
+    if (null != props.block.link_to && props.block.link_to.length > 0) {
         cx.add('link')
         image_el = r('a', {
             style: { display: 'block' },
-            href: props.block.link,
+            href: props.block.link_to,
             className: '_Link',
         }, image_el)
     }
