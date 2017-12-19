@@ -1,3 +1,5 @@
+// @flow
+
 const React     = require('react')
 const url       = require('url')
 const shiny     = require('shiny')
@@ -54,7 +56,7 @@ const ImageBlock = (props) => {
     const layout    = props.block.layout || {}
     const size      = layout.size || 'medium'
     const position  = layout.position || 'center'
-    cx = shiny('Block', 'ImageBlock')
+    const cx        = shiny('Block', 'ImageBlock')
     cx.set({
         size        : size,
         position    : position,

@@ -1,5 +1,5 @@
-const fs        = require('fs-extra')
-const { exec }  = require('child_process')
+const fs            = require('fs-extra')
+const { spawn }     = require('child-process')
 const path      = require('path')
 
 module.exports = function getCurrentCommit (directory, callback) {
@@ -9,7 +9,7 @@ module.exports = function getCurrentCommit (directory, callback) {
         return
     }
     // http://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
-    exec(
+    spwan(
         'git diff-index HEAD && git ls-files --exclude-standard --others',
         { cwd: directory },
         (err, stdout, stderr) => {
@@ -19,7 +19,7 @@ module.exports = function getCurrentCommit (directory, callback) {
                 const _stdout = stdout.trim()
                 const is_dirty = _stdout.length !== 0
                 const dirty_files = stdout.split('\n').slice(1).join('\n')
-                exec(
+                swpan(
                     'git rev-parse --short=N HEAD',
                     { cwd: directory },
                     (err, stdout, stderr) => {

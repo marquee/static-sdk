@@ -1,3 +1,5 @@
+// @flow
+
 const BlockCaption  = require('./BlockCaption')
 const React         = require('react')
 const shiny         = require('shiny')

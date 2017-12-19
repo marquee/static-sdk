@@ -1,3 +1,5 @@
+// @flow
+
 const React = require('react')
 const shiny = require('shiny')
 
@@ -62,4 +64,3 @@ const GalleryBlock = (props) => {
 }
 
 module.exports = GalleryBlock
-

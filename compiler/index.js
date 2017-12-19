@@ -1,13 +1,21 @@
 /* DECAFFEINATED */
 
+
+
 // Enable support for requiring `.cjsx` files.
 require('coffee-react/register')
 // Enable support for requiring `.jsx` files.
 const react_preset = require('babel-preset-react')
 const flow_preset = require('babel-preset-flow')
+const babel_preset_env = require('babel-preset-env')
 require('babel-register')({
-    ignore: /node_modules/,
-    presets: [flow_preset, react_preset],
+    ignore  : /node_modules/,
+    presets : [flow_preset, react_preset, babel_preset_env],
+    plugins : [
+          require('babel-plugin-transform-object-rest-spread')
+        , require('babel-plugin-transform-decorators-legacy').default
+        , require('babel-plugin-transform-flow-strip-types')
+    ]
 });
 
 
@@ -15,16 +23,16 @@ require('babel-register')({
 const fs = require('fs-extra')
 const path = require('path')
 
-const compileAssets = require('./compileAssets')
-const ContentAPI = require('./ContentAPI')
-const loadConfiguration = require('./loadConfiguration')
-const SDKError = require('./SDKError')
+const compileAssets         = require('./compileAssets')
+const ContentAPI            = require('./ContentAPI')
+const loadConfiguration     = require('./loadConfiguration')
+const SDKError              = require('./SDKError')
 let { formatProjectPath }   = SDKError;
 
-const getCurrentCommit = require('./getCurrentCommit')
+const getCurrentCommit      = require('./getCurrentCommit')
+
 
 module.exports = function(project_directory, options, onCompile) {
-
     if (onCompile == null) { onCompile = null; }
     if (options.ignore_schedule) {
         SDKError.warn('Ignoring release schedule!');
@@ -45,8 +53,9 @@ module.exports = function(project_directory, options, onCompile) {
 
         // Set up or invalidate React cache if necessary
         let build_cache_directory = path.join(project_directory, '.build-cache');
-        let build_cache_file = path.join(build_cache_directory, 'cache-v0.9.2.json');
-        let build_cache = null;
+        let build_cache_file      = path.join(build_cache_directory, 'cache-v0.9.2.json');
+        let build_cache           = null;
+
         if (options.build_cache) {
             if (null == commit_sha) {
                 if (!options.force) {
@@ -145,7 +154,6 @@ module.exports = function(project_directory, options, onCompile) {
             throw new SDKError('entrypoint', `Project main MUST export a function. Got ${ SDKError.colors.underline(typeof buildFn) }.`);
         }
 
-
         // Set up metadata exporting function.
         let metadata_for_s3 = new Map();
 
@@ -171,7 +179,7 @@ module.exports = function(project_directory, options, onCompile) {
             let _metadata_json = {};
             let iterable = metadata_for_s3.entries();
             for (let v = 0; v < iterable.length; v++) { let k = iterable[v]; _metadata_json[k] = v; }
-                
+
             let metadata_content = JSON.stringify(_metadata_json);
             SDKError.log(SDKError.colors.grey(`Writing ${ metadata_content.length } bytes of metadata...`));
             return fs.writeFileSync(
@@ -303,7 +311,7 @@ module.exports = function(project_directory, options, onCompile) {
                     asset_cache_directory   : path.join(project_directory, '.asset-cache')
                 };
                 global.build_info = build_info;
-                
+
                 if (project_config.FULLY_QUALIFY_ASSET_URL) {
                     _prefix = `//${ project_config.HOST }${ _prefix }`;
                 }
@@ -314,7 +322,7 @@ module.exports = function(project_directory, options, onCompile) {
                     global.ASSET_URL = `${ _prefix }/assets/`;
                 }
 
-                
+
                 let _emitAssets = (...args) =>
                     compileAssets.includeAssets({
                         project_directory,

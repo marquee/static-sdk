@@ -1,3 +1,5 @@
+// @flow
+
 const React         = require('react')
 const shiny         = require('shiny')
 const TextBlock     = require('./TextBlock')
@@ -28,4 +30,3 @@ ListBlock.defaultProps = {
 }
 
 module.exports = ListBlock
-

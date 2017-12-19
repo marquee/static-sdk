@@ -1,3 +1,5 @@
+// @flow
+
 const NOAT      = require('./NOAT')
 const React     = require('react')
 const shiny     = require('shiny')
@@ -82,6 +84,7 @@ const TextBlock = (props) => {
 
     // Choose the appropriate tag for the given block's role.
     // Unknown roles are ignored and not rendered.
+    let blocktag = null;
     switch (props.block.role) {
         case 'paragraph':
             blocktag = 'p'

@@ -2,7 +2,9 @@
 const EnumerationItem   = require('./EnumerationItem')
 const React             = require('react')
 const { Enumerate }     = require('./Site')
+const {reallyMapDataToProps} = require("./utils.js")
 
+const _ = require("lodash")
 /*::
 type NodePropsType = {
     props           : ?(Object | Function),
@@ -32,7 +34,17 @@ type ExpandedDescriptorNode = {
 function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedDescriptorNode */, enumeration/*: ?EnumerationItem */)/*: Array<ExpandedDescriptorNode>*/ {
     const to_return = []
     if (Enumerate === node.type) {
-        let items = node.props.items
+
+        let items
+        if (null != node.props.items){
+            items = node.props.items
+        }else if(null != node.props.data){
+            const realProps = reallyMapDataToProps(node.props.apiData, {"items" : node.props.data})
+            items = realProps.items
+        }else{
+            throw new Error('Enumerate not given items. Must be an Array or function that returns an Array.')
+        }
+
         let items_array = []
         if (null == items) {
             throw new Error('Enumerate not given items. Must be an Array or function that returns an Array.')
@@ -55,8 +67,8 @@ function _expandDescription (node/*: DescriptorNodeType */, parent/*: ?ExpandedD
                 to_return.push(..._expandDescription(child, parent, _e))
             })
         })
-    } else {
-
+    }
+    else {
         const expanded_node/*: ExpandedDescriptorNode */= {
             parent          : parent,
             type            : node.type,
