@@ -1,6 +1,6 @@
 {
   "name": "proof-sdk",
-  "version": "0.11.0-alpha.2",
+  "version": "0.11.0-alpha.5",
   "scripts": {
     "test": "jest",
     "flow": "flow"
