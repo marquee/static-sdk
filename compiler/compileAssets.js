@@ -94,7 +94,7 @@ function compileSass (source_path, dest_path, project_directory, cb) {
     })
 }
 
-function compileJS (source_path : string, dest_path, project_directory, cb) {
+function compileJS (source_path, dest_path, project_directory, cb) {
     SDKError.log(SDKError.colors.grey(`Compiling (js/x): ${ source_path.replace(project_directory, '') }`))
     const b = browserify([source_path], { extensions: ['.js', '.jsx', '.es', '.es6']})
     const compiled = b.transform(
