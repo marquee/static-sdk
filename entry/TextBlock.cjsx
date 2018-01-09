@@ -9,6 +9,7 @@ TAG_MAP =
     'emphasis'      : 'em.Annotation.-emphasis'
     'strong'        : 'strong.Annotation.-strong'
     'link'          : 'a.Annotation.-link'
+    'anchor_link'   : 'a.Annotation.-link'
     'small-caps'    : 'i.Annotation.-small_caps'
     'superscript'   : 'sup.Annotation.-superscript'
     'subscript'     : 'sub.Annotation.-subscript'
@@ -17,6 +18,7 @@ TAG_MAP_PLAIN =
     'emphasis'      : 'em'
     'strong'        : 'strong'
     'link'          : 'a'
+    'anchor_link'   : 'a'
     'small-caps'    : null
     'superscript'   : 'sup'
     'subscript'     : 'sub'
@@ -45,6 +47,11 @@ module.exports = React.createClass
 
         @props.block.annotations?.forEach (anno) =>
             attrs = {}
+            if anno.type is 'anchor_link'
+                unless anno.content_id
+                    return
+                attrs.href  = "##{anno.content_id}"
+
             if anno.type is 'link'
                 # Avoid trying to render links without a url specified.
                 unless anno.url
@@ -54,10 +61,11 @@ module.exports = React.createClass
                     _parsed = url.parse(anno.url)
                     if _parsed.host and _parsed.host isnt global.config.HOST
                         attrs['data-external'] = true
+
             if tag_map[anno.type]
                 [tag, classes...] = tag_map[anno.type].split('.')
                 if classes.length > 0 and not @props.plain
-                    attrs['class'] = classes.join(' ') 
+                    attrs['class'] = classes.join(' ')
                 text.add(tag, anno.start, anno.end, attrs)
 
         # Choose the appropriate tag for the given block's role.
